@@ -1,4 +1,3 @@
-# coding=utf-8
 """Training on DVRL class"""
 
 import os
