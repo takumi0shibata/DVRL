@@ -123,6 +123,7 @@ def main():
     dvrl_params['batch_size'] = 2000
     dvrl_params['inner_iterations'] = 100
     dvrl_params['batch_size_predictor'] = 256
+    dvrl_params['moving_average_window'] = 10
 
 
     # Initialize DVRL

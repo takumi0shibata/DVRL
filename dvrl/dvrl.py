@@ -35,6 +35,7 @@ class Dvrl(object):
         self.batch_size = int(np.min([parameters['batch_size'], self.x_train.shape[0]]))
         self.learning_rate = parameters['learning_rate']
         self.batch_size_predictor = int(np.min([parameters['batch_size_predictor'], self.x_val.shape[0]]))
+        self.moving_average_window = parameters['moving_average_window']
 
         # Basic parameters
         self.epsilon = 1e-8  # Adds to the log to avoid overflow
@@ -91,6 +92,7 @@ class Dvrl(object):
 
         rewards_history = []
         losses_history = []
+        baseline = 0
         for iter in tqdm(range(self.outter_iterations)):
             self.value_estimator.train()
             dvrl_optimizer.zero_grad()
@@ -121,10 +123,10 @@ class Dvrl(object):
             # reward computation
             if metric == 'mse':
                 dvrl_perf = metrics.mean_squared_error(self.y_val, y_valid_hat)
-                reward = valid_perf - dvrl_perf
+                reward = baseline - dvrl_perf
             elif metric == 'qwk':
                 dvrl_perf = calc_qwk(self.y_val, y_valid_hat, self.test_prompt_id, 'score')
-                reward = dvrl_perf - valid_perf
+                reward = dvrl_perf - baseline
 
             # update the selection network
             reward = torch.tensor([reward]).to(self.device)
@@ -132,6 +134,8 @@ class Dvrl(object):
             loss = dvrl_criterion(est_dv_curr, sel_prob_curr, reward)
             loss.backward()
             dvrl_optimizer.step()
+            # update baseline
+            baseline = ((self.moving_average_window - 1) / self.moving_average_window) * baseline + (dvrl_perf / self.moving_average_window)
 
             print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, QWK: {dvrl_perf:.3f}')
             rewards_history.append(reward.item())
