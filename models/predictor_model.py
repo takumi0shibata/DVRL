@@ -11,7 +11,7 @@ class EssayScorer(nn.Module):
     """
     Essay Scorer
     """
-    def __init__(self, input_feature=2048):
+    def __init__(self, input_feature):
         super(EssayScorer, self).__init__()
         self.net = nn.Sequential(
             nn.Linear(input_feature, 512),
