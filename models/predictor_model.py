@@ -7,13 +7,18 @@ import torch
 import torch.nn as nn
 
 
-class Predictor(nn.Module):
+class EssayScorer(nn.Module):
     """
-    Predictor.
+    Essay Scorer
     """
     def __init__(self, input_feature=2048):
-        super().__init__()
-        self.linear_layer = nn.Linear(input_feature, 2)
+        super(EssayScorer, self).__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_feature, 512),
+            nn.ReLU(),
+            nn.Linear(512, 1),
+            nn.Sigmoid()
+        )
 
     def forward(self, x):
-        return self.linear_layer(x)
+        return self.net(x)

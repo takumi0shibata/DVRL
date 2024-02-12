@@ -9,7 +9,7 @@ from sklearn import metrics
 
 from models.value_estimator import DataValueEstimator
 from dvrl.dvrl_loss import DvrlLoss
-from utils.my_utils_for_DVRL import fit_func, pred_func, calc_qwk
+from utils.dvrl_utils import fit_func, pred_func, calc_qwk
 
 class Dvrl(object):
     """

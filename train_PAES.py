@@ -14,7 +14,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from configs.configs import Configs
 from utils.read_data import read_essays_single_score, read_pos_vocab
 from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences
-from models.hierarchical_att_model import PAES_on_torch, EssayEncoder
+from models.PAES import PAES
 from utils.evaluation import train_model, evaluate_model
 
 def main():
@@ -43,8 +43,8 @@ def main():
     np.random.seed(seed)
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
-    # torch.manual_seed(seed)
-    # torch.cuda.manual_seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
 
     print("Test prompt id is {} of type {}".format(test_prompt_id, type(test_prompt_id)))
     print("Attribute: {}".format(attribute_name))
@@ -153,7 +153,7 @@ def main():
 
     # Create model
     # model = PAES_on_torch(100, 100, batch_size, len(pos_vocab), configs, X_train_linguistic_features.size()[1], X_train_readability.size()[1], device)
-    model = EssayEncoder(max_sentnum, max_sentlen, X_train_linguistic_features.size(1), X_train_readability.size(1), pos_vocab=pos_vocab)
+    model = PAES(max_sentnum, max_sentlen, X_train_linguistic_features.size(1), X_train_readability.size(1), pos_vocab=pos_vocab)
     model = model.to(device)
     print(model)
 

@@ -17,9 +17,10 @@ import torch.nn as nn
 # import my modules
 from configs.configs import Configs
 import dvrl.dvrl as dvrl
-from utils.my_utils_for_DVRL import calc_qwk
+from utils.dvrl_utils import calc_qwk
 from transformers import AutoConfig
 from utils.create_embedding_feautres import create_embedding_features
+from models.predictor_model import EssayScorer
 
 
 def main():
@@ -73,7 +74,6 @@ def main():
     data_path1 = configs.DATA_PATH2 + str(test_prompt_id) + '/fold-0/'
     data_path2 = configs.DATA_PATH2 + str(noise_prompt) + '/fold-0/'
     model_name = 'microsoft/deberta-v3-large'
-    config = AutoConfig.from_pretrained(model_name)
 
     train_features1, dev_features1, test_features1, y_train1, y_dev1, y_test1 = create_embedding_features(data_path1, test_prompt_id, attribute_name, model_name, device)
     train_features2, dev_features2, test_features2, y_train2, y_dev2, y_test2 = create_embedding_features(data_path2, noise_prompt, attribute_name, model_name, device)
@@ -108,12 +108,8 @@ def main():
     ###################################################
     # Create predictor
     print('Creating predictor model...')
-    pred_model = nn.Sequential(
-        nn.Linear(config.hidden_size, 512),
-        nn.ReLU(),
-        nn.Linear(512, 1),
-        nn.Sigmoid()
-    ).to(device)
+    config = AutoConfig.from_pretrained(model_name)
+    pred_model = EssayScorer(input_feature=config.hidden_size).to(device)
 
     # Network parameters
     print('Initialize DVRL class')
