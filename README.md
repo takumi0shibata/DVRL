@@ -14,4 +14,6 @@ To embark on this project, ensure Python is installed on your system. You will a
 ### Usage
 
 To commence training the DVRL model, execute the `train_dvrl.py` script. This script is designed to accept multiple command-line arguments, allowing for a tailored training experience. Below is an example command:
-`python train_dvrl.py --test_prompt_id 1`
+```
+python train_dvrl.py --test_prompt_id 1
+```
