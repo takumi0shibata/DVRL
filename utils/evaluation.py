@@ -1,11 +1,35 @@
+"""Evaluation functions for PAES model."""
+
 from tqdm import tqdm
 import numpy as np
 import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
 from sklearn.metrics import mean_squared_error, cohen_kappa_score, mean_absolute_error
 from utils.general_utils import get_min_max_scores
 
 # 訓練関数の定義
-def train_model(model, data_loader, loss_fn, optimizer, device, scheduler=None):
+def train_model(
+        model: nn.Module,
+        data_loader: DataLoader,
+        loss_fn: nn.Module,
+        optimizer: nn.Module,
+        device: torch.device,
+        scheduler: nn.Module =None
+        ) -> float:
+    """
+    Train the model.
+    Args:
+        model: Model to train
+        data_loader: Data loader
+        loss_fn: Loss function
+        optimizer: Optimizer
+        device: Device to run the model
+        scheduler: Learning rate scheduler
+    Returns:
+        float: Loss value
+    """
     model.train()
 
     losses = []
@@ -35,7 +59,25 @@ def train_model(model, data_loader, loss_fn, optimizer, device, scheduler=None):
     return np.mean(losses)
 
 # 評価関数の定義
-def evaluate_model(model, data_loader, loss_fn, device, attribute):
+def evaluate_model(
+        model: nn.Module,
+        data_loader: DataLoader,
+        loss_fn: nn.Module,
+        device: torch.device,
+        attribute: str
+        ) -> dict:
+    """
+    Evaluate the model.
+    Args:
+        model: Model to evaluate
+        data_loader: Data loader
+        loss_fn: Loss function
+        device: Device to run the model
+        attribute: Attribute to evaluate
+    Returns:
+        dict: Evaluation results
+    """
+    
     model.eval()
 
     losses = []

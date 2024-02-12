@@ -1,19 +1,16 @@
-"""
-Loss function for data valuation
-"""
+"""Loss function for data valuation"""
 
 import torch
 import torch.nn as nn
 
 
 class DvrlLoss(nn.Module):
-    def __init__(self, epsilon, threshold):
+    def __init__(self, epsilon: float, threshold: float) -> None:
         """
         Construct class
-        :param epsilon: Used to avoid log(0)
-        :type epsilon:
-        :param threshold: The exploration rate
-        :type threshold:
+        Args:
+            epsilon: Small value to avoid overflow
+            threshold: Encourages exploration
         """
         super().__init__()
         self.epsilon = epsilon
@@ -22,14 +19,12 @@ class DvrlLoss(nn.Module):
     def forward(self, est_data_value, s_input, reward_input):
         """
         Calculate the loss.
-        :param est_data_value: The estimated data value(probability)
-        :type est_data_value: torch.Tensor
-        :param s_input: Final selection
-        :type s_input: torch.Tensor
-        :param reward_input: Reward
-        :type reward_input: torch.Float
-        :return:
-        :rtype:
+        Args:
+            est_data_value: Estimated data value
+            s_input: data selection array
+            reward_input: Reward
+        Returns:
+            dve_loss: Loss value
         """
         # Generator loss (REINFORCE algorithm)
         one = torch.ones_like(est_data_value, dtype=est_data_value.dtype)

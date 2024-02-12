@@ -1,10 +1,21 @@
+"""PAES model"""
+
 import torch
 import torch.nn as nn
 from custom_layers.soft_attention import SoftAttention
 
 
 class PAES(nn.Module):
-    def __init__(self, max_num, max_len, linguistic_feature_size, readability_feature_size, embed_dim=50, pos_vocab=None):
+    def __init__(
+            self,
+            max_num: int,
+            max_len: int,
+            linguistic_feature_size: int,
+            readability_feature_size: int,
+            embed_dim=50,
+            pos_vocab=None
+            ) -> None:
+        
         super(PAES, self).__init__()
         self.N = max_num
         self.L = max_len
@@ -17,7 +28,13 @@ class PAES(nn.Module):
         self.sent_att = SoftAttention(100)
         self.linear = nn.Linear(100+linguistic_feature_size+readability_feature_size, 1)
 
-    def forward(self, x, linguistic_features, readability_features):
+    def forward(
+            self,
+            x: torch.Tensor,
+            linguistic_features: torch.Tensor,
+            readability_features: torch.Tensor
+            ) -> torch.Tensor:
+        
         embed = self.embed_layer(x)
         embed = nn.Dropout(0.5)(embed)
         embed = embed.view(embed.size()[0], self.N, self.L, self.embed_dim)

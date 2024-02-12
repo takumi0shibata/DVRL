@@ -1,13 +1,37 @@
+"""Utility functions for DVRL model."""
+
 import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
 import torch
-from torch import nn, optim
+import torch.optim as optim
+import torch.nn as nn
 from sklearn.metrics import cohen_kappa_score
 from utils.general_utils import get_min_max_scores
 
 
+def fit_func(
+        model: nn.Module,
+        x_train: np.ndarray,
+        y_train: np.ndarray,
+        batch_size: int,
+        epochs: int,
+        device: torch.device,
+        sample_weight: np.ndarray = None
+        ) -> list:
+    """
+    Fit the model with the given data.
+    Args:
+        model: Model to train
+        x_train: Training data
+        y_train: Training labels
+        batch_size: Batch size
+        epochs: Number of epochs
+        device: Device to run the model
+        sample_weight: Sample weight for each data
+    Returns:
+        list: Loss history
+    """
 
-def fit_func(model, x_train, y_train, batch_size, epochs, device, sample_weight=None):
     model = model.to(device)
     model.train()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -52,7 +76,22 @@ def fit_func(model, x_train, y_train, batch_size, epochs, device, sample_weight=
     
     return history
 
-def pred_func(model, x_test, batch_size, device):
+def pred_func(
+        model: nn.Module,
+        x_test: np.ndarray,
+        batch_size: int,
+        device: torch.device
+        ) -> list:
+    """
+    Predict with the given model.
+    Args:
+        model: Model to predict
+        x_test: Test data
+        batch_size: Batch size
+        device: Device to run the model
+    Returns:
+        list: Predicted results
+    """
     model = model.to(device)
     model.eval()
 
@@ -67,7 +106,18 @@ def pred_func(model, x_test, batch_size, device):
             preds.extend(y_pred.cpu().tolist())
     return preds
 
-def calc_qwk(y_true, y_pred, prompt_id, attribute):
+def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str) -> float:
+    """
+    Calculate the quadratic weighted kappa.
+    Args:
+        y_true: True labels
+        y_pred: Predicted labels
+        prompt_id: Prompt ID
+        attribute: Attribute name
+    Returns:
+        float: Quadratic weighted kappa
+    """
+
     minscore, maxscore = get_min_max_scores()[prompt_id][attribute]
 
     y_true = (maxscore - minscore) * np.array(y_true) + minscore
@@ -75,7 +125,16 @@ def calc_qwk(y_true, y_pred, prompt_id, attribute):
     
     return cohen_kappa_score(y_true, y_pred, weights='quadratic', labels=[i for i in range(minscore, maxscore+1)])
 
-def get_sample_weight(data_value, top_p, ascending=True):
+def get_sample_weight(data_value: np.ndarray, top_p: float, ascending: bool =True):
+    """
+    Get sample weight for the given data value.
+    Args:
+        data_value: Data value
+        top_p: Top percentage to be selected
+        ascending: If True, select the lowest data value
+    Returns:
+        np.ndarray: Sample weight
+    """
     if ascending:
         sorted_data_value = data_value.flatten().argsort()
     else:

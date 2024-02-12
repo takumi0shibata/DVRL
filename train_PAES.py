@@ -1,5 +1,5 @@
+"""This script trains the PAES_on_torch model on the given prompt and attribute."""
 
-# This script trains the PAES_on_torch model on the given prompt and attribute.
 import os
 import random
 import argparse

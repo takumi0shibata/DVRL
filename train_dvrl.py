@@ -1,7 +1,5 @@
 # coding=utf-8
-"""
-Training on DVRL class
-"""
+"""Training on DVRL class"""
 
 import os
 import platform
@@ -14,7 +12,6 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 
-# import my modules
 from configs.configs import Configs
 import dvrl.dvrl as dvrl
 from utils.dvrl_utils import calc_qwk

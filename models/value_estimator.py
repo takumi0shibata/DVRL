@@ -1,44 +1,49 @@
+"""Value estimator model for the data value estimation"""
+
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+
 
 class DataValueEstimator(nn.Module):
-    def __init__(self, input_dim, hidden_dim, comb_dim, layer_number, act_fn):
+    def __init__(
+            self,
+            input_dim: int,
+            hidden_dim: int,
+            comb_dim: int,
+            layer_number: int,
+            act_fn: callable
+            ) -> None:
         """
         Args:
-          input_dim (int): The dimensionality of the input features (x_input and y_input combined).
-          hidden_dim (int): The dimensionality of the hidden layers.
-          comb_dim (int): The dimensionality of the combined layer.
-          layer_number (int): Total number of layers in the MLP before combining with y_hat.
-          act_fn (callable): Activation function to use.
+          input_dim: The dimensionality of the input features (x_input and y_input combined).
+          hidden_dim: The dimensionality of the hidden layers.
+          comb_dim: The dimensionality of the combined layer.
+          layer_number: Total number of layers in the MLP before combining with y_hat.
+          act_fn: Activation function to use.
         """
+
         super(DataValueEstimator, self).__init__()
         
         self.act_fn = act_fn
-        
         # Initial layer
         self.initial_layer = nn.Linear(input_dim, hidden_dim)
-        
         # Intermediate layers
         self.intermediate_layers = nn.ModuleList(
             [nn.Linear(hidden_dim, hidden_dim) for _ in range(layer_number - 3)]
         )
-        
         # Layer before combining with y_hat
         self.pre_comb_layer = nn.Linear(hidden_dim, comb_dim)
-        
         # Layer after combining with y_hat
-        self.comb_layer = nn.Linear(comb_dim + 1, comb_dim)  # Assuming y_hat_input is 1-dimensional
-        
+        self.comb_layer = nn.Linear(comb_dim + 1, comb_dim)
         # Output layer
         self.output_layer = nn.Linear(comb_dim, 1)
         
-    def forward(self, x_input, y_input, y_hat_input):
+    def forward(self, x_input: torch.Tensor, y_input: torch.Tensor, y_hat_input: torch.Tensor) -> torch.Tensor:
         """
         Args:
-          x_input (Tensor): Input features.
-          y_input (Tensor): Target labels.
-          y_hat_input (Tensor): Predicted labels or some representation thereof.
+          x_input: Input features.
+          y_input: Target labels.
+          y_hat_input: Predicted labels or some representation thereof.
           
         Returns:
           Tensor: The estimated data values.

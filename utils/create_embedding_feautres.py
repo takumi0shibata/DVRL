@@ -1,6 +1,9 @@
+"""Utility functions for creating embedding features by pre-trained language model."""
+
 import pandas as pd
 import os
 import torch
+import torch.nn as nn
 import pickle
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel
@@ -10,7 +13,25 @@ from torch.utils.data import DataLoader, Dataset
 from utils.general_utils import get_min_max_scores
 
 
-def create_embedding_features(data_path, prompt_id, attribute_name, embedding_model_name, device) -> tuple:
+def create_embedding_features(
+        data_path: str,
+        prompt_id: int,
+        attribute_name: str,
+        embedding_model_name: str,
+        device: torch.device
+        ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Create embedding features for the given data.
+    Args:
+        data_path: Path to the data.
+        prompt_id: Prompt id.
+        attribute_name: Attribute name.
+        embedding_model_name: Pre-trained language model name.
+        device: Device to run the model.
+    Returns:
+        tuple: Train, dev, and test features and labels.
+    """
+
     # Load data
     print(f'load data from {data_path}...')
     data = load_data(data_path)
@@ -65,6 +86,13 @@ def create_embedding_features(data_path, prompt_id, attribute_name, embedding_mo
 
 
 def load_data(data_path: str) -> dict:
+    """
+    Load data from the given path.
+    Args:
+        data_path: Path to the data.
+    Returns:
+        dict: Data.
+    """
     data = {}
     for file in ['train', 'dev', 'test']:
         feature = []
@@ -81,7 +109,17 @@ def load_data(data_path: str) -> dict:
 
     return data
 
-def run_embedding_model(data_loader: DataLoader, model, device) -> np.array:
+def run_embedding_model(data_loader: DataLoader, model: nn.Module, device: torch.device) -> np.ndarray:
+    """
+    Run the embedding model.
+    Args:
+        data_loader: Data loader.
+        model: Embedding model.
+        device: Device to run the model.
+    Returns:
+        np.ndarray: Features.
+    """
+
     model.eval()
     progress_bar = tqdm(data_loader, desc="Create Embedding", unit="batch", ncols=100)
     with torch.no_grad():
@@ -95,7 +133,13 @@ def run_embedding_model(data_loader: DataLoader, model, device) -> np.array:
 
 
 class EssayDataset(Dataset):
-    def __init__(self, texts, tokenizer, max_length):
+    def __init__(self, texts: np.ndarray, tokenizer: AutoTokenizer, max_length: int) -> None:
+        """
+        Args:
+            texts: Texts.
+            tokenizer: Tokenizer.
+            max_length: Maximum length of the input.
+        """
         self.texts = texts
         self.tokenizer = tokenizer
         self.max_length = max_length
@@ -124,7 +168,17 @@ class EssayDataset(Dataset):
     
 
 # データローダーの定義
-def create_data_loader(text, tokenizer, max_length, batch_size):
+def create_data_loader(text: list[str], tokenizer: AutoTokenizer, max_length: int, batch_size: int) -> DataLoader:
+    """
+    Create data loader.
+    Args:
+        text: Texts.
+        tokenizer: Tokenizer.
+        max_length: Maximum length of the input.
+        batch_size: Batch size.
+    Returns:
+        DataLoader: Data loader.
+    """
     ds = EssayDataset(
         texts=np.array(text),
         tokenizer=tokenizer,

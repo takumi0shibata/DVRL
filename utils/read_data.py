@@ -1,3 +1,5 @@
+"""Data reading utilities for the essay scoring project."""
+
 import pickle
 import nltk
 import re

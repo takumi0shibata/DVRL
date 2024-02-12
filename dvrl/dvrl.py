@@ -1,22 +1,44 @@
-# coding=utf-8
+
+"""DVRL class for data valuation using reinforcement learning"""
+
 import copy
 import os
 import numpy as np
 from tqdm import tqdm
 import torch
 import torch.optim as optim
+import torch.nn as nn
 from sklearn import metrics
 
 from models.value_estimator import DataValueEstimator
 from dvrl.dvrl_loss import DvrlLoss
 from utils.dvrl_utils import fit_func, pred_func, calc_qwk
 
-class Dvrl(object):
-    """
-    Data Valuation using Reinforcement Learning (DVRL) class.
-    """
 
-    def __init__(self, x_train, y_train, x_val, y_val, pred_model, parameters, device, test_prompt_id):
+class Dvrl(object):
+
+    def __init__(
+            self,
+            x_train: np.ndarray,
+            y_train: np.ndarray,
+            x_val: np.ndarray,
+            y_val: np.ndarray,
+            pred_model: nn.Module,
+            parameters: dict,
+            device: str,
+            test_prompt_id: int
+            ) -> None:
+        """
+        Args:
+            x_train: Training data
+            y_train: Training labels
+            x_val: Validation data
+            y_val: Validation labels
+            pred_model: Prediction model
+            parameters: Parameters for DVRL
+            device: Device to run the model
+            test_prompt_id: Prompt id for the test
+        """
 
         self.x_train = x_train
         self.y_train = y_train.reshape(-1, 1)
@@ -63,11 +85,15 @@ class Dvrl(object):
         fit_func(self.val_model, self.x_val, self.y_val, self.batch_size_predictor, self.inner_iterations, self.device)
 
 
-    def train_dvrl(self, metric='mse'):
+    def train_dvrl(self, metric: str = 'mse') -> tuple[list[float], list[float]]:
         """
-        Train value estimator
-        :return:
-        :rtype:
+        Train the DVRL model
+        Args:
+            metric: Metric to use for the DVRL
+                mse or qwk
+        Returns:
+            rewards_history: History of rewards
+            losses_history: History of losses
         """
         # selection network
         self.value_estimator = DataValueEstimator(self.data_dim+self.label_dim, self.hidden_dim, self.comb_dim, self.layer_number, self.act_fn)
@@ -152,15 +178,14 @@ class Dvrl(object):
 
         return rewards_history, losses_history
 
-    def dvrl_valuator(self, x_train, y_train):
+    def dvrl_valuator(self, x_train: np.ndarray, y_train: np.ndarray) -> np.ndarray:
         """
         Estimate the given data value.
-        :param feature: Data intermediate feature.
-        :type feature: torch.Tensor
-        :param label: Corresponding labels
-        :type label:torch.Tensor
-        :return:
-        :rtype:
+        Args:
+            x_train: Training data
+            y_train: Training labels
+        Returns:
+            data_value: Estimated data value
         """
         x_train = torch.tensor(x_train, dtype=torch.float).to(self.device)
         y_train = torch.tensor(y_train, dtype=torch.float).view(-1, 1).to(self.device)
@@ -175,7 +200,14 @@ class Dvrl(object):
         return data_value.cpu().detach().numpy()
     
 
-    def dvrl_predict(self, x_test):
+    def dvrl_predict(self, x_test: np.ndarray) -> np.ndarray:
+        """
+        Predict the given data using the DVRL model
+        Args:
+            x_test: Test data
+        Returns:
+            test_results: Predicted results
+        """
 
         test_results = pred_func(self.final_model, x_test, self.batch_size_predictor, self.device)
 

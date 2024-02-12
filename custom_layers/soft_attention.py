@@ -1,14 +1,17 @@
+"""Attention Pooling Layer for PAES"""
+
 import torch
 import torch.nn as nn
 
 class SoftAttention(nn.Module):
-    def __init__(self, hidden_dim):
+
+    def __init__(self, hidden_dim: int) -> None:
         super(SoftAttention, self).__init__()
         self.hidden_dim = hidden_dim
         self.w = nn.Linear(self.hidden_dim, self.hidden_dim)
         self.v = nn.Linear(self.hidden_dim, 1)
 
-    def forward(self, h):
+    def forward(self, h: torch.Tensor) -> torch.Tensor:
         w = torch.tanh(self.w(h))
 
         weight = self.v(w)

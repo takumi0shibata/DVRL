@@ -1,3 +1,5 @@
+"""General utility functions for the project."""
+
 import numpy as np
 
 def get_overall_score_range():
