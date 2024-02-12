@@ -1,4 +1,4 @@
-# DVRL_on_torch Project
+# DVRL_on_torch for AES Project
 
 Welcome to the DVRL_on_torch project! This project is primarily focused on training the DVRL (Data Valuation using Reinforcement Learning) model using PyTorch. The main objective is to provide a robust framework for evaluating the value of data in various machine learning tasks, thereby enhancing model performance through data valuation.
 
