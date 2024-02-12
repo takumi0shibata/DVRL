@@ -141,9 +141,10 @@ def pred_func(model, x_test, batch_size, device):
 
 def calc_qwk(y_true, y_pred, prompt_id, attribute):
     minscore, maxscore = get_min_max_scores()[prompt_id][attribute]
-    y_pred = np.round((maxscore - minscore) * np.array(y_pred) + minscore).flatten()
-    y_true = (maxscore - minscore) * y_true + minscore
 
+    y_true = (maxscore - minscore) * np.array(y_true) + minscore
+    y_pred = np.round((maxscore - minscore) * np.array(y_pred) + minscore).flatten()
+    
     return cohen_kappa_score(y_true, y_pred, weights='quadratic', labels=[i for i in range(minscore, maxscore+1)])
 
 def get_sample_weight(data_value, top_p, ascending=True):

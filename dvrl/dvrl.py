@@ -1,26 +1,14 @@
 # coding=utf-8
-"""
-The core class of DVRL(Data Valuation using Reinforcement Learning).
-"""
-
 import copy
 import os
-from tqdm import tqdm
-
 import numpy as np
+from tqdm import tqdm
 import torch
-import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
-import torch.optim.lr_scheduler as lr_scheduler
-
 from sklearn import metrics
 
-import utils.helper as helper
 from models.value_estimator import DataValueEstimator
-from dvrl.dvrl_pretrain import pretrain
 from dvrl.dvrl_loss import DvrlLoss
-from utils.evaluation import evaluate_model
 from utils.my_utils_for_DVRL import fit_func, pred_func, calc_qwk
 
 class Dvrl(object):
@@ -28,13 +16,12 @@ class Dvrl(object):
     Data Valuation using Reinforcement Learning (DVRL) class.
     """
 
-    def __init__(self, x_train, y_train, x_val, y_val, pred_model, parameters, checkpoint_file_name, device, test_prompt_id):
+    def __init__(self, x_train, y_train, x_val, y_val, pred_model, parameters, device, test_prompt_id):
 
         self.x_train = x_train
         self.y_train = y_train.reshape(-1, 1)
         self.x_val = x_val
         self.y_val = y_val.reshape(-1, 1)
-        self.checkpoint_file_name = checkpoint_file_name
         self.device = device
         self.test_prompt_id = test_prompt_id
 
@@ -86,7 +73,6 @@ class Dvrl(object):
         self.value_estimator = self.value_estimator.to(self.device)
         dvrl_criterion = DvrlLoss(self.epsilon, self.threshold).to(self.device)
         dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.learning_rate)
-        # scheduler = lr_scheduler.ExponentialLR(dvrl_optimizer, gamma=0.999)
 
         # baseline performance
         y_valid_hat = pred_func(self.ori_model, self.x_val, self.batch_size_predictor, self.device)
@@ -172,6 +158,9 @@ class Dvrl(object):
         :return:
         :rtype:
         """
+        x_train = torch.tensor(x_train, dtype=torch.float).to(self.device)
+        y_train = torch.tensor(y_train, dtype=torch.float).view(-1, 1).to(self.device)
+
         # first calculate the prection difference
         output = self.val_model(x_train)
         y_pred_diff = torch.abs(y_train - output)

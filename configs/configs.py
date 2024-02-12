@@ -7,13 +7,9 @@ class Configs:
     PRETRAINED_EMBEDDING = True
     EMBEDDING_PATH = 'embeddings/glove.6B.50d.txt'
     VOCAB_SIZE = 4000
-    DATA_PATH = 'data/train_test_split/'
+    DATA_PATH1 = 'data/train_test_split/'
     DATA_PATH2 = 'data/train_dev_test_split/'
     DATA_PATH3 = 'data/cross_prompt_attributes/'
-    DATA_PATH4 = 'data/cross_prompt_attributes_small/'
-    DATA_PATH5 = 'data/cross_prompt_attributes_small3456_/'
-    DATA_PATH6 = 'data/cross_prompt_attribute_small123456/'
-    DATA_PATH7 = 'data/cross_prompt_content/'
     FEATURES_PATH = 'data/hand_crafted_v3.csv'
     READABILITY_PATH = 'data/allreadability.pickle'
     EPOCHS = 50

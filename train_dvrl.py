@@ -8,26 +8,19 @@ import platform
 import pickle
 import torch
 import numpy as np
-import pandas as pd
 import argparse
 import random
 import gc
 import warnings
 import matplotlib.pyplot as plt
-
-import dvrl.dvrl as dvrl
-import utils.helper as helper
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset, Dataset
-from models.predictor_model import Predictor
+
 # import my modules
 from configs.configs import Configs
-from utils.read_data import read_essays_single_score, read_pos_vocab
-from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences, get_min_max_scores
-from models.hierarchical_att_model import PAES_on_torch, EssayEncoder
-from utils.evaluation import train_model, evaluate_model
-from utils.my_utils_for_DVRL import load_data, create_data_loader, create_embedding, fit_func, pred_func, calc_qwk
+import dvrl.dvrl as dvrl
+from utils.general_utils import get_min_max_scores
+from utils.my_utils_for_DVRL import load_data, create_data_loader, create_embedding, calc_qwk
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 
 
@@ -60,12 +53,12 @@ def main():
     else:
         raise Exception('Unknown platform')
     
-    # fix random seed
-    # np.random.seed(seed)
-    # random.seed(seed)
-    # os.environ['PYTHONHASHSEED'] = str(seed)
-    # torch.manual_seed(seed)
-    # torch.cuda.manual_seed(seed)
+    #fix random seed
+    np.random.seed(seed)
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
 
     # print info
     print("Test prompt id is {} of type {}".format(test_prompt_id, type(test_prompt_id)))
@@ -202,7 +195,7 @@ def main():
     dvrl_params = {}
     dvrl_params['hidden_dim'] = 100
     dvrl_params['comb_dim'] = 10
-    dvrl_params['iterations'] = 2000
+    dvrl_params['iterations'] = 30
     dvrl_params['activation'] = nn.ReLU()
     dvrl_params['layer_number'] = 5
     dvrl_params['learning_rate'] = 0.01
@@ -210,12 +203,9 @@ def main():
     dvrl_params['inner_iterations'] = 100
     dvrl_params['batch_size_predictor'] = 256
 
-    # Set checkpoint file name
-    checkpoint_file_name = './tmp/model.pth'
-
 
     # Initialize DVRL
-    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features, y_dev, pred_model, dvrl_params, checkpoint_file_name, device, test_prompt_id)
+    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features, y_dev, pred_model, dvrl_params, device, test_prompt_id)
 
     # Train DVRL
     print('Training DVRL...')
@@ -223,26 +213,18 @@ def main():
 
     # Estimate data value
     print('Estimating data value...')
-    x_train = torch.tensor(train_features, dtype=torch.float).to(device)
-    y_train = torch.tensor(y_train, dtype=torch.float).view(-1, 1).to(device)
-    data_value = dvrl_class.dvrl_valuator(x_train, y_train)
+    data_value = dvrl_class.dvrl_valuator(train_features, y_train)
+    np.save('./tmp/estimated_data_value.npy', data_value)
 
     # Pridicts with DVRl
     y_test_hat = dvrl_class.dvrl_predict(test_features)
     print('Finished data valuation.')
 
-    minscore, maxscore = get_min_max_scores()[1]['score']
-    y_pred = np.round(((maxscore - minscore) * np.array(y_test_hat) + minscore))
-    y_true = (maxscore - minscore) * y_test + minscore
 
-    from sklearn.metrics import cohen_kappa_score
-    qwk = cohen_kappa_score(y_true, y_pred, weights='quadratic')
-
+    qwk = calc_qwk(y_test, y_test_hat, test_prompt_id, attribute_name)
     print(f'QWK: {qwk: .4f}')
     print(f'Data Value: {data_value}')
-    np.save('./estimated_data_value.npy', data_value)
-
-
+    
     # plot loss
     epochs = list(range(1, dvrl_params['iterations']+1))
     plt.figure(figsize=(10, 5))
@@ -251,7 +233,7 @@ def main():
     plt.xlabel('Epoch')
     plt.ylabel('Reward')
     plt.legend()
-    plt.show()
+    plt.savefig('./tmp/rewards_history.png')
 
     plt.figure(figsize=(10, 5))
     plt.plot(epochs, losses_history, label='Train', color='red')
@@ -259,7 +241,7 @@ def main():
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
-    plt.show()
+    plt.savefig('./tmp/losses_history.png')
 
 
 if __name__ == '__main__':
