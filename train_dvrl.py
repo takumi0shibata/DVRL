@@ -116,7 +116,7 @@ def main():
     dvrl_params = {}
     dvrl_params['hidden_dim'] = 100
     dvrl_params['comb_dim'] = 10
-    dvrl_params['iterations'] = 30
+    dvrl_params['iterations'] = 2000
     dvrl_params['activation'] = nn.ReLU()
     dvrl_params['layer_number'] = 5
     dvrl_params['learning_rate'] = 0.01
