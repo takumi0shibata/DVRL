@@ -1,82 +1,10 @@
 import numpy as np
-import pandas as pd
-import pickle
-from torch.utils.data import DataLoader, Dataset, TensorDataset
+from torch.utils.data import DataLoader, TensorDataset
 import torch
 from torch import nn, optim
-from tqdm import tqdm
 from sklearn.metrics import cohen_kappa_score
 from utils.general_utils import get_min_max_scores
 
-
-def load_data(data_path: str) -> dict:
-    data = {}
-    for file in ['train', 'dev', 'test']:
-        feature = []
-        label = []
-        essay_id = []
-        essay_set = []
-        read_data = pd.read_pickle(data_path + file + '.pkl')
-        for i in range(len(read_data)):
-            feature.append(read_data[i]['content_text'])
-            label.append(int(read_data[i]['score']))
-            essay_id.append(int(read_data[i]['essay_id']))
-            essay_set.append(int(read_data[i]['prompt_id']))
-        data[file] = {'feature': feature, 'label': label, 'essay_id': essay_id, 'essay_set': essay_set}
-
-    return data
-
-
-class EssayDataset(Dataset):
-    def __init__(self, texts, tokenizer, max_length):
-        self.texts = texts
-        self.tokenizer = tokenizer
-        self.max_length = max_length
-
-    def __len__(self):
-        return len(self.texts)
-
-    def __getitem__(self, item):
-        text = str(self.texts[item])
-
-        encoding = self.tokenizer.encode_plus(
-            text,
-            add_special_tokens=True,
-            max_length=self.max_length,
-            padding='max_length',
-            truncation=True,
-            return_attention_mask=True,
-            return_tensors='pt',
-        )
-
-        return {
-            'text': text,
-            'input_ids': encoding['input_ids'].flatten(),
-            'attention_mask': encoding['attention_mask'].flatten(),
-        }
-    
-
-# データローダーの定義
-def create_data_loader(text, tokenizer, max_length, batch_size):
-    ds = EssayDataset(
-        texts=np.array(text),
-        tokenizer=tokenizer,
-        max_length=max_length
-    )
-    return DataLoader(ds, batch_size=batch_size, num_workers=4)
-
-
-def create_embedding(data_loader: DataLoader, model, device):
-    model.eval()
-    progress_bar = tqdm(data_loader, desc="Create Embedding", unit="batch", ncols=100)
-    with torch.no_grad():
-        features = []
-        for d in progress_bar:
-            input_ids = d["input_ids"].to(device)
-            attention_mask = d["attention_mask"].to(device)
-            outputs = model(input_ids, attention_mask)
-            features.extend(outputs.last_hidden_state[:, 0, :].cpu().tolist())
-    return np.array(features)
 
 
 def fit_func(model, x_train, y_train, batch_size, epochs, device, sample_weight=None):
