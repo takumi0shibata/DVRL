@@ -30,11 +30,13 @@ def main():
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
     parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
-    parser.add_argument('--experiment_name', type=str, default='DVRL', help='name of the experiment')
+    parser.add_argument('--experiment_name', type=str, default='DVRL_DataValueEstimate', help='name of the experiment')
     args = parser.parse_args()
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
     seed = args.seed
+    save_dir = args.output_dir + args.experiment_name + '/'
+    os.makedirs(save_dir, exist_ok=True)
 
     # Load configs
     configs = Configs()
@@ -66,17 +68,10 @@ def main():
     # Step1. Create/Load Text Embedding
     ###################################################
     # Load data
-    noise_prompt = 2
-    data_path1 = configs.DATA_PATH2 + str(test_prompt_id) + '/fold-0/'
-    data_path2 = configs.DATA_PATH2 + str(noise_prompt) + '/fold-0/'
+    data_path = configs.DATA_PATH2 + str(test_prompt_id) + '/fold-0/'
     model_name = 'microsoft/deberta-v3-large'
 
-    train_features1, dev_features1, test_features1, y_train1, y_dev1, y_test1 = create_embedding_features(data_path1, test_prompt_id, attribute_name, model_name, device)
-    train_features2, dev_features2, test_features2, y_train2, y_dev2, y_test2 = create_embedding_features(data_path2, noise_prompt, attribute_name, model_name, device)
-
-    # Concatenate data of prompt 1 and prompt 2
-    train_features = np.concatenate([train_features1, train_features2], axis=0)
-    y_train = np.concatenate([y_train1, y_train2[::-1]], axis=0)
+    train_features, dev_features, test_features, y_train, y_dev, y_test = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
 
     # print info
     print('================================')
@@ -86,16 +81,16 @@ def main():
     print('Y_train min: ', np.min(y_train))
 
     print('================================')
-    print('X_dev: ', dev_features1.shape)
-    print('Y_dev: ', y_dev1.shape)
-    print('Y_dev max: ', np.max(y_dev1))
-    print('Y_dev min: ', np.min(y_dev1))
+    print('X_dev: ', dev_features.shape)
+    print('Y_dev: ', y_dev.shape)
+    print('Y_dev max: ', np.max(y_dev))
+    print('Y_dev min: ', np.min(y_dev))
 
     print('================================')
-    print('X_test: ', test_features1.shape)
-    print('Y_test: ', y_test1.shape)
-    print('Y_test max: ', np.max(y_test1))
-    print('Y_test min: ', np.min(y_test1))
+    print('X_test: ', test_features.shape)
+    print('Y_test: ', y_test.shape)
+    print('Y_test max: ', np.max(y_test))
+    print('Y_test min: ', np.min(y_test))
     print('================================')
 
 
@@ -123,23 +118,23 @@ def main():
 
 
     # Initialize DVRL
-    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features1, y_dev1, pred_model, dvrl_params, device, test_prompt_id)
+    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features, y_dev, pred_model, dvrl_params, device, test_prompt_id)
 
     # Train DVRL
     print('Training DVRL...')
-    rewards_history, losses_history = dvrl_class.train_dvrl('qwk')
+    rewards_history, losses_history = dvrl_class.train_dvrl('mse')
 
     # Estimate data value
     print('Estimating data value...')
     data_value = dvrl_class.dvrl_valuator(train_features, y_train)
-    np.save('./tmp/estimated_data_value.npy', data_value)
+    np.save(save_dir + 'estimated_data_value.npy', data_value)
 
     # Pridicts with DVRl
-    y_test_hat = dvrl_class.dvrl_predict(test_features1)
+    y_test_hat = dvrl_class.dvrl_predict(test_features)
     print('Finished data valuation.')
 
 
-    qwk = calc_qwk(y_test1, y_test_hat, test_prompt_id, attribute_name)
+    qwk = calc_qwk(y_test, y_test_hat, test_prompt_id, attribute_name)
     print(f'QWK: {qwk: .4f}')
     print(f'Data Value: {data_value}')
     
@@ -151,7 +146,7 @@ def main():
     plt.xlabel('Epoch')
     plt.ylabel('Reward')
     plt.legend()
-    plt.savefig('./tmp/rewards_history.png')
+    plt.savefig(save_dir + 'rewards_history.png')
 
     plt.figure(figsize=(10, 5))
     plt.plot(epochs, losses_history, label='Train', color='red')
@@ -159,7 +154,7 @@ def main():
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
-    plt.savefig('./tmp/losses_history.png')
+    plt.savefig(save_dir + 'losses_history.png')
 
 
 if __name__ == '__main__':

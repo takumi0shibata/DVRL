@@ -125,7 +125,7 @@ def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str) -> floa
     
     return cohen_kappa_score(y_true, y_pred, weights='quadratic', labels=[i for i in range(minscore, maxscore+1)])
 
-def get_sample_weight(data_value: np.ndarray, top_p: float, ascending: bool =True):
+def remove_top_p_sample(data_value: np.ndarray, top_p: float, ascending: bool =True):
     """
     Get sample weight for the given data value.
     Args:
@@ -144,4 +144,19 @@ def get_sample_weight(data_value: np.ndarray, top_p: float, ascending: bool =Tru
     weights = np.ones_like(data_value.flatten())
     for i in sorted_data_value:
         weights[i] = 0
+    return weights
+
+def random_remove_sample(data_value: np.ndarray, remove_p: float):
+    """
+    Get sample weight for the given data value.
+    Args:
+        data_value: Data value
+        remove_p: Percentage to be removed
+    Returns:
+        np.ndarray: Sample weight
+    """
+    weights = np.ones_like(data_value.flatten())
+    num_elements = int(len(weights) * remove_p)
+    remove_idx = np.random.choice(len(weights), num_elements, replace=False)
+    weights[remove_idx] = 0
     return weights

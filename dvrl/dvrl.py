@@ -163,7 +163,10 @@ class Dvrl(object):
             # update baseline
             baseline = ((self.moving_average_window - 1) / self.moving_average_window) * baseline + (dvrl_perf / self.moving_average_window)
 
-            print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, QWK: {dvrl_perf:.3f}')
+            if metric == 'mse':
+                print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, MSE: {dvrl_perf:.3f}')
+            elif metric == 'qwk':
+                print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, QWK: {dvrl_perf:.3f}')
             rewards_history.append(reward.item())
             losses_history.append(loss.item())
 
