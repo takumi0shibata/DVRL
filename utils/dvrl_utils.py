@@ -7,6 +7,7 @@ import torch.optim as optim
 import torch.nn as nn
 from sklearn.metrics import cohen_kappa_score
 from utils.general_utils import get_min_max_scores
+import matplotlib.pyplot as plt
 
 
 def fit_func(
@@ -120,7 +121,7 @@ def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str) -> floa
 
     minscore, maxscore = get_min_max_scores()[prompt_id][attribute]
 
-    y_true = (maxscore - minscore) * np.array(y_true) + minscore
+    y_true = np.round((maxscore - minscore) * np.array(y_true) + minscore)
     y_pred = np.round((maxscore - minscore) * np.array(y_pred) + minscore).flatten()
     
     return cohen_kappa_score(y_true, y_pred, weights='quadratic', labels=[i for i in range(minscore, maxscore+1)])
@@ -160,3 +161,56 @@ def random_remove_sample(data_value: np.ndarray, remove_p: float):
     remove_idx = np.random.choice(len(weights), num_elements, replace=False)
     weights[remove_idx] = 0
     return weights
+
+def discover_corrupted_sample(dve_out, noise_idx, noise_rate, output_path, plot=True):
+  """Reports True Positive Rate (TPR) of corrupted label discovery.
+
+  Args:
+    dve_out: data values
+    noise_idx: noise index
+    noise_rate: the ratio of noisy samples
+    plot: print plot or not
+
+  Returns:
+    output_perf: True positive rate (TPR) of corrupted label discovery
+                 (per 5 percentiles)
+  """
+
+  # Sorts samples by data values
+  num_bins = 20  # Per 100/20 percentile
+  sort_idx = np.argsort(dve_out)
+
+  # Output initialization
+  output_perf = np.zeros([num_bins,])
+
+  # For each percentile
+  for itt in range(num_bins):
+    # from low to high data values
+    output_perf[itt] = len(np.intersect1d(sort_idx[:int((itt+1)* \
+                              len(dve_out)/num_bins)], noise_idx)) \
+                              / len(noise_idx)
+
+  # Plot corrupted label discovery graphs
+  if plot:
+
+    # Defines x-axis
+    num_x = int(num_bins/2 + 1)
+    x = [a*(1.0/num_bins) for a in range(num_x)]
+
+    # Corrupted label discovery results (dvrl, optimal, random)
+    y_dvrl = np.concatenate((np.zeros(1), output_perf[:(num_x-1)]))
+    y_opt = [min([a*((1.0/num_bins)/noise_rate), 1]) for a in range(num_x)]
+    y_random = x
+
+    plt.figure(figsize=(6, 7.5))
+    plt.plot(x, y_dvrl, 'o-')
+    plt.plot(x, y_opt, '--')
+    plt.plot(x, y_random, ':')
+    plt.xlabel('Fraction of data Inspected', size=16)
+    plt.ylabel('Fraction of discovered corrupted samples', size=16)
+    plt.legend(['DVRL', 'Optimal', 'Random'], prop={'size': 16})
+    plt.title('Corrupted Sample Discovery', size=16)
+    plt.savefig(output_path + 'corrupted_sample_discovery.png')
+
+  # Returns True Positive Rate of corrupted label discovery
+  return output_perf

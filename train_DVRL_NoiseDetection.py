@@ -68,17 +68,17 @@ def main():
     # Step1. Create/Load Text Embedding
     ###################################################
     # Load data
-    noise_prompt = 2
-    data_path1 = configs.DATA_PATH2 + str(test_prompt_id) + '/fold-0/'
-    data_path2 = configs.DATA_PATH2 + str(noise_prompt) + '/fold-0/'
+    data_path = configs.DATA_PATH2 + str(test_prompt_id) + '/fold-0/'
     model_name = 'microsoft/deberta-v3-large'
 
-    train_features1, dev_features1, test_features1, y_train1, y_dev1, y_test1 = create_embedding_features(data_path1, test_prompt_id, attribute_name, model_name, device)
-    train_features2, dev_features2, test_features2, y_train2, y_dev2, y_test2 = create_embedding_features(data_path2, noise_prompt, attribute_name, model_name, device)
+    train_features, dev_features, test_features, y_train, y_dev, y_test = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
 
-    # Concatenate data of prompt 1 and prompt 2
-    train_features = np.concatenate([train_features1, train_features2], axis=0)
-    y_train = np.concatenate([y_train1, y_train2[::-1]], axis=0)
+    # add noise
+    num_elements = int(len(y_train) * 0.2)
+    noise_indices = np.random.choice(len(y_train), num_elements, replace=False)
+    y_train[noise_indices] += 0.3
+    np.save(save_dir + 'noise_indices.npy', noise_indices)
+
 
     # print info
     print('================================')
@@ -88,16 +88,16 @@ def main():
     print('Y_train min: ', np.min(y_train))
 
     print('================================')
-    print('X_dev: ', dev_features1.shape)
-    print('Y_dev: ', y_dev1.shape)
-    print('Y_dev max: ', np.max(y_dev1))
-    print('Y_dev min: ', np.min(y_dev1))
+    print('X_dev: ', dev_features.shape)
+    print('Y_dev: ', y_dev.shape)
+    print('Y_dev max: ', np.max(y_dev))
+    print('Y_dev min: ', np.min(y_dev))
 
     print('================================')
-    print('X_test: ', test_features1.shape)
-    print('Y_test: ', y_test1.shape)
-    print('Y_test max: ', np.max(y_test1))
-    print('Y_test min: ', np.min(y_test1))
+    print('X_test: ', test_features.shape)
+    print('Y_test: ', y_test.shape)
+    print('Y_test max: ', np.max(y_test))
+    print('Y_test min: ', np.min(y_test))
     print('================================')
 
 
@@ -125,7 +125,7 @@ def main():
 
 
     # Initialize DVRL
-    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features1, y_dev1, pred_model, dvrl_params, device, test_prompt_id)
+    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features, y_dev, pred_model, dvrl_params, device, test_prompt_id)
 
     # Train DVRL
     print('Training DVRL...')
@@ -137,11 +137,11 @@ def main():
     np.save(save_dir + 'estimated_data_value.npy', data_value)
 
     # Pridicts with DVRl
-    y_test_hat = dvrl_class.dvrl_predict(test_features1)
+    y_test_hat = dvrl_class.dvrl_predict(test_features)
     print('Finished data valuation.')
 
 
-    qwk = calc_qwk(y_test1, y_test_hat, test_prompt_id, attribute_name)
+    qwk = calc_qwk(y_test, y_test_hat, test_prompt_id, attribute_name)
     print(f'QWK: {qwk: .4f}')
     print(f'Data Value: {data_value}')
     
