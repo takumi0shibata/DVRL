@@ -122,7 +122,7 @@ def main():
     dvrl_params['inner_iterations'] = 100
     dvrl_params['batch_size_predictor'] = 256
     dvrl_params['moving_average_window'] = 10
-    dvrl_params['moving_average'] = True
+    dvrl_params['moving_average'] = False
 
 
     # Initialize DVRL
@@ -130,7 +130,7 @@ def main():
 
     # Train DVRL
     print('Training DVRL...')
-    rewards_history, losses_history = dvrl_class.train_dvrl('mse')
+    rewards_history, losses_history = dvrl_class.train_dvrl('qwk')
 
     # Estimate data value
     print('Estimating data value...')
