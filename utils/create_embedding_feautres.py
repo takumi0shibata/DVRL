@@ -13,6 +13,25 @@ from torch.utils.data import DataLoader, Dataset
 from utils.general_utils import get_min_max_scores
 
 
+def normalize_scores(y, essay_set, attribute_name):
+    """
+    Normalize scores based on the min and max scores for each unique prompt_id in essay_set.
+    Args:
+        y: Scores to normalize.
+        essay_set: Array of essay_set (prompt_id) for each score.
+        attribute_name: The attribute name to filter the min and max scores.
+    Returns:
+        np.ndarray: Normalized scores.
+    """
+    min_max_scores = get_min_max_scores()
+    normalized_scores = np.zeros_like(y, dtype=np.float)
+    for unique_prompt_id in np.unique(essay_set):
+        minscore, maxscore = min_max_scores[unique_prompt_id][attribute_name]
+        mask = (essay_set == unique_prompt_id)
+        normalized_scores[mask] = (y[mask] - minscore) / (maxscore - minscore)
+    return normalized_scores
+
+
 def create_embedding_features(
         data_path: str,
         prompt_id: int,
@@ -40,10 +59,14 @@ def create_embedding_features(
     y_dev = np.array(data['dev']['label'])
     y_test = np.array(data['test']['label'])
 
-    minscore, maxscore = get_min_max_scores()[prompt_id][attribute_name]
-    y_train = (y_train - minscore) / (maxscore - minscore)
-    y_dev = (y_dev - minscore) / (maxscore - minscore)
-    y_test = (y_test - minscore) / (maxscore - minscore)
+    train_essay_prompt = np.array(data['train']['essay_set'])
+    dev_essay_prompt = np.array(data['dev']['essay_set'])
+    test_essay_prompt = np.array(data['test']['essay_set'])
+
+    # Normalize scores
+    y_train = normalize_scores(y_train, train_essay_prompt, attribute_name)
+    y_dev = normalize_scores(y_dev, dev_essay_prompt, attribute_name)
+    y_test = normalize_scores(y_test, test_essay_prompt, attribute_name)
 
     # Create embedding
     os.makedirs(data_path + 'cache/', exist_ok=True)
