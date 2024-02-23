@@ -24,7 +24,7 @@ def normalize_scores(y, essay_set, attribute_name):
         np.ndarray: Normalized scores.
     """
     min_max_scores = get_min_max_scores()
-    normalized_scores = np.zeros_like(y, dtype=np.float)
+    normalized_scores = np.zeros_like(y, dtype=float)
     for unique_prompt_id in np.unique(essay_set):
         minscore, maxscore = min_max_scores[unique_prompt_id][attribute_name]
         mask = (essay_set == unique_prompt_id)
@@ -122,7 +122,10 @@ def load_data(data_path: str) -> dict:
         label = []
         essay_id = []
         essay_set = []
-        read_data = pd.read_pickle(data_path + file + '.pkl')
+        try:
+            read_data = pd.read_pickle(data_path + file + '.pkl')
+        except:
+            read_data = pd.read_pickle(data_path + file + '.pk')
         for i in range(len(read_data)):
             feature.append(read_data[i]['content_text'])
             label.append(int(read_data[i]['score']))

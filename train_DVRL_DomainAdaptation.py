@@ -10,6 +10,7 @@ import warnings
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
+from sklearn.model_selection import train_test_split
 
 from configs.configs import Configs
 import dvrl.dvrl as dvrl
@@ -68,20 +69,11 @@ def main():
     # Step1. Create/Load Text Embedding
     ###################################################
     # Load data
-    if test_prompt_id in [1, 2, 3, 4, 5, 6, 7]:
-        noise_prompt = test_prompt_id + 1
-    else:
-        noise_prompt = 1
-    data_path1 = configs.DATA_PATH2 + str(test_prompt_id) + '/fold-0/'
-    data_path2 = configs.DATA_PATH2 + str(noise_prompt) + '/fold-0/'
+    data_path = configs.DATA_PATH3 + str(test_prompt_id) + '/'
     model_name = 'microsoft/deberta-v3-large'
 
-    train_features1, dev_features1, test_features1, y_train1, y_dev1, y_test1 = create_embedding_features(data_path1, test_prompt_id, attribute_name, model_name, device)
-    train_features2, _, _, y_train2, _, _ = create_embedding_features(data_path2, noise_prompt, attribute_name, model_name, device)
-
-    # Concatenate data of prompt 1 and prompt 2
-    train_features = np.concatenate([train_features1, train_features2], axis=0)
-    y_train = np.concatenate([y_train1, y_train2], axis=0)
+    train_features, _, test_features, y_train, _, y_test = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
+    dev_features, test_features, y_dev, y_test = train_test_split(test_features, y_test, test_size=0.9, random_state=seed)
 
     # print info
     print('================================')
@@ -91,16 +83,16 @@ def main():
     print('Y_train min: ', np.min(y_train))
 
     print('================================')
-    print('X_dev: ', dev_features1.shape)
-    print('Y_dev: ', y_dev1.shape)
-    print('Y_dev max: ', np.max(y_dev1))
-    print('Y_dev min: ', np.min(y_dev1))
+    print('X_dev: ', dev_features.shape)
+    print('Y_dev: ', y_dev.shape)
+    print('Y_dev max: ', np.max(y_dev))
+    print('Y_dev min: ', np.min(y_dev))
 
     print('================================')
-    print('X_test: ', test_features1.shape)
-    print('Y_test: ', y_test1.shape)
-    print('Y_test max: ', np.max(y_test1))
-    print('Y_test min: ', np.min(y_test1))
+    print('X_test: ', test_features.shape)
+    print('Y_test: ', y_test.shape)
+    print('Y_test max: ', np.max(y_test))
+    print('Y_test min: ', np.min(y_test))
     print('================================')
 
 
@@ -117,23 +109,23 @@ def main():
     dvrl_params = {}
     dvrl_params['hidden_dim'] = 100
     dvrl_params['comb_dim'] = 10
-    dvrl_params['iterations'] = 2000
-    dvrl_params['activation'] = nn.ReLU()
+    dvrl_params['iterations'] = 1000
+    dvrl_params['activation'] = nn.Tanh()
     dvrl_params['layer_number'] = 5
-    dvrl_params['learning_rate'] = 0.01
-    dvrl_params['batch_size'] = 2000
+    dvrl_params['learning_rate'] = 0.001
+    dvrl_params['batch_size'] = 10000
     dvrl_params['inner_iterations'] = 100
     dvrl_params['batch_size_predictor'] = 256
     dvrl_params['moving_average_window'] = 10
-    dvrl_params['moving_average'] = True
+    dvrl_params['moving_average'] = False
 
 
     # Initialize DVRL
-    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features1, y_dev1, pred_model, dvrl_params, device, test_prompt_id)
+    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features, y_dev, pred_model, dvrl_params, device, test_prompt_id)
 
     # Train DVRL
     print('Training DVRL...')
-    rewards_history, losses_history = dvrl_class.train_dvrl('mse')
+    rewards_history, losses_history = dvrl_class.train_dvrl('qwk')
 
     # Estimate data value
     print('Estimating data value...')
@@ -141,11 +133,11 @@ def main():
     np.save(save_dir + 'estimated_data_value.npy', data_value)
 
     # Pridicts with DVRl
-    y_test_hat = dvrl_class.dvrl_predict(test_features1)
+    y_test_hat = dvrl_class.dvrl_predict(test_features)
     print('Finished data valuation.')
 
 
-    qwk = calc_qwk(y_test1, y_test_hat, test_prompt_id, attribute_name)
+    qwk = calc_qwk(y_test, y_test_hat, test_prompt_id, attribute_name)
     print(f'QWK: {qwk: .4f}')
     print(f'Data Value: {data_value}')
     
