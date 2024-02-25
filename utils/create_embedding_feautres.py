@@ -68,6 +68,10 @@ def create_embedding_features(
     y_dev = normalize_scores(y_dev, dev_essay_prompt, attribute_name)
     y_test = normalize_scores(y_test, test_essay_prompt, attribute_name)
 
+    data['train']['normalized_label'] = y_train
+    data['dev']['normalized_label'] = y_dev
+    data['test']['normalized_label'] = y_test
+
     # Create embedding
     os.makedirs(data_path + 'cache/', exist_ok=True)
     pkl_files = [file for file in os.listdir(data_path + 'cache/') if file.endswith('.pkl')]
@@ -77,9 +81,9 @@ def create_embedding_features(
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModel.from_pretrained(model_name).to(device)
 
-        train_loader = create_data_loader(data['train']['feature'], tokenizer, max_length=512, batch_size=32)
-        dev_loader = create_data_loader(data['dev']['feature'], tokenizer, max_length=512, batch_size=32)
-        test_loader = create_data_loader(data['test']['feature'], tokenizer, max_length=512, batch_size=32)
+        train_loader = create_data_loader(data['train'], tokenizer, max_length=512, batch_size=32)
+        dev_loader = create_data_loader(data['dev'], tokenizer, max_length=512, batch_size=32)
+        test_loader = create_data_loader(data['test'], tokenizer, max_length=512, batch_size=32)
 
         # Create embedding
         print('[Train]')
@@ -159,16 +163,22 @@ def run_embedding_model(data_loader: DataLoader, model: nn.Module, device: torch
 
 
 class EssayDataset(Dataset):
-    def __init__(self, texts: np.ndarray, tokenizer: AutoTokenizer, max_length: int) -> None:
+    def __init__(self, data: list, tokenizer: AutoTokenizer, max_length: int, weights: np.ndarray = None) -> None:
         """
         Args:
-            texts: Texts.
+            data: Data.
             tokenizer: Tokenizer.
             max_length: Maximum length of the input.
         """
-        self.texts = texts
+        self.texts = np.array(data['feature'])
+        self.scores = np.array(data['normalized_label'])
+        self.prompts = np.array(data['essay_set'])
         self.tokenizer = tokenizer
         self.max_length = max_length
+        if weights is not None:
+            self.weights = weights
+        else:
+            self.weights = np.ones_like(self.scores)
 
     def __len__(self):
         return len(self.texts)
@@ -188,17 +198,20 @@ class EssayDataset(Dataset):
 
         return {
             'text': text,
+            'score': torch.tensor(self.scores[item], dtype=torch.float),
+            'prompt': torch.tensor(self.prompts[item], dtype=torch.long),
             'input_ids': encoding['input_ids'].flatten(),
             'attention_mask': encoding['attention_mask'].flatten(),
+            'weights': torch.tensor(self.weights[item], dtype=torch.float)
         }
     
 
 # データローダーの定義
-def create_data_loader(text: list[str], tokenizer: AutoTokenizer, max_length: int, batch_size: int) -> DataLoader:
+def create_data_loader(data: list, tokenizer: AutoTokenizer, max_length: int, batch_size: int, weights: np.ndarray = None) -> DataLoader:
     """
     Create data loader.
     Args:
-        text: Texts.
+        data: Data.
         tokenizer: Tokenizer.
         max_length: Maximum length of the input.
         batch_size: Batch size.
@@ -206,8 +219,9 @@ def create_data_loader(text: list[str], tokenizer: AutoTokenizer, max_length: in
         DataLoader: Data loader.
     """
     ds = EssayDataset(
-        texts=np.array(text),
+        data=data,
         tokenizer=tokenizer,
-        max_length=max_length
+        max_length=max_length,
+        weights = weights
     )
     return DataLoader(ds, batch_size=batch_size, num_workers=4)

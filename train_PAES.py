@@ -158,7 +158,7 @@ def main():
     print(model)
 
     # Create loss and optimizer
-    MSE_Loss = nn.MSELoss().to(device)
+    MSE_Loss = nn.MSELoss(reduction='mean').to(device)
     optimizer = torch.optim.RMSprop(model.parameters(), lr=0.001)
 
     train_history = []
