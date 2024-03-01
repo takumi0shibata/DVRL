@@ -71,7 +71,9 @@ def main():
     data_path = configs.DATA_PATH2 + str(test_prompt_id) + '/fold-0/'
     model_name = 'microsoft/deberta-v3-large'
 
-    train_features, dev_features, test_features, y_train, y_dev, y_test = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
+    train_data, dev_data, test_data = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
+    train_features, dev_features, test_features = train_data['essay'], dev_data['essay'], test_data['essay']
+    y_train, y_dev, y_test = train_data['normalized_label'], dev_data['normalized_label'], test_data['normalized_label']
 
     # add noise
     num_elements = int(len(y_train) * 0.2)

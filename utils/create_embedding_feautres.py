@@ -38,7 +38,7 @@ def create_embedding_features(
         attribute_name: str,
         embedding_model_name: str,
         device: torch.device
-        ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        ) -> list[dict]:
     """
     Create embedding features for the given data.
     Args:
@@ -62,6 +62,10 @@ def create_embedding_features(
     train_essay_prompt = np.array(data['train']['essay_set'])
     dev_essay_prompt = np.array(data['dev']['essay_set'])
     test_essay_prompt = np.array(data['test']['essay_set'])
+
+    train_essay_id = np.array(data['train']['essay_id'])
+    dev_essay_id = np.array(data['dev']['essay_id'])
+    test_essay_id = np.array(data['test']['essay_id'])
 
     # Normalize scores
     y_train = normalize_scores(y_train, train_essay_prompt, attribute_name)
@@ -109,7 +113,11 @@ def create_embedding_features(
         dev_features = pickle.load(open(data_path + 'cache/dev_features.pkl', 'rb'))
         test_features = pickle.load(open(data_path + 'cache/test_features.pkl', 'rb'))
 
-    return train_features, dev_features, test_features, y_train, y_dev, y_test
+    train_data = {'essay': train_features, 'normalized_label': y_train, 'essay_set': train_essay_prompt, 'essay_id': train_essay_id}
+    dev_data = {'essay': dev_features, 'normalized_label': y_dev, 'essay_set': dev_essay_prompt, 'essay_id': dev_essay_id}
+    test_data = {'essay': test_features, 'normalized_label': y_test, 'essay_set': test_essay_prompt, 'essay_id': test_essay_id}
+
+    return train_data, dev_data, test_data
 
 
 def load_data(data_path: str) -> dict:

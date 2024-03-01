@@ -72,8 +72,10 @@ def main():
     data_path = configs.DATA_PATH3 + str(test_prompt_id) + '/'
     model_name = 'microsoft/deberta-v3-large'
 
-    train_features, _, test_features, y_train, _, y_test = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
-    dev_features, test_features, y_dev, y_test = train_test_split(test_features, y_test, test_size=0.9, random_state=seed)
+    train_data, _, test_data = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
+    train_features, test_features, y_train, y_test, id_test = train_data['essay'], test_data['essay'], train_data['normalized_label'], test_data['normalized_label'], test_data['essay_id']
+    dev_features, test_features, y_dev, y_test, dev_ids, _ = train_test_split(test_features, y_test, id_test, test_size=0.9, random_state=seed)
+    np.save(save_dir + 'dev_ids.npy', dev_ids)
 
     # print info
     print('================================')
