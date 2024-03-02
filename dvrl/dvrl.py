@@ -147,7 +147,7 @@ class Dvrl(object):
 
             new_model = self.pred_model
             new_model.load_state_dict(torch.load('tmp/init_model.pth'))
-            history = fit_func(new_model, x_batch, y_batch, self.batch_size_predictor, self.inner_iterations, self.device, sel_prob_curr)
+            history = fit_func(new_model, x_batch, y_batch, 512, self.inner_iterations, self.device, sel_prob_curr)
             y_valid_hat = pred_func(new_model, self.x_val, self.batch_size_predictor, self.device)
 
             # reward computation

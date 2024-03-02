@@ -14,7 +14,7 @@ from sklearn.model_selection import train_test_split
 
 from configs.configs import Configs
 import dvrl.dvrl as dvrl
-from utils.dvrl_utils import calc_qwk
+from utils.dvrl_utils import calc_qwk, get_dev_sample
 from transformers import AutoConfig
 from utils.create_embedding_feautres import create_embedding_features
 from models.predictor_model import EssayScorer
@@ -74,7 +74,7 @@ def main():
 
     train_data, _, test_data = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
     train_features, test_features, y_train, y_test, id_test = train_data['essay'], test_data['essay'], train_data['normalized_label'], test_data['normalized_label'], test_data['essay_id']
-    dev_features, test_features, y_dev, y_test, dev_ids, _ = train_test_split(test_features, y_test, id_test, test_size=0.9, random_state=seed)
+    dev_features, test_features, y_dev, y_test, dev_ids, _ = get_dev_sample(test_features, y_test, dev_size=0.01)
     np.save(save_dir + 'dev_ids.npy', dev_ids)
 
     # print info

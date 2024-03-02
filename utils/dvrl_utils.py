@@ -214,3 +214,45 @@ def discover_corrupted_sample(dve_out, noise_idx, noise_rate, output_path, plot=
 
   # Returns True Positive Rate of corrupted label discovery
   return output_perf
+
+
+def find_sample_with_max_distance_sum(selected_sample_indices, all_samples):
+    max_distance_sum = -1
+    selected_sample_index = None
+    for index in range(len(all_samples)):
+        if index not in selected_sample_indices:
+            # Calculate the sum of distances from the current sample to all selected samples
+            distance_sum_to_selected = sum([np.linalg.norm(all_samples[index] - all_samples[selected_index]) for selected_index in selected_sample_indices])
+            if distance_sum_to_selected > max_distance_sum:
+                max_distance_sum = distance_sum_to_selected
+                selected_sample_index = index
+    return selected_sample_index
+
+
+def get_dev_sample(features, label, dev_size):
+    # Initialize the list of selected sample indices with the index of the initial sample
+    init_sample_idx = np.random.randint(0, len(features), 1)[0]
+    selected_sample_indices = [init_sample_idx]
+    all_samples = features
+
+    # Calculate the number of samples to select (1% of y_test's size)
+    num_samples_to_select = int(len(label) * dev_size)
+
+    # Repeat the process until we have the desired number of samples
+    while len(selected_sample_indices) < num_samples_to_select:
+        sample_with_max_distance_sum_index = find_sample_with_max_distance_sum(selected_sample_indices, all_samples)
+        selected_sample_indices.append(sample_with_max_distance_sum_index)
+
+    # Convert the list of indices into a numpy array of samples
+    selected_samples_array = all_samples[selected_sample_indices]
+    selected_labels_array = label[selected_sample_indices]
+
+    # Identify the indices of unselected samples
+    unselected_sample_indices = [i for i in range(len(features)) if i not in selected_sample_indices]
+    unselected_samples_array = all_samples[unselected_sample_indices]
+    unselected_labels_array = label[unselected_sample_indices]
+
+    print(f"Selected {len(selected_sample_indices)} samples.")
+    print('Selected sample indices:', selected_sample_indices)
+
+    return selected_samples_array, unselected_samples_array, selected_labels_array, unselected_labels_array, selected_sample_indices, unselected_sample_indices
