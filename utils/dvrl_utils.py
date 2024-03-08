@@ -229,14 +229,31 @@ def find_sample_with_max_distance_sum(selected_sample_indices, all_samples):
     return selected_sample_index
 
 
-def get_dev_sample(features, label, dev_size):
+def get_dev_sample(
+        features: np.ndarray,
+        label: np.ndarray, 
+        dev_size: float | int
+    ) -> tuple:
+    """
+    Get the dev set samples.
+    Args:
+        features: Features
+        label: Labels
+        dev_size: Dev set size
+            percentage or number of samples
+    Returns:
+        tuple:
+    """
     # Initialize the list of selected sample indices with the index of the initial sample
     init_sample_idx = np.random.randint(0, len(features), 1)[0]
     selected_sample_indices = [init_sample_idx]
     all_samples = features
 
-    # Calculate the number of samples to select (1% of y_test's size)
-    num_samples_to_select = int(len(label) * dev_size)
+    if 0 < dev_size <= 1:
+    # Calculate the number of samples to select
+        num_samples_to_select = int(len(label) * dev_size)
+    else:
+        num_samples_to_select = int(dev_size)
 
     # Repeat the process until we have the desired number of samples
     while len(selected_sample_indices) < num_samples_to_select:
