@@ -117,8 +117,17 @@ def evaluate_model(
 
     with torch.no_grad():
         for x_input, y_true, linguistic, readability, essay_set in progress_bar:
-            y_true_list.extend(y_true.squeeze().tolist())
-            essay_set_list.extend(essay_set.tolist())
+            y_true = y_true.squeeze()
+            if y_true.dim() == 0:
+                y_true_list.append(y_true.item())
+            else:
+                y_true_list.extend(y_true.tolist())
+            
+            essay_set = essay_set.squeeze()
+            if essay_set.dim() == 0:
+                essay_set_list.append(essay_set.item()) 
+            else:
+                essay_set_list.extend(essay_set.tolist())
             x_input = x_input.to(device)
             y_true = y_true.to(device)
             linguistic = linguistic.to(device)
