@@ -52,7 +52,7 @@ def main():
     else:
         raise Exception('Unknown platform')
     
-    #fix random seed
+    # fix random seed
     np.random.seed(seed)
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
