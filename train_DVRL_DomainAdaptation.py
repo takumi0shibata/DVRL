@@ -10,7 +10,6 @@ import warnings
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
-from sklearn.model_selection import train_test_split
 
 from configs.configs import Configs
 import dvrl.dvrl as dvrl
@@ -32,6 +31,8 @@ def main():
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
     parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
     parser.add_argument('--experiment_name', type=str, default='DVRL_DomainAdaptation', help='name of the experiment')
+    parser.add_argument('--dev_size', type=int, default=20, help='size of the dev set')
+    parser.add_argument('--metric', type=str, default='corr', help='metric to be used for DVRL', choices=['corr', 'mse', 'qwk'])
     args = parser.parse_args()
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
@@ -74,7 +75,7 @@ def main():
 
     train_data, _, test_data = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
     train_features, test_features, y_train, y_test, id_test = train_data['essay'], test_data['essay'], train_data['normalized_label'], test_data['normalized_label'], test_data['essay_id']
-    dev_features, test_features, y_dev, y_test, dev_ids, _ = get_dev_sample(test_features, y_test, dev_size=0.01)
+    dev_features, test_features, y_dev, y_test, dev_ids, _ = get_dev_sample(test_features, y_test, dev_size=args.dev_size)
     np.save(save_dir + 'dev_ids.npy', dev_ids)
 
     # print info
@@ -127,7 +128,7 @@ def main():
 
     # Train DVRL
     print('Training DVRL...')
-    rewards_history, losses_history = dvrl_class.train_dvrl('corr')
+    rewards_history, losses_history = dvrl_class.train_dvrl(args.metric)
 
     # Estimate data value
     print('Estimating data value...')
