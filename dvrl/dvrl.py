@@ -91,7 +91,7 @@ class Dvrl(object):
         Train the DVRL model
         Args:
             metric: Metric to use for the DVRL
-                mse or qwk
+                mse or qwk or corr
         Returns:
             rewards_history: History of rewards
             losses_history: History of losses
@@ -110,6 +110,9 @@ class Dvrl(object):
         elif metric == 'qwk':
             valid_perf = calc_qwk(self.y_val, y_valid_hat, self.test_prompt_id, 'score')
             print(f'Origin model Performance QWK: {valid_perf: .3f}')
+        elif metric == 'corr':
+            valid_perf = np.corrcoef(self.y_val.flatten(), y_valid_hat.flatten())[0, 1]
+            print(f'Origin model Performance Corr: {valid_perf: .3f}')
         else:
             raise ValueError('Metric not supported')
 
@@ -157,6 +160,9 @@ class Dvrl(object):
             elif metric == 'qwk':
                 dvrl_perf = calc_qwk(self.y_val, y_valid_hat, self.test_prompt_id, 'score')
                 reward = dvrl_perf - baseline
+            elif metric == 'corr':
+                dvrl_perf = np.corrcoef(self.y_val.flatten(), y_valid_hat.flatten())[0, 1]
+                reward = dvrl_perf - baseline
 
             # update the selection network
             reward = torch.tensor([reward]).to(self.device)
@@ -172,6 +178,8 @@ class Dvrl(object):
                 print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, MSE: {dvrl_perf:.3f}')
             elif metric == 'qwk':
                 print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, QWK: {dvrl_perf:.3f}')
+            elif metric == 'corr':
+                print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, Corr: {dvrl_perf:.3f}')
             rewards_history.append(reward.item())
             losses_history.append(loss.item())
 

@@ -127,7 +127,7 @@ def main():
 
     # Train DVRL
     print('Training DVRL...')
-    rewards_history, losses_history = dvrl_class.train_dvrl('qwk')
+    rewards_history, losses_history = dvrl_class.train_dvrl('corr')
 
     # Estimate data value
     print('Estimating data value...')
