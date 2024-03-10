@@ -21,19 +21,19 @@ class Dvrl(object):
             self,
             x_train: np.ndarray,
             y_train: np.ndarray,
-            x_val: np.ndarray,
-            y_val: np.ndarray,
+            x_dev: np.ndarray,
+            y_dev: np.ndarray,
             pred_model: nn.Module,
             parameters: dict,
             device: str,
             test_prompt_id: int
-        ) -> None:
+    ) -> None:
         """
         Args:
             x_train: Training data
             y_train: Training labels
-            x_val: Validation data
-            y_val: Validation labels
+            x_dev: Validation data
+            y_dev: Validation labels
             pred_model: Prediction model
             parameters: Parameters for DVRL
             device: Device to run the model
@@ -42,8 +42,8 @@ class Dvrl(object):
 
         self.x_train = x_train
         self.y_train = y_train.reshape(-1, 1)
-        self.x_val = x_val
-        self.y_val = y_val.reshape(-1, 1)
+        self.x_dev = x_dev
+        self.y_dev = y_dev.reshape(-1, 1)
         self.device = device
         self.test_prompt_id = test_prompt_id
 
@@ -56,7 +56,7 @@ class Dvrl(object):
         self.inner_iterations = parameters['inner_iterations']
         self.batch_size = int(np.min([parameters['batch_size'], self.x_train.shape[0]]))
         self.learning_rate = parameters['learning_rate']
-        self.batch_size_predictor = int(np.min([parameters['batch_size_predictor'], self.x_val.shape[0]]))
+        self.batch_size_predictor = int(np.min([parameters['batch_size_predictor'], self.x_dev.shape[0]]))
         self.moving_average_window = parameters['moving_average_window']
         self.moving_average = parameters['moving_average']
 
@@ -83,7 +83,7 @@ class Dvrl(object):
         self.val_model = copy.deepcopy(self.pred_model)
         self.val_model.load_state_dict(torch.load('tmp/init_model.pth'))
         print('Training the validation model...')
-        fit_func(self.val_model, self.x_val, self.y_val, self.batch_size_predictor, self.inner_iterations, self.device)
+        fit_func(self.val_model, self.x_dev, self.y_dev, self.batch_size_predictor, self.inner_iterations, self.device)
 
 
     def train_dvrl(self, metric: str = 'mse') -> tuple[list[float], list[float]]:
@@ -103,15 +103,15 @@ class Dvrl(object):
         dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.learning_rate)
 
         # baseline performance
-        y_valid_hat = pred_func(self.ori_model, self.x_val, self.batch_size_predictor, self.device)
+        y_valid_hat = pred_func(self.ori_model, self.x_dev, self.batch_size_predictor, self.device)
         if metric == 'mse':
-            valid_perf = metrics.mean_squared_error(self.y_val, y_valid_hat)
+            valid_perf = metrics.mean_squared_error(self.y_dev, y_valid_hat)
             print(f'Origin model Performance MSE: {valid_perf: .3f}')
         elif metric == 'qwk':
-            valid_perf = calc_qwk(self.y_val, y_valid_hat, self.test_prompt_id, 'score')
+            valid_perf = calc_qwk(self.y_dev, y_valid_hat, self.test_prompt_id, 'score')
             print(f'Origin model Performance QWK: {valid_perf: .3f}')
         elif metric == 'corr':
-            valid_perf = np.corrcoef(self.y_val.flatten(), np.array(y_valid_hat).flatten())[0, 1]
+            valid_perf = np.corrcoef(self.y_dev.flatten(), np.array(y_valid_hat).flatten())[0, 1]
             print(f'Origin model Performance Corr: {valid_perf: .3f}')
         else:
             raise ValueError('Metric not supported')
@@ -151,17 +151,17 @@ class Dvrl(object):
             new_model = self.pred_model
             new_model.load_state_dict(torch.load('tmp/init_model.pth'))
             history = fit_func(new_model, x_batch, y_batch, 512, self.inner_iterations, self.device, sel_prob_curr)
-            y_valid_hat = pred_func(new_model, self.x_val, self.batch_size_predictor, self.device)
+            y_valid_hat = pred_func(new_model, self.x_dev, self.batch_size_predictor, self.device)
 
             # reward computation
             if metric == 'mse':
-                dvrl_perf = metrics.mean_squared_error(self.y_val, y_valid_hat)
+                dvrl_perf = metrics.mean_squared_error(self.y_dev, y_valid_hat)
                 reward = baseline - dvrl_perf
             elif metric == 'qwk':
-                dvrl_perf = calc_qwk(self.y_val, y_valid_hat, self.test_prompt_id, 'score')
+                dvrl_perf = calc_qwk(self.y_dev, y_valid_hat, self.test_prompt_id, 'score')
                 reward = dvrl_perf - baseline
             elif metric == 'corr':
-                dvrl_perf = np.corrcoef(self.y_val.flatten(), np.array(y_valid_hat).flatten())[0, 1]
+                dvrl_perf = np.corrcoef(self.y_dev.flatten(), np.array(y_valid_hat).flatten())[0, 1]
                 reward = dvrl_perf - baseline
 
             # update the selection network
