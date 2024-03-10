@@ -31,8 +31,8 @@ def main():
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
     parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
     parser.add_argument('--experiment_name', type=str, default='DVRL_DomainAdaptation', help='name of the experiment')
-    parser.add_argument('--dev_size', type=int, default=20, help='size of the dev set')
-    parser.add_argument('--metric', type=str, default='corr', help='metric to be used for DVRL', choices=['corr', 'mse', 'qwk'])
+    parser.add_argument('--dev_size', type=int, default=30, help='size of the dev set')
+    parser.add_argument('--metric', type=str, default='qwk', help='metric to be used for DVRL', choices=['corr', 'mse', 'qwk'])
     args = parser.parse_args()
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
@@ -73,26 +73,27 @@ def main():
     data_path = configs.DATA_PATH3 + str(test_prompt_id) + '/'
     model_name = 'microsoft/deberta-v3-large'
 
-    train_data, _, test_data = create_embedding_features(data_path, test_prompt_id, attribute_name, model_name, device)
-    train_features, test_features, y_train, y_test, id_test = train_data['essay'], test_data['essay'], train_data['normalized_label'], test_data['normalized_label'], test_data['essay_id']
-    dev_features, test_features, y_dev, y_test, dev_ids, _ = get_dev_sample(test_features, y_test, dev_size=args.dev_size)
+    train_data, val_data, test_data = create_embedding_features(data_path, attribute_name, model_name, device)
+    x_source, y_source = np.concatenate([train_data['essay'], val_data['essay']]), np.concatenate([train_data['normalized_label'], val_data['normalized_label']])
+    # split test data into dev and test
+    x_dev, x_test, y_dev, y_test, dev_ids, _ = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
     np.save(save_dir + 'dev_ids.npy', dev_ids)
 
     # print info
     print('================================')
-    print('X_train: ', train_features.shape)
-    print('Y_train: ', y_train.shape)
-    print('Y_train max: ', np.max(y_train))
-    print('Y_train min: ', np.min(y_train))
+    print('X_train: ', x_source.shape)
+    print('Y_train: ', y_source.shape)
+    print('Y_train max: ', np.max(y_source))
+    print('Y_train min: ', np.min(y_source))
 
     print('================================')
-    print('X_dev: ', dev_features.shape)
+    print('X_dev: ', x_dev.shape)
     print('Y_dev: ', y_dev.shape)
     print('Y_dev max: ', np.max(y_dev))
     print('Y_dev min: ', np.min(y_dev))
 
     print('================================')
-    print('X_test: ', test_features.shape)
+    print('X_test: ', x_test.shape)
     print('Y_test: ', y_test.shape)
     print('Y_test max: ', np.max(y_test))
     print('Y_test min: ', np.min(y_test))
@@ -124,7 +125,7 @@ def main():
 
 
     # Initialize DVRL
-    dvrl_class = dvrl.Dvrl(train_features, y_train, dev_features, y_dev, pred_model, dvrl_params, device, test_prompt_id)
+    dvrl_class = dvrl.Dvrl(x_source, y_source, x_dev, y_dev, pred_model, dvrl_params, device, test_prompt_id)
 
     # Train DVRL
     print('Training DVRL...')
@@ -132,11 +133,11 @@ def main():
 
     # Estimate data value
     print('Estimating data value...')
-    data_value = dvrl_class.dvrl_valuator(train_features, y_train)
+    data_value = dvrl_class.dvrl_valuator(x_source, y_source)
     np.save(save_dir + 'estimated_data_value.npy', data_value)
 
     # Pridicts with DVRl
-    y_test_hat = dvrl_class.dvrl_predict(test_features)
+    y_test_hat = dvrl_class.dvrl_predict(x_test)
     print('Finished data valuation.')
 
 

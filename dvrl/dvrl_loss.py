@@ -35,6 +35,8 @@ class DvrlLoss(nn.Module):
         zero = torch.Tensor([0.0])
         zero = zero.to(est_data_value.device)
 
+        print("prob: ", prob)
+        print("reward_input: ", reward_input)
         dve_loss = (-reward_input * prob) + \
                    1e3 * torch.maximum(torch.mean(est_data_value) - self.threshold, zero) + \
                    1e3 * torch.maximum(1 - self.threshold - torch.mean(est_data_value), zero)

@@ -34,16 +34,14 @@ def normalize_scores(y, essay_set, attribute_name):
 
 def create_embedding_features(
         data_path: str,
-        prompt_id: int,
         attribute_name: str,
         embedding_model_name: str,
         device: torch.device
-        ) -> list[dict]:
+    ) -> list[dict]:
     """
     Create embedding features for the given data.
     Args:
         data_path: Path to the data.
-        prompt_id: Prompt id.
         attribute_name: Attribute name.
         embedding_model_name: Pre-trained language model name.
         device: Device to run the model.

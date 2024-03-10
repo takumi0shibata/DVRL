@@ -111,7 +111,7 @@ class Dvrl(object):
             valid_perf = calc_qwk(self.y_val, y_valid_hat, self.test_prompt_id, 'score')
             print(f'Origin model Performance QWK: {valid_perf: .3f}')
         elif metric == 'corr':
-            valid_perf = np.corrcoef(self.y_val.flatten().tolist(), y_valid_hat)[0, 1]
+            valid_perf = np.corrcoef(self.y_val.flatten(), np.array(y_valid_hat).flatten())[0, 1]
             print(f'Origin model Performance Corr: {valid_perf: .3f}')
         else:
             raise ValueError('Metric not supported')
@@ -161,7 +161,7 @@ class Dvrl(object):
                 dvrl_perf = calc_qwk(self.y_val, y_valid_hat, self.test_prompt_id, 'score')
                 reward = dvrl_perf - baseline
             elif metric == 'corr':
-                dvrl_perf = np.corrcoef(self.y_val.flatten().tolist(), y_valid_hat)[0, 1]
+                dvrl_perf = np.corrcoef(self.y_val.flatten(), np.array(y_valid_hat).flatten())[0, 1]
                 reward = dvrl_perf - baseline
 
             # update the selection network
