@@ -10,6 +10,7 @@ import warnings
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
+import wandb
 
 from configs.configs import Configs
 import dvrl.dvrl as dvrl
@@ -122,7 +123,10 @@ def main():
     dvrl_params['batch_size_predictor'] = 256
     dvrl_params['moving_average_window'] = 10
     dvrl_params['moving_average'] = False
+    dvrl_params['std_penalty_weight'] = None
 
+    # Init wandb
+    wandb.init(project='DVRL-本番', name=args.experiment_name, config=dvrl_params)
 
     # Initialize DVRL
     dvrl_class = dvrl.Dvrl(x_source, y_source, x_dev, y_dev, pred_model, dvrl_params, device, test_prompt_id)
@@ -162,6 +166,9 @@ def main():
     plt.ylabel('Loss')
     plt.legend()
     plt.savefig(save_dir + 'losses_history.png')
+
+    wandb.alert(title='DVRL', text='Training finished!')
+    wandb.finish()
 
 
 if __name__ == '__main__':

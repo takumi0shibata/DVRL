@@ -9,6 +9,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 from sklearn import metrics
+import wandb
 
 from models.value_estimator import DataValueEstimator
 from dvrl.dvrl_loss import DvrlLoss
@@ -63,6 +64,7 @@ class Dvrl(object):
         # Basic parameters
         self.epsilon = 1e-8  # Adds to the log to avoid overflow
         self.threshold = 0.9  # Encourages exploration
+        self.std_penalty_weight = parameters['std_penalty_weight']
         self.data_dim = self.x_train.shape[1]
         self.label_dim = self.y_train.shape[1]
 
@@ -99,7 +101,7 @@ class Dvrl(object):
         # selection network
         self.value_estimator = DataValueEstimator(self.data_dim+self.label_dim, self.hidden_dim, self.comb_dim, self.layer_number, self.act_fn)
         self.value_estimator = self.value_estimator.to(self.device)
-        dvrl_criterion = DvrlLoss(self.epsilon, self.threshold).to(self.device)
+        dvrl_criterion = DvrlLoss(self.epsilon, self.threshold, self.std_penalty_weight).to(self.device)
         dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.learning_rate)
 
         # baseline performance
@@ -182,6 +184,7 @@ class Dvrl(object):
                 print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, Corr: {dvrl_perf:.3f}')
             rewards_history.append(reward.item())
             losses_history.append(loss.item())
+            wandb.log({'Reward': reward.item(), 'DVRL Loss': loss.item(), 'Prob MAX': torch.max(est_dv_curr).item(), 'Prob MIN': torch.min(est_dv_curr).item(), metric: dvrl_perf})
 
 
         # Training the final model

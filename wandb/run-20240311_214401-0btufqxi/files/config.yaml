@@ -1,0 +1,74 @@
+wandb_version: 1
+
+hidden_dim:
+  desc: null
+  value: 100
+comb_dim:
+  desc: null
+  value: 10
+iterations:
+  desc: null
+  value: 1000
+activation:
+  desc: null
+  value: Tanh()
+layer_number:
+  desc: null
+  value: 5
+learning_rate:
+  desc: null
+  value: 0.001
+batch_size:
+  desc: null
+  value: 10000
+inner_iterations:
+  desc: null
+  value: 100
+batch_size_predictor:
+  desc: null
+  value: 256
+moving_average_window:
+  desc: null
+  value: 10
+moving_average:
+  desc: null
+  value: false
+std_penalty_weight:
+  desc: null
+  value: 500
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.13
+    cli_version: 0.16.4
+    framework: huggingface
+    huggingface_version: 4.32.1
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1710161041.0
+    t:
+      1:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 53
+      - 55
+      2:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 53
+      - 55
+      3:
+      - 2
+      - 13
+      - 16
+      - 23
+      4: 3.10.13
+      5: 0.16.4
+      6: 4.32.1
+      8:
+      - 5
+      13: linux-x86_64
