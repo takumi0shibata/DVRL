@@ -1,0 +1,10 @@
+load data from data/cross_prompt_attributes/1/...
+Loading embedding from cache...
+Selected 30 samples.
+Selected sample indices: [1691, 446, 689, 653, 945, 1548, 1244, 452, 1413, 916, 1447, 871, 1645, 476, 1368, 878, 746, 282, 1509, 1347, 151, 1577, 622, 1549, 1570, 915, 1348, 690, 794, 1359]
+Traceback (most recent call last):
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT_fullsource.py", line 163, in <module>
+    main(args)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT_fullsource.py", line 46, in main
+    train_features = np.concatenate([data['train']['feature'], data['val']['feature']])
+KeyError: 'val'

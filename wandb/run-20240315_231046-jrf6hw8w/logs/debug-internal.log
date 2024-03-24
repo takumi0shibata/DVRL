@@ -1,0 +1,191 @@
+2024-03-15 23:10:46,346 INFO    StreamThr :7059 [internal.py:wandb_internal():86] W&B internal server running at pid: 7059, started at: 2024-03-15 23:10:46.345473
+2024-03-15 23:10:46,348 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: status
+2024-03-15 23:10:46,365 INFO    WriterThread:7059 [datastore.py:open_for_write():87] open: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/run-jrf6hw8w.wandb
+2024-03-15 23:10:46,367 DEBUG   SenderThread:7059 [sender.py:send():378] send: header
+2024-03-15 23:10:46,398 DEBUG   SenderThread:7059 [sender.py:send():378] send: run
+2024-03-15 23:10:46,796 INFO    SenderThread:7059 [dir_watcher.py:__init__():211] watching files in: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files
+2024-03-15 23:10:46,797 INFO    SenderThread:7059 [sender.py:_start_run_threads():1099] run started: jrf6hw8w with start time 1710511846.345634
+2024-03-15 23:10:46,802 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: check_version
+2024-03-15 23:10:46,802 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: check_version
+2024-03-15 23:10:46,892 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: run_start
+2024-03-15 23:10:46,924 DEBUG   HandlerThread:7059 [system_info.py:__init__():26] System info init
+2024-03-15 23:10:46,924 DEBUG   HandlerThread:7059 [system_info.py:__init__():41] System info init done
+2024-03-15 23:10:46,925 INFO    HandlerThread:7059 [system_monitor.py:start():194] Starting system monitor
+2024-03-15 23:10:46,925 INFO    SystemMonitor:7059 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-03-15 23:10:46,925 INFO    HandlerThread:7059 [system_monitor.py:probe():214] Collecting system info
+2024-03-15 23:10:46,925 INFO    SystemMonitor:7059 [interfaces.py:start():190] Started cpu monitoring
+2024-03-15 23:10:46,926 INFO    SystemMonitor:7059 [interfaces.py:start():190] Started disk monitoring
+2024-03-15 23:10:46,926 INFO    SystemMonitor:7059 [interfaces.py:start():190] Started gpu monitoring
+2024-03-15 23:10:46,929 INFO    SystemMonitor:7059 [interfaces.py:start():190] Started memory monitoring
+2024-03-15 23:10:46,930 INFO    SystemMonitor:7059 [interfaces.py:start():190] Started network monitoring
+2024-03-15 23:10:46,941 DEBUG   HandlerThread:7059 [system_info.py:probe():150] Probing system
+2024-03-15 23:10:46,947 DEBUG   HandlerThread:7059 [system_info.py:_probe_git():135] Probing git
+2024-03-15 23:10:46,986 DEBUG   HandlerThread:7059 [system_info.py:_probe_git():143] Probing git done
+2024-03-15 23:10:46,986 DEBUG   HandlerThread:7059 [system_info.py:probe():198] Probing system done
+2024-03-15 23:10:46,986 DEBUG   HandlerThread:7059 [system_monitor.py:probe():223] {'os': 'Linux-5.15.133.1-microsoft-standard-WSL2-x86_64-with-glibc2.35', 'python': '3.10.13', 'heartbeatAt': '2024-03-15T14:10:46.941967', 'startedAt': '2024-03-15T14:10:46.271114', 'docker': None, 'cuda': None, 'args': ('--test_prompt_id', '1', '--experiment_name', 'DVRL_DomainAdaptation', '--dev_size', '50'), 'state': 'running', 'program': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT.py', 'codePathLocal': 'train_BERT.py', 'codePath': 'train_BERT.py', 'git': {'remote': 'https://github.com/takumi0shibata/DVRL.git', 'commit': '84f7b000c7d79e1efd4f911d62d0e6686dad0c21'}, 'email': None, 'root': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL', 'host': 'takushibata', 'username': 'takumi', 'executable': '/home/takumi/anaconda3/envs/torch/bin/python', 'cpu_count': 16, 'cpu_count_logical': 32, 'cpu_freq': {'current': 2995.1999999999985, 'min': 0.0, 'max': 0.0}, 'cpu_freq_per_core': [{'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}], 'disk': {'/': {'total': 1006.853931427002, 'used': 249.88700103759766}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 31.267444610595703}}
+2024-03-15 23:10:46,986 INFO    HandlerThread:7059 [system_monitor.py:probe():224] Finished collecting system info
+2024-03-15 23:10:46,986 INFO    HandlerThread:7059 [system_monitor.py:probe():227] Publishing system info
+2024-03-15 23:10:46,986 DEBUG   HandlerThread:7059 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-03-15 23:10:47,800 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/conda-environment.yaml
+2024-03-15 23:10:48,452 DEBUG   HandlerThread:7059 [system_info.py:_save_conda():219] Saving conda packages done
+2024-03-15 23:10:48,458 INFO    HandlerThread:7059 [system_monitor.py:probe():229] Finished publishing system info
+2024-03-15 23:10:48,459 DEBUG   SenderThread:7059 [sender.py:send():378] send: files
+2024-03-15 23:10:48,460 INFO    SenderThread:7059 [sender.py:_save_file():1365] saving file wandb-metadata.json with policy now
+2024-03-15 23:10:48,508 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: python_packages
+2024-03-15 23:10:48,509 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: python_packages
+2024-03-15 23:10:48,509 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-15 23:10:48,523 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-15 23:10:48,534 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: stop_status
+2024-03-15 23:10:48,746 DEBUG   SenderThread:7059 [sender.py:send():378] send: telemetry
+2024-03-15 23:10:48,979 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/conda-environment.yaml
+2024-03-15 23:10:48,980 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/requirements.txt
+2024-03-15 23:10:48,981 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/wandb-metadata.json
+2024-03-15 23:10:49,071 INFO    wandb-upload_0:7059 [upload_job.py:push():131] Uploaded file /tmp/tmpfwdu44a4wandb/7oqqiqn6-wandb-metadata.json
+2024-03-15 23:10:50,986 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/output.log
+2024-03-15 23:10:51,763 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: status_report
+2024-03-15 23:10:52,990 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/output.log
+2024-03-15 23:10:53,544 DEBUG   SenderThread:7059 [sender.py:send():378] send: exit
+2024-03-15 23:10:53,544 INFO    SenderThread:7059 [sender.py:send_exit():585] handling exit code: 255
+2024-03-15 23:10:53,544 INFO    SenderThread:7059 [sender.py:send_exit():587] handling runtime: 6
+2024-03-15 23:10:53,545 INFO    SenderThread:7059 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-15 23:10:53,547 INFO    SenderThread:7059 [sender.py:send_exit():593] send defer
+2024-03-15 23:10:53,548 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,548 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 0
+2024-03-15 23:10:53,548 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,548 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 0
+2024-03-15 23:10:53,548 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 1
+2024-03-15 23:10:53,548 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,549 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 1
+2024-03-15 23:10:53,549 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,549 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 1
+2024-03-15 23:10:53,549 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 2
+2024-03-15 23:10:53,549 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,549 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 2
+2024-03-15 23:10:53,549 INFO    HandlerThread:7059 [system_monitor.py:finish():203] Stopping system monitor
+2024-03-15 23:10:53,549 DEBUG   SystemMonitor:7059 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-03-15 23:10:53,550 DEBUG   SystemMonitor:7059 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-03-15 23:10:53,550 INFO    HandlerThread:7059 [interfaces.py:finish():202] Joined cpu monitor
+2024-03-15 23:10:53,550 DEBUG   SystemMonitor:7059 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-03-15 23:10:53,550 INFO    HandlerThread:7059 [interfaces.py:finish():202] Joined disk monitor
+2024-03-15 23:10:53,553 INFO    HandlerThread:7059 [interfaces.py:finish():202] Joined gpu monitor
+2024-03-15 23:10:53,553 INFO    HandlerThread:7059 [interfaces.py:finish():202] Joined memory monitor
+2024-03-15 23:10:53,554 INFO    HandlerThread:7059 [interfaces.py:finish():202] Joined network monitor
+2024-03-15 23:10:53,554 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,554 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 2
+2024-03-15 23:10:53,554 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 3
+2024-03-15 23:10:53,554 DEBUG   SenderThread:7059 [sender.py:send():378] send: stats
+2024-03-15 23:10:53,554 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,554 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 3
+2024-03-15 23:10:53,555 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,555 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 3
+2024-03-15 23:10:53,555 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 4
+2024-03-15 23:10:53,555 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,555 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 4
+2024-03-15 23:10:53,555 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,555 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 4
+2024-03-15 23:10:53,555 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 5
+2024-03-15 23:10:53,555 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,555 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 5
+2024-03-15 23:10:53,556 DEBUG   SenderThread:7059 [sender.py:send():378] send: summary
+2024-03-15 23:10:53,556 INFO    SenderThread:7059 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-15 23:10:53,557 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,557 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 5
+2024-03-15 23:10:53,557 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 6
+2024-03-15 23:10:53,557 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,557 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 6
+2024-03-15 23:10:53,557 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,558 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 6
+2024-03-15 23:10:53,559 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: status_report
+2024-03-15 23:10:53,730 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 7
+2024-03-15 23:10:53,731 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:53,732 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 7
+2024-03-15 23:10:53,735 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:53,735 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 7
+2024-03-15 23:10:54,000 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/config.yaml
+2024-03-15 23:10:54,001 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/wandb-summary.json
+2024-03-15 23:10:54,544 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-15 23:10:55,553 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 8
+2024-03-15 23:10:55,553 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: poll_exit
+2024-03-15 23:10:55,554 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:55,556 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 8
+2024-03-15 23:10:55,561 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:55,562 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 8
+2024-03-15 23:10:55,562 INFO    SenderThread:7059 [job_builder.py:build():298] Attempting to build job artifact
+2024-03-15 23:10:55,567 INFO    SenderThread:7059 [job_builder.py:_get_source_type():428] is repo sourced job
+2024-03-15 23:10:55,583 INFO    SenderThread:7059 [job_builder.py:build():404] adding wandb-job metadata file
+2024-03-15 23:10:55,593 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 9
+2024-03-15 23:10:55,593 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:55,593 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 9
+2024-03-15 23:10:55,593 DEBUG   SenderThread:7059 [sender.py:send():378] send: artifact
+2024-03-15 23:10:56,025 INFO    Thread-12 :7059 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/output.log
+2024-03-15 23:10:56,389 INFO    SenderThread:7059 [sender.py:send_artifact():1443] sent artifact job-https___github.com_takumi0shibata_DVRL.git_train_BERT.py - {'id': 'QXJ0aWZhY3Q6NzU3MDkxNzYz', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE0OTEyNjIzNQ==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NzU3MDkxNzYz', 'versionIndex': 0}}}
+2024-03-15 23:10:56,391 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:56,392 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 9
+2024-03-15 23:10:56,393 INFO    SenderThread:7059 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-03-15 23:10:56,545 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-15 23:10:57,044 INFO    SenderThread:7059 [dir_watcher.py:finish():388] scan: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files
+2024-03-15 23:10:57,045 INFO    SenderThread:7059 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/conda-environment.yaml conda-environment.yaml
+2024-03-15 23:10:57,047 INFO    SenderThread:7059 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/config.yaml config.yaml
+2024-03-15 23:10:57,050 INFO    SenderThread:7059 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/output.log output.log
+2024-03-15 23:10:57,052 INFO    SenderThread:7059 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/requirements.txt requirements.txt
+2024-03-15 23:10:57,055 INFO    SenderThread:7059 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/wandb-metadata.json wandb-metadata.json
+2024-03-15 23:10:57,056 INFO    SenderThread:7059 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/wandb-summary.json wandb-summary.json
+2024-03-15 23:10:57,057 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 10
+2024-03-15 23:10:57,058 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: poll_exit
+2024-03-15 23:10:57,058 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:57,059 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 10
+2024-03-15 23:10:57,059 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:57,059 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 10
+2024-03-15 23:10:57,060 INFO    SenderThread:7059 [file_pusher.py:finish():172] shutting down file pusher
+2024-03-15 23:10:57,440 INFO    wandb-upload_0:7059 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/conda-environment.yaml
+2024-03-15 23:10:57,496 INFO    wandb-upload_1:7059 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/config.yaml
+2024-03-15 23:10:57,531 INFO    wandb-upload_2:7059 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/output.log
+2024-03-15 23:10:57,545 INFO    wandb-upload_4:7059 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/wandb-summary.json
+2024-03-15 23:10:57,546 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-15 23:10:57,547 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: poll_exit
+2024-03-15 23:10:57,561 INFO    wandb-upload_3:7059 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/files/requirements.txt
+2024-03-15 23:10:57,762 INFO    Thread-11 (_thread_body):7059 [sender.py:transition_state():613] send defer: 11
+2024-03-15 23:10:57,764 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:57,764 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 11
+2024-03-15 23:10:57,766 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:57,767 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 11
+2024-03-15 23:10:57,768 INFO    SenderThread:7059 [file_pusher.py:join():178] waiting for file pusher
+2024-03-15 23:10:57,769 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 12
+2024-03-15 23:10:57,770 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:57,770 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 12
+2024-03-15 23:10:57,771 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:57,772 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 12
+2024-03-15 23:10:57,772 INFO    SenderThread:7059 [file_stream.py:finish():595] file stream finish called
+2024-03-15 23:10:57,923 INFO    SenderThread:7059 [file_stream.py:finish():599] file stream finish is done
+2024-03-15 23:10:57,924 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 13
+2024-03-15 23:10:57,925 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:57,928 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 13
+2024-03-15 23:10:57,929 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:57,930 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 13
+2024-03-15 23:10:57,930 INFO    SenderThread:7059 [sender.py:transition_state():613] send defer: 14
+2024-03-15 23:10:57,930 DEBUG   SenderThread:7059 [sender.py:send():378] send: final
+2024-03-15 23:10:57,930 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: defer
+2024-03-15 23:10:57,930 DEBUG   SenderThread:7059 [sender.py:send():378] send: footer
+2024-03-15 23:10:57,930 INFO    HandlerThread:7059 [handler.py:handle_request_defer():172] handle defer: 14
+2024-03-15 23:10:57,931 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: defer
+2024-03-15 23:10:57,931 INFO    SenderThread:7059 [sender.py:send_request_defer():609] handle sender defer: 14
+2024-03-15 23:10:57,931 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-15 23:10:57,932 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-15 23:10:57,933 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: poll_exit
+2024-03-15 23:10:57,933 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: server_info
+2024-03-15 23:10:57,935 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: poll_exit
+2024-03-15 23:10:57,935 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: get_summary
+2024-03-15 23:10:57,936 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: server_info
+2024-03-15 23:10:57,936 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: sampled_history
+2024-03-15 23:10:57,938 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-15 23:10:57,938 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: job_info
+2024-03-15 23:10:58,078 DEBUG   SenderThread:7059 [sender.py:send_request():405] send_request: job_info
+2024-03-15 23:10:58,080 INFO    MainThread:7059 [wandb_run.py:_footer_history_summary_info():3851] rendering history
+2024-03-15 23:10:58,081 INFO    MainThread:7059 [wandb_run.py:_footer_history_summary_info():3883] rendering summary
+2024-03-15 23:10:58,081 INFO    MainThread:7059 [wandb_run.py:_footer_sync_info():3810] logging synced files
+2024-03-15 23:10:58,083 DEBUG   HandlerThread:7059 [handler.py:handle_request():146] handle_request: shutdown
+2024-03-15 23:10:58,084 INFO    HandlerThread:7059 [handler.py:finish():869] shutting down handler
+2024-03-15 23:10:58,939 INFO    WriterThread:7059 [datastore.py:close():296] close: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240315_231046-jrf6hw8w/run-jrf6hw8w.wandb
+2024-03-15 23:10:59,080 INFO    SenderThread:7059 [sender.py:finish():1521] shutting down sender
+2024-03-15 23:10:59,081 INFO    SenderThread:7059 [file_pusher.py:finish():172] shutting down file pusher
+2024-03-15 23:10:59,082 INFO    SenderThread:7059 [file_pusher.py:join():178] waiting for file pusher

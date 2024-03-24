@@ -1,0 +1,16 @@
+Saving the initial model...
+Training the original model...
+Traceback (most recent call last):
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_DVRL_DomainAdaptation_FeatureModel.py", line 182, in <module>
+    main(args)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_DVRL_DomainAdaptation_FeatureModel.py", line 142, in main
+    dvrl_class = dvrl.Dvrl(x_source, y_source, x_dev, y_dev, pred_model, dvrl_params, device, test_prompt_id)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/dvrl/dvrl.py", line 154, in __init__
+    history = fit_func(self.ori_model, self.x_train, self.y_train, self.batch_size_predictor, self.inner_iterations, self.device)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py", line 69, in fit_func
+    y_pred = model(x_batch)
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+TypeError: FeatureModel.forward() missing 1 required positional argument: 'linguistic_features'

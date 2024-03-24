@@ -11,12 +11,12 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 
-from configs.configs import Configs
+from PAES.configs import Configs
 import dvrl.dvrl as dvrl
 from utils.dvrl_utils import calc_qwk
 from transformers import AutoConfig
 from utils.create_embedding_feautres import create_embedding_features
-from models.predictor_model import EssayScorer
+from dvrl.predictor_model import EssayScorer
 
 
 def main():

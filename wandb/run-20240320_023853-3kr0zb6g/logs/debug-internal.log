@@ -1,0 +1,857 @@
+2024-03-20 02:38:53,789 INFO    StreamThr :1072207 [internal.py:wandb_internal():86] W&B internal server running at pid: 1072207, started at: 2024-03-20 02:38:53.787832
+2024-03-20 02:38:53,790 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status
+2024-03-20 02:38:53,793 INFO    WriterThread:1072207 [datastore.py:open_for_write():87] open: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/run-3kr0zb6g.wandb
+2024-03-20 02:38:53,794 DEBUG   SenderThread:1072207 [sender.py:send():378] send: header
+2024-03-20 02:38:53,824 DEBUG   SenderThread:1072207 [sender.py:send():378] send: run
+2024-03-20 02:38:54,264 INFO    SenderThread:1072207 [dir_watcher.py:__init__():211] watching files in: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files
+2024-03-20 02:38:54,264 INFO    SenderThread:1072207 [sender.py:_start_run_threads():1099] run started: 3kr0zb6g with start time 1710869933.788012
+2024-03-20 02:38:54,268 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: check_version
+2024-03-20 02:38:54,268 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: check_version
+2024-03-20 02:38:54,362 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: run_start
+2024-03-20 02:38:54,396 DEBUG   HandlerThread:1072207 [system_info.py:__init__():26] System info init
+2024-03-20 02:38:54,396 DEBUG   HandlerThread:1072207 [system_info.py:__init__():41] System info init done
+2024-03-20 02:38:54,396 INFO    HandlerThread:1072207 [system_monitor.py:start():194] Starting system monitor
+2024-03-20 02:38:54,396 INFO    SystemMonitor:1072207 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-03-20 02:38:54,396 INFO    HandlerThread:1072207 [system_monitor.py:probe():214] Collecting system info
+2024-03-20 02:38:54,397 INFO    SystemMonitor:1072207 [interfaces.py:start():190] Started cpu monitoring
+2024-03-20 02:38:54,397 INFO    SystemMonitor:1072207 [interfaces.py:start():190] Started disk monitoring
+2024-03-20 02:38:54,399 INFO    SystemMonitor:1072207 [interfaces.py:start():190] Started gpu monitoring
+2024-03-20 02:38:54,399 INFO    SystemMonitor:1072207 [interfaces.py:start():190] Started memory monitoring
+2024-03-20 02:38:54,400 INFO    SystemMonitor:1072207 [interfaces.py:start():190] Started network monitoring
+2024-03-20 02:38:54,410 DEBUG   HandlerThread:1072207 [system_info.py:probe():150] Probing system
+2024-03-20 02:38:54,416 DEBUG   HandlerThread:1072207 [system_info.py:_probe_git():135] Probing git
+2024-03-20 02:38:54,450 DEBUG   HandlerThread:1072207 [system_info.py:_probe_git():143] Probing git done
+2024-03-20 02:38:54,450 DEBUG   HandlerThread:1072207 [system_info.py:probe():198] Probing system done
+2024-03-20 02:38:54,451 DEBUG   HandlerThread:1072207 [system_monitor.py:probe():223] {'os': 'Linux-5.15.133.1-microsoft-standard-WSL2-x86_64-with-glibc2.35', 'python': '3.10.13', 'heartbeatAt': '2024-03-19T17:38:54.410673', 'startedAt': '2024-03-19T17:38:53.756413', 'docker': None, 'cuda': None, 'args': ('--test_prompt_id', '7', '--experiment_name', 'DVRL_DomainAdaptation', '--seed', '32'), 'state': 'running', 'program': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT.py', 'codePathLocal': 'train_BERT.py', 'codePath': 'train_BERT.py', 'git': {'remote': 'https://github.com/takumi0shibata/DVRL.git', 'commit': '84f7b000c7d79e1efd4f911d62d0e6686dad0c21'}, 'email': None, 'root': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL', 'host': 'takushibata', 'username': 'takumi', 'executable': '/home/takumi/anaconda3/envs/torch/bin/python', 'cpu_count': 16, 'cpu_count_logical': 32, 'cpu_freq': {'current': 2995.1999999999985, 'min': 0.0, 'max': 0.0}, 'cpu_freq_per_core': [{'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}], 'disk': {'/': {'total': 1006.853931427002, 'used': 249.88970565795898}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 31.267444610595703}}
+2024-03-20 02:38:54,451 INFO    HandlerThread:1072207 [system_monitor.py:probe():224] Finished collecting system info
+2024-03-20 02:38:54,451 INFO    HandlerThread:1072207 [system_monitor.py:probe():227] Publishing system info
+2024-03-20 02:38:54,451 DEBUG   HandlerThread:1072207 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-03-20 02:38:55,268 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/conda-environment.yaml
+2024-03-20 02:38:55,920 DEBUG   HandlerThread:1072207 [system_info.py:_save_conda():219] Saving conda packages done
+2024-03-20 02:38:55,924 INFO    HandlerThread:1072207 [system_monitor.py:probe():229] Finished publishing system info
+2024-03-20 02:38:55,925 DEBUG   SenderThread:1072207 [sender.py:send():378] send: files
+2024-03-20 02:38:55,926 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-metadata.json with policy now
+2024-03-20 02:38:55,973 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: python_packages
+2024-03-20 02:38:55,974 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: python_packages
+2024-03-20 02:38:55,974 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:38:55,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:38:55,978 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:38:56,176 DEBUG   SenderThread:1072207 [sender.py:send():378] send: telemetry
+2024-03-20 02:38:56,271 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/conda-environment.yaml
+2024-03-20 02:38:56,272 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-metadata.json
+2024-03-20 02:38:56,273 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/requirements.txt
+2024-03-20 02:38:56,631 INFO    wandb-upload_0:1072207 [upload_job.py:push():131] Uploaded file /tmp/tmpxijctyr0wandb/uboyn5j5-wandb-metadata.json
+2024-03-20 02:38:58,281 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:38:59,636 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:00,295 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:02,299 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:03,302 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:04,304 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:04,666 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:05,308 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:07,313 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:08,902 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:08,906 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:08,906 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:08,910 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:09,328 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:09,328 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:09,769 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:10,974 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:39:10,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:39:10,975 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:39:11,338 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:12,341 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:13,345 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:14,866 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:15,354 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:15,674 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:15,675 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:15,676 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:15,683 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:16,356 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:17,359 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:18,361 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:19,365 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:19,947 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:21,378 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:22,382 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:22,454 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:22,455 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:22,455 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:22,460 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:23,385 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:23,385 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:24,389 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:25,052 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:25,392 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/config.yaml
+2024-03-20 02:39:25,974 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:39:25,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:39:25,975 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:39:26,394 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:28,398 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:29,281 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:29,282 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:29,283 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:29,285 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:29,403 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:30,260 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:30,406 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:31,408 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:32,411 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:34,417 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:35,381 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:36,064 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:36,065 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:36,065 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:36,067 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:36,422 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:36,423 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:37,425 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:38,427 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:40,433 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:40,481 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:40,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:39:40,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:39:40,975 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:39:42,438 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:42,895 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:42,896 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:42,896 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:42,900 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:43,441 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:43,441 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:44,444 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:45,486 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:46,454 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:48,461 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:49,724 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:49,725 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:49,726 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:49,729 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:50,471 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:50,472 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:50,598 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:51,474 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:52,476 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:54,401 DEBUG   SystemMonitor:1072207 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-03-20 02:39:54,404 DEBUG   SenderThread:1072207 [sender.py:send():378] send: stats
+2024-03-20 02:39:54,483 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:55,633 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:39:55,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:39:55,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:39:55,975 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:39:56,490 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:56,584 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:39:57,564 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:39:57,564 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:39:57,566 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:39:58,495 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:39:58,496 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:39:59,499 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:00,501 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:00,745 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:02,507 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:03,414 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:03,415 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:03,418 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:03,422 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:03,509 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:04,512 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:05,515 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:05,875 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:06,518 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:08,524 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:10,285 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:10,286 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:10,286 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:10,292 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:10,530 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:10,531 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:10,890 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:10,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:40:10,975 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:40:10,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:40:11,533 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:12,535 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:14,543 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:15,912 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:16,548 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:17,125 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:17,126 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:17,126 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:17,134 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:17,551 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:18,554 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:19,557 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:20,560 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:21,021 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:22,566 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:23,965 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:23,966 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:23,966 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:23,968 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:24,404 DEBUG   SenderThread:1072207 [sender.py:send():378] send: stats
+2024-03-20 02:40:24,573 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:24,573 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:25,576 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:25,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:40:25,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:40:25,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:40:26,578 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:27,908 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:28,584 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:30,590 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:30,815 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:30,817 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:30,818 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:30,821 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:31,593 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:31,593 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:32,596 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:33,003 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:34,602 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:36,610 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:37,654 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:37,655 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:37,656 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:37,660 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:38,262 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:38,617 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:38,618 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:39,621 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:40,624 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:40,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:40:40,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:40:40,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:40:42,631 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:43,283 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:44,494 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:44,495 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:44,495 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:44,498 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:44,642 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:44,644 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:45,646 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:46,649 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:48,324 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:48,656 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:50,662 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:51,424 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:51,425 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:51,428 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:51,433 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:51,665 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:52,668 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:53,364 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:53,671 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:54,405 DEBUG   SenderThread:1072207 [sender.py:send():378] send: stats
+2024-03-20 02:40:54,675 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:55,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:40:55,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:40:55,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:40:56,681 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:58,324 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:40:58,325 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:40:58,326 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:40:58,328 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:40:58,593 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:40:58,686 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:40:58,687 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:40:59,690 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:00,693 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:02,698 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:03,594 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:04,704 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:05,194 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:05,195 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:05,196 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:05,200 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:05,707 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:06,710 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:07,714 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:08,709 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:08,717 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:10,722 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:10,975 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:41:10,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:41:10,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:41:12,040 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:12,041 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:12,041 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:12,045 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:12,730 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:12,730 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:13,733 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:13,832 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:14,735 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:16,744 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:18,750 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:18,848 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:18,880 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:18,881 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:18,881 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:18,884 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:19,754 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:19,754 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:20,756 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:22,761 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:23,859 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:24,405 DEBUG   SenderThread:1072207 [sender.py:send():378] send: stats
+2024-03-20 02:41:24,767 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:25,747 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:25,748 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:25,752 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:25,756 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:25,782 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:25,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:41:25,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:41:25,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:41:26,785 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:27,787 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:28,790 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:28,876 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:30,795 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:32,627 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:32,629 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:32,631 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:32,633 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:32,802 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:32,804 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:33,806 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:33,908 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:34,808 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:36,812 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:38,826 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:38,978 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:39,532 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:39,536 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:39,536 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:39,538 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:39,834 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:40,837 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:40,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:41:40,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:41:40,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:41:41,840 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:42,843 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:44,096 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:44,849 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:46,383 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:46,387 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:46,388 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:46,390 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:46,854 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:46,854 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:47,857 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:48,859 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:49,112 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:50,865 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:52,871 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:53,255 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:41:53,256 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:41:53,257 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:41:53,263 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:41:53,874 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:41:54,113 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:41:54,405 DEBUG   SenderThread:1072207 [sender.py:send():378] send: stats
+2024-03-20 02:41:54,877 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:55,880 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:55,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:41:55,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:41:55,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:41:56,885 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:58,891 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:41:59,147 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:00,094 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:42:00,095 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:42:00,096 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:42:00,098 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:42:00,896 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:42:00,897 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:01,899 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:02,903 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:04,161 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:04,908 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:06,916 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:06,977 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:42:06,978 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:42:06,979 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:42:06,982 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:42:07,920 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:42:07,921 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:08,922 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:09,292 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:10,929 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:10,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:42:10,976 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:42:10,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:42:12,936 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:13,828 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:42:13,829 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:42:13,829 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:42:13,832 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:42:13,939 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:42:14,411 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:14,944 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:15,947 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:16,950 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:18,957 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:19,475 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:20,694 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:42:20,696 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:42:20,696 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:42:20,698 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:42:20,970 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:42:20,970 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:21,974 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:22,977 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:24,405 DEBUG   SenderThread:1072207 [sender.py:send():378] send: stats
+2024-03-20 02:42:24,522 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:24,983 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:25,976 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-20 02:42:25,977 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: stop_status
+2024-03-20 02:42:25,977 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:42:26,988 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:27,608 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-20 02:42:27,609 DEBUG   SenderThread:1072207 [sender.py:send():378] send: history
+2024-03-20 02:42:27,610 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: summary_record
+2024-03-20 02:42:27,612 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:42:27,617 DEBUG   SenderThread:1072207 [sender.py:send():378] send: alert
+2024-03-20 02:42:28,001 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:42:28,305 DEBUG   SenderThread:1072207 [sender.py:send():378] send: telemetry
+2024-03-20 02:42:28,306 DEBUG   SenderThread:1072207 [sender.py:send():378] send: exit
+2024-03-20 02:42:28,307 INFO    SenderThread:1072207 [sender.py:send_exit():585] handling exit code: 0
+2024-03-20 02:42:28,308 INFO    SenderThread:1072207 [sender.py:send_exit():587] handling runtime: 213
+2024-03-20 02:42:28,315 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:42:28,317 INFO    SenderThread:1072207 [sender.py:send_exit():593] send defer
+2024-03-20 02:42:28,318 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,318 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 0
+2024-03-20 02:42:28,319 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,319 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 0
+2024-03-20 02:42:28,320 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 1
+2024-03-20 02:42:28,320 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,320 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 1
+2024-03-20 02:42:28,321 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,321 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 1
+2024-03-20 02:42:28,321 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 2
+2024-03-20 02:42:28,322 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,322 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 2
+2024-03-20 02:42:28,323 INFO    HandlerThread:1072207 [system_monitor.py:finish():203] Stopping system monitor
+2024-03-20 02:42:28,324 DEBUG   SystemMonitor:1072207 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-03-20 02:42:28,324 INFO    HandlerThread:1072207 [interfaces.py:finish():202] Joined cpu monitor
+2024-03-20 02:42:28,325 INFO    HandlerThread:1072207 [interfaces.py:finish():202] Joined disk monitor
+2024-03-20 02:42:28,324 DEBUG   SystemMonitor:1072207 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-03-20 02:42:28,329 INFO    HandlerThread:1072207 [interfaces.py:finish():202] Joined gpu monitor
+2024-03-20 02:42:28,329 INFO    HandlerThread:1072207 [interfaces.py:finish():202] Joined memory monitor
+2024-03-20 02:42:28,329 INFO    HandlerThread:1072207 [interfaces.py:finish():202] Joined network monitor
+2024-03-20 02:42:28,330 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,330 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 2
+2024-03-20 02:42:28,330 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 3
+2024-03-20 02:42:28,330 DEBUG   SenderThread:1072207 [sender.py:send():378] send: stats
+2024-03-20 02:42:28,330 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,330 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 3
+2024-03-20 02:42:28,330 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,330 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 3
+2024-03-20 02:42:28,331 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 4
+2024-03-20 02:42:28,331 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,331 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 4
+2024-03-20 02:42:28,331 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,331 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 4
+2024-03-20 02:42:28,331 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 5
+2024-03-20 02:42:28,331 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,331 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 5
+2024-03-20 02:42:28,331 DEBUG   SenderThread:1072207 [sender.py:send():378] send: summary
+2024-03-20 02:42:28,332 INFO    SenderThread:1072207 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-20 02:42:28,333 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,333 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 5
+2024-03-20 02:42:28,333 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 6
+2024-03-20 02:42:28,333 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,333 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 6
+2024-03-20 02:42:28,333 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,334 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 6
+2024-03-20 02:42:28,335 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:28,619 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:28,619 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 7
+2024-03-20 02:42:28,620 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:28,620 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:28,621 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 7
+2024-03-20 02:42:28,621 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:28,622 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 7
+2024-03-20 02:42:29,012 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/config.yaml
+2024-03-20 02:42:29,013 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:42:29,014 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:29,620 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:30,024 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:30,639 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 8
+2024-03-20 02:42:30,645 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:30,645 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:30,646 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 8
+2024-03-20 02:42:30,646 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:30,647 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 8
+2024-03-20 02:42:30,647 INFO    SenderThread:1072207 [job_builder.py:build():298] Attempting to build job artifact
+2024-03-20 02:42:30,655 INFO    SenderThread:1072207 [job_builder.py:_get_source_type():428] is repo sourced job
+2024-03-20 02:42:30,669 INFO    SenderThread:1072207 [job_builder.py:build():404] adding wandb-job metadata file
+2024-03-20 02:42:30,678 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 9
+2024-03-20 02:42:30,678 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:30,678 DEBUG   SenderThread:1072207 [sender.py:send():378] send: artifact
+2024-03-20 02:42:30,679 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 9
+2024-03-20 02:42:31,038 INFO    Thread-12 :1072207 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:31,558 INFO    SenderThread:1072207 [sender.py:send_artifact():1443] sent artifact job-https___github.com_takumi0shibata_DVRL.git_train_BERT.py - {'id': 'QXJ0aWZhY3Q6NzYyOTE3NTk3', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE1MDQwMzc1Mw==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NzYyOTE3NTk3', 'versionIndex': 0}}}
+2024-03-20 02:42:31,559 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:31,560 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 9
+2024-03-20 02:42:31,561 INFO    SenderThread:1072207 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-03-20 02:42:31,621 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:32,059 INFO    SenderThread:1072207 [dir_watcher.py:finish():388] scan: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files
+2024-03-20 02:42:32,060 INFO    SenderThread:1072207 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/conda-environment.yaml conda-environment.yaml
+2024-03-20 02:42:32,061 INFO    SenderThread:1072207 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/config.yaml config.yaml
+2024-03-20 02:42:32,063 INFO    SenderThread:1072207 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log output.log
+2024-03-20 02:42:32,066 INFO    SenderThread:1072207 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/requirements.txt requirements.txt
+2024-03-20 02:42:32,069 INFO    SenderThread:1072207 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-metadata.json wandb-metadata.json
+2024-03-20 02:42:32,069 INFO    SenderThread:1072207 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json wandb-summary.json
+2024-03-20 02:42:32,072 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 10
+2024-03-20 02:42:32,072 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:32,072 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:42:32,072 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 10
+2024-03-20 02:42:32,073 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:42:32,073 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 10
+2024-03-20 02:42:32,074 INFO    SenderThread:1072207 [file_pusher.py:finish():172] shutting down file pusher
+2024-03-20 02:42:32,516 INFO    wandb-upload_0:1072207 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/conda-environment.yaml
+2024-03-20 02:42:32,622 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:32,624 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:32,922 INFO    wandb-upload_2:1072207 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/output.log
+2024-03-20 02:42:32,977 INFO    wandb-upload_4:1072207 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/wandb-summary.json
+2024-03-20 02:42:32,982 INFO    wandb-upload_3:1072207 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/requirements.txt
+2024-03-20 02:42:33,624 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:33,625 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:34,625 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:34,627 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:35,626 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:35,627 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:36,627 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:36,628 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:36,631 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:37,628 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:37,630 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:38,628 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:38,631 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:39,629 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:39,631 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:40,630 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:40,632 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:41,631 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:41,633 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:41,635 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:42,632 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:42,634 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:43,633 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:43,636 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:44,634 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:44,636 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:45,635 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:45,637 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:46,636 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:46,637 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:46,638 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:47,637 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:47,640 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:48,638 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:48,640 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:49,639 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:49,642 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:50,640 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:50,643 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:51,641 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:51,643 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:51,647 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:52,642 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:52,644 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:53,643 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:53,645 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:54,644 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:54,647 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:55,645 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:55,647 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:56,646 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:56,649 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:56,650 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:42:57,647 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:57,649 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:58,648 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:58,650 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:42:59,649 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:42:59,652 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:00,651 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:00,653 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:01,651 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:01,653 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:01,655 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:02,652 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:02,654 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:03,653 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:03,656 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:04,654 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:04,656 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:05,655 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:05,658 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:06,656 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:06,658 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:06,660 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:07,657 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:07,659 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:08,658 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:08,660 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:09,659 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:09,660 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:10,659 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:10,661 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:11,660 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:11,663 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:11,664 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:12,661 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:12,663 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:13,662 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:13,665 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:14,663 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:14,666 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:15,664 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:15,666 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:16,665 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:16,667 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:16,668 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:17,666 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:17,668 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:18,667 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:18,669 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:19,668 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:19,670 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:20,669 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:20,671 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:21,670 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:21,673 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:21,674 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:22,672 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:22,673 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:23,675 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:23,676 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:24,674 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:24,677 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:25,675 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:25,678 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:26,676 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:26,678 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:26,680 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:27,677 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:27,680 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:28,678 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:28,680 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:29,679 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:29,681 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:30,680 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:30,683 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:31,681 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:31,683 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:31,685 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:32,682 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:32,684 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:33,683 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:33,685 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:34,684 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:34,686 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:35,685 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:35,687 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:36,686 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:36,688 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:36,690 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:37,687 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:37,689 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:38,688 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:38,690 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:39,689 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:39,691 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:40,690 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:40,692 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:41,690 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:41,692 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:41,693 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:42,691 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:42,691 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:43,692 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:43,695 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:44,693 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:44,695 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:45,694 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:45,696 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:46,695 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:46,697 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:46,699 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:47,696 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:47,698 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:48,697 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:48,699 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:49,698 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:49,700 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:50,699 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:50,701 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:51,700 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:51,703 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:51,705 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:52,702 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:52,704 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:53,703 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:53,704 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:54,704 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:54,706 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:55,705 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:55,707 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:56,706 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:56,708 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:56,710 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:43:57,707 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:57,709 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:58,708 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:58,710 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:43:59,709 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:43:59,710 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:00,710 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:00,712 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:01,711 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:01,713 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:01,715 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:02,712 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:02,714 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:03,713 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:03,715 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:04,714 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:04,716 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:05,715 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:05,716 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:06,716 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:06,718 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:06,720 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:07,717 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:07,719 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:08,717 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:08,719 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:09,719 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:09,720 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:10,720 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:10,722 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:11,721 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:11,723 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:11,725 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:12,721 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:12,723 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:13,722 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:13,725 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:14,723 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:14,726 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:15,724 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:15,726 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:16,725 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:16,727 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:16,730 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:17,726 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:17,728 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:18,728 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:18,729 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:19,729 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:19,731 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:20,729 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:20,731 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:21,731 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:21,733 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:21,735 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:22,732 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:22,734 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:23,733 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:23,735 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:24,734 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:24,736 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:25,735 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:25,738 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:26,736 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:26,737 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:26,740 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:27,737 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:27,739 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:28,738 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:28,741 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:29,739 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:29,741 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:30,740 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:30,742 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:31,741 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:31,743 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:31,745 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:32,742 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:32,744 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:33,743 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:33,745 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:34,743 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:34,745 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:35,746 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:35,747 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:36,747 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:36,749 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:36,752 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:37,748 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:37,750 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:38,749 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:38,752 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:39,750 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:39,753 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:40,751 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:40,753 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:41,752 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:41,754 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:41,756 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: status_report
+2024-03-20 02:44:42,753 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:42,755 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:43,754 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:43,756 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:44,755 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:44,757 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:45,756 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:45,758 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:46,244 INFO    wandb-upload_1:1072207 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/files/config.yaml
+2024-03-20 02:44:46,446 INFO    Thread-11 (_thread_body):1072207 [sender.py:transition_state():613] send defer: 11
+2024-03-20 02:44:46,449 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:44:46,450 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 11
+2024-03-20 02:44:46,451 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:44:46,452 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 11
+2024-03-20 02:44:46,453 INFO    SenderThread:1072207 [file_pusher.py:join():178] waiting for file pusher
+2024-03-20 02:44:46,454 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 12
+2024-03-20 02:44:46,455 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:44:46,456 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 12
+2024-03-20 02:44:46,456 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:44:46,457 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 12
+2024-03-20 02:44:46,457 INFO    SenderThread:1072207 [file_stream.py:finish():595] file stream finish called
+2024-03-20 02:44:46,661 INFO    SenderThread:1072207 [file_stream.py:finish():599] file stream finish is done
+2024-03-20 02:44:46,663 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 13
+2024-03-20 02:44:46,664 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:44:46,665 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 13
+2024-03-20 02:44:46,667 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:44:46,668 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 13
+2024-03-20 02:44:46,668 INFO    SenderThread:1072207 [sender.py:transition_state():613] send defer: 14
+2024-03-20 02:44:46,669 DEBUG   SenderThread:1072207 [sender.py:send():378] send: final
+2024-03-20 02:44:46,670 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: defer
+2024-03-20 02:44:46,670 DEBUG   SenderThread:1072207 [sender.py:send():378] send: footer
+2024-03-20 02:44:46,671 INFO    HandlerThread:1072207 [handler.py:handle_request_defer():172] handle defer: 14
+2024-03-20 02:44:46,672 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: defer
+2024-03-20 02:44:46,672 INFO    SenderThread:1072207 [sender.py:send_request_defer():609] handle sender defer: 14
+2024-03-20 02:44:46,673 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-20 02:44:46,674 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: poll_exit
+2024-03-20 02:44:46,675 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-20 02:44:46,676 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: server_info
+2024-03-20 02:44:46,676 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: server_info
+2024-03-20 02:44:46,677 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: get_summary
+2024-03-20 02:44:46,677 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: sampled_history
+2024-03-20 02:44:46,677 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: job_info
+2024-03-20 02:44:46,677 DEBUG   SenderThread:1072207 [sender.py:send_request():405] send_request: job_info
+2024-03-20 02:44:46,722 DEBUG   HandlerThread:1072207 [handler.py:handle_request():146] handle_request: shutdown
+2024-03-20 02:44:46,722 INFO    HandlerThread:1072207 [handler.py:finish():869] shutting down handler
+2024-03-20 02:44:47,678 INFO    WriterThread:1072207 [datastore.py:close():296] close: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_023853-3kr0zb6g/run-3kr0zb6g.wandb
+2024-03-20 02:44:47,678 INFO    SenderThread:1072207 [sender.py:finish():1521] shutting down sender
+2024-03-20 02:44:47,680 INFO    SenderThread:1072207 [file_pusher.py:finish():172] shutting down file pusher
+2024-03-20 02:44:47,681 INFO    SenderThread:1072207 [file_pusher.py:join():178] waiting for file pusher

@@ -1,6 +1,7 @@
 """This script trains the PAES_on_torch model on the given prompt and attribute."""
 
 import os
+import platform
 import random
 import argparse
 import numpy as np
@@ -11,33 +12,25 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 
 # import my modules
-from configs.configs import Configs
+from PAES.configs import PAESConfig
 from utils.read_data import read_essays_single_score, read_pos_vocab
 from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences
-from models.PAES import PAES, fastPAES
+from PAES.models import fastPAES
 from utils.evaluation import train_model, evaluate_model
 
-def main():
-    # Set up the argument parser
-    parser = argparse.ArgumentParser(description="PAES_on_torch model")
-    parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
-    parser.add_argument('--seed', type=int, default=12, help='set random seed')
-    parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
-    parser.add_argument('--device', type=str, default='mac', help='linux or mac')
-    parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
-    parser.add_argument('--experiment_name', type=str, default='fastPAES', help='name of the experiment')
-    args = parser.parse_args()
+def main(args):
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
     seed = args.seed
 
     # Set device
-    if args.device == 'linux':
+    pf = platform.system()
+    if pf == 'Windows' or pf == 'Linux':
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    elif args.device == 'mac':
+    elif pf == 'Darwin':
         device = torch.device('mps')
     else:
-        raise ValueError("device must be either 'linux' or 'mac'")
+        raise Exception('Unknown platform')
     
     # fix random seed
     np.random.seed(seed)
@@ -52,16 +45,15 @@ def main():
     print("Device: {}".format(device))
 
     # Load configs
-    configs = Configs()
+    configs = PAESConfig()
 
-    data_path = configs.DATA_PATH3
+    data_path = args.data_dir
     print(f'load data from {data_path}...')
     train_path = data_path + str(test_prompt_id) + '/train.pk'
     dev_path = data_path + str(test_prompt_id) + '/dev.pk'
     test_path = data_path + str(test_prompt_id) + '/test.pk'
     features_path = configs.FEATURES_PATH
     readability_path = configs.READABILITY_PATH
-    vocab_size = configs.VOCAB_SIZE
     epochs = configs.EPOCHS
     batch_size = configs.BATCH_SIZE
 
@@ -70,8 +62,7 @@ def main():
         'dev_path': dev_path,
         'test_path': test_path,
         'features_path': features_path,
-        'readability_path': readability_path,
-        'vocab_size': vocab_size
+        'readability_path': readability_path
     }
 
     # Read data
@@ -152,8 +143,6 @@ def main():
     print('================================')
 
     # Create model
-    # model = PAES_on_torch(100, 100, batch_size, len(pos_vocab), configs, X_train_linguistic_features.size()[1], X_train_readability.size()[1], device)
-    # model = PAES(max_sentnum, max_sentlen, X_train_linguistic_features.size(1), X_train_readability.size(1), pos_vocab=pos_vocab)
     model = fastPAES(max_sentnum, max_sentlen, X_train_linguistic_features.size(1), X_train_readability.size(1), pos_vocab=pos_vocab)
     model = model.to(device)
     print(model)
@@ -214,4 +203,15 @@ def main():
     plt.savefig(output_dir + f'loss_prompt{test_prompt_id}.png')
 
 if __name__ == '__main__':
-    main()
+
+    # Set up the argument parser
+    parser = argparse.ArgumentParser(description="PAES_on_torch model")
+    parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
+    parser.add_argument('--seed', type=int, default=12, help='set random seed')
+    parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
+    parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
+    parser.add_argument('--experiment_name', type=str, default='fastPAES', help='name of the experiment')
+    parser.add_argument('--data_dir', type=str, default='data/cross_prompt_attributes/', help='data directory')
+    args = parser.parse_args()
+
+    main(args)

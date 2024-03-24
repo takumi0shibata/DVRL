@@ -1,0 +1,19 @@
+2024-03-20 15:39:07,622 INFO    StreamThr :1178352 [internal.py:wandb_internal():86] W&B internal server running at pid: 1178352, started at: 2024-03-20 15:39:07.617485
+2024-03-20 15:39:07,623 DEBUG   HandlerThread:1178352 [handler.py:handle_request():146] handle_request: status
+2024-03-20 15:39:07,641 INFO    WriterThread:1178352 [datastore.py:open_for_write():87] open: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_153907-i3vss6sd/run-i3vss6sd.wandb
+2024-03-20 15:39:07,643 DEBUG   SenderThread:1178352 [sender.py:send():378] send: header
+2024-03-20 15:39:07,818 DEBUG   SenderThread:1178352 [sender.py:send():378] send: run
+2024-03-20 15:39:08,266 DEBUG   HandlerThread:1178352 [handler.py:handle_request():146] handle_request: shutdown
+2024-03-20 15:39:08,266 INFO    HandlerThread:1178352 [handler.py:finish():869] shutting down handler
+2024-03-20 15:39:08,307 INFO    SenderThread:1178352 [dir_watcher.py:__init__():211] watching files in: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_153907-i3vss6sd/files
+2024-03-20 15:39:08,307 INFO    SenderThread:1178352 [sender.py:_start_run_threads():1099] run started: i3vss6sd with start time 1710916747.617962
+2024-03-20 15:39:08,307 INFO    SenderThread:1178352 [sender.py:finish():1521] shutting down sender
+2024-03-20 15:39:08,307 INFO    SenderThread:1178352 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-03-20 15:39:08,818 INFO    WriterThread:1178352 [datastore.py:close():296] close: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_153907-i3vss6sd/run-i3vss6sd.wandb
+2024-03-20 15:39:09,334 INFO    SenderThread:1178352 [dir_watcher.py:finish():388] scan: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_153907-i3vss6sd/files
+2024-03-20 15:39:09,337 INFO    SenderThread:1178352 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_153907-i3vss6sd/files/config.yaml config.yaml
+2024-03-20 15:39:09,348 INFO    SenderThread:1178352 [file_pusher.py:finish():172] shutting down file pusher
+2024-03-20 15:39:09,349 INFO    SenderThread:1178352 [file_pusher.py:join():178] waiting for file pusher
+2024-03-20 15:41:23,382 INFO    wandb-upload_0:1178352 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240320_153907-i3vss6sd/files/config.yaml
+2024-03-20 15:41:24,043 INFO    SenderThread:1178352 [file_stream.py:finish():595] file stream finish called
+2024-03-20 15:41:27,467 INFO    SenderThread:1178352 [file_stream.py:finish():599] file stream finish is done

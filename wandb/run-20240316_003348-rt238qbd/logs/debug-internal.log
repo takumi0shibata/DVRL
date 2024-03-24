@@ -1,0 +1,597 @@
+2024-03-16 00:33:48,398 INFO    StreamThr :290706 [internal.py:wandb_internal():86] W&B internal server running at pid: 290706, started at: 2024-03-16 00:33:48.396858
+2024-03-16 00:33:48,399 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status
+2024-03-16 00:33:48,409 INFO    WriterThread:290706 [datastore.py:open_for_write():87] open: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/run-rt238qbd.wandb
+2024-03-16 00:33:48,413 DEBUG   SenderThread:290706 [sender.py:send():378] send: header
+2024-03-16 00:33:48,505 DEBUG   SenderThread:290706 [sender.py:send():378] send: run
+2024-03-16 00:33:48,916 INFO    SenderThread:290706 [dir_watcher.py:__init__():211] watching files in: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files
+2024-03-16 00:33:48,916 INFO    SenderThread:290706 [sender.py:_start_run_threads():1099] run started: rt238qbd with start time 1710516828.39853
+2024-03-16 00:33:48,924 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: check_version
+2024-03-16 00:33:48,925 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: check_version
+2024-03-16 00:33:48,976 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: run_start
+2024-03-16 00:33:49,002 DEBUG   HandlerThread:290706 [system_info.py:__init__():26] System info init
+2024-03-16 00:33:49,002 DEBUG   HandlerThread:290706 [system_info.py:__init__():41] System info init done
+2024-03-16 00:33:49,002 INFO    HandlerThread:290706 [system_monitor.py:start():194] Starting system monitor
+2024-03-16 00:33:49,002 INFO    SystemMonitor:290706 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-03-16 00:33:49,002 INFO    HandlerThread:290706 [system_monitor.py:probe():214] Collecting system info
+2024-03-16 00:33:49,003 INFO    SystemMonitor:290706 [interfaces.py:start():190] Started cpu monitoring
+2024-03-16 00:33:49,003 INFO    SystemMonitor:290706 [interfaces.py:start():190] Started disk monitoring
+2024-03-16 00:33:49,005 INFO    SystemMonitor:290706 [interfaces.py:start():190] Started gpu monitoring
+2024-03-16 00:33:49,006 INFO    SystemMonitor:290706 [interfaces.py:start():190] Started memory monitoring
+2024-03-16 00:33:49,007 INFO    SystemMonitor:290706 [interfaces.py:start():190] Started network monitoring
+2024-03-16 00:33:49,016 DEBUG   HandlerThread:290706 [system_info.py:probe():150] Probing system
+2024-03-16 00:33:49,023 DEBUG   HandlerThread:290706 [system_info.py:_probe_git():135] Probing git
+2024-03-16 00:33:49,061 DEBUG   HandlerThread:290706 [system_info.py:_probe_git():143] Probing git done
+2024-03-16 00:33:49,061 DEBUG   HandlerThread:290706 [system_info.py:probe():198] Probing system done
+2024-03-16 00:33:49,062 DEBUG   HandlerThread:290706 [system_monitor.py:probe():223] {'os': 'Linux-5.15.133.1-microsoft-standard-WSL2-x86_64-with-glibc2.35', 'python': '3.10.13', 'heartbeatAt': '2024-03-15T15:33:49.017060', 'startedAt': '2024-03-15T15:33:48.340926', 'docker': None, 'cuda': None, 'args': ('--test_prompt_id', '5', '--experiment_name', 'DVRL_DomainAdaptation', '--dev_size', '60'), 'state': 'running', 'program': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT.py', 'codePathLocal': 'train_BERT.py', 'codePath': 'train_BERT.py', 'git': {'remote': 'https://github.com/takumi0shibata/DVRL.git', 'commit': '84f7b000c7d79e1efd4f911d62d0e6686dad0c21'}, 'email': None, 'root': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL', 'host': 'takushibata', 'username': 'takumi', 'executable': '/home/takumi/anaconda3/envs/torch/bin/python', 'cpu_count': 16, 'cpu_count_logical': 32, 'cpu_freq': {'current': 2995.1999999999985, 'min': 0.0, 'max': 0.0}, 'cpu_freq_per_core': [{'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}, {'current': 2995.2, 'min': 0.0, 'max': 0.0}], 'disk': {'/': {'total': 1006.853931427002, 'used': 249.8871192932129}}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 31.267444610595703}}
+2024-03-16 00:33:49,062 INFO    HandlerThread:290706 [system_monitor.py:probe():224] Finished collecting system info
+2024-03-16 00:33:49,062 INFO    HandlerThread:290706 [system_monitor.py:probe():227] Publishing system info
+2024-03-16 00:33:49,062 DEBUG   HandlerThread:290706 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-03-16 00:33:49,919 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/conda-environment.yaml
+2024-03-16 00:33:50,523 DEBUG   HandlerThread:290706 [system_info.py:_save_conda():219] Saving conda packages done
+2024-03-16 00:33:50,526 INFO    HandlerThread:290706 [system_monitor.py:probe():229] Finished publishing system info
+2024-03-16 00:33:50,529 DEBUG   SenderThread:290706 [sender.py:send():378] send: files
+2024-03-16 00:33:50,529 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-metadata.json with policy now
+2024-03-16 00:33:50,577 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: python_packages
+2024-03-16 00:33:50,589 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:33:50,590 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:33:50,589 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: python_packages
+2024-03-16 00:33:50,728 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:33:50,969 DEBUG   SenderThread:290706 [sender.py:send():378] send: telemetry
+2024-03-16 00:33:51,015 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/conda-environment.yaml
+2024-03-16 00:33:51,016 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-metadata.json
+2024-03-16 00:33:51,017 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/requirements.txt
+2024-03-16 00:33:51,352 INFO    wandb-upload_0:290706 [upload_job.py:push():131] Uploaded file /tmp/tmprf1ow2ofwandb/um48s58i-wandb-metadata.json
+2024-03-16 00:33:53,033 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:33:53,926 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:33:55,046 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:33:59,428 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:01,069 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:02,072 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:03,075 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:04,079 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:04,507 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:05,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:34:05,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:34:05,578 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:34:06,084 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:08,089 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:09,549 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:09,775 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:34:09,776 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:34:09,777 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:34:09,780 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:34:10,095 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:10,096 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_created():271] file/dir created: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:34:11,105 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:12,107 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:14,114 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:14,586 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:16,126 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:17,854 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:34:17,856 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:34:17,856 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:34:17,860 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:34:18,134 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:34:18,134 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:19,136 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:19,616 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:20,139 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:20,140 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/config.yaml
+2024-03-16 00:34:20,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:34:20,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:34:20,578 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:34:22,147 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:24,177 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:24,788 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:25,937 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:34:25,938 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:34:25,938 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:34:25,942 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:34:26,196 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:34:26,197 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:27,198 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:28,203 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:29,825 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:30,210 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:32,223 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:34,033 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:34:34,034 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:34:34,036 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:34:34,041 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:34:34,230 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:34:34,231 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:34,992 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:35,234 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:35,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:34:35,585 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:34:35,585 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:34:36,237 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:40,023 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:40,260 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:42,097 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:34:42,098 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:34:42,100 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:34:42,105 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:34:42,274 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:34:42,275 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:43,276 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:44,279 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:45,066 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:46,288 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:48,295 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:49,008 DEBUG   SystemMonitor:290706 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-03-16 00:34:49,009 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:34:50,110 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:50,202 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:34:50,204 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:34:50,204 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:34:50,208 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:34:50,305 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:34:50,306 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:50,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:34:50,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:34:50,579 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:34:51,310 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:52,314 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:54,322 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:55,186 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:34:56,330 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:58,337 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:34:58,363 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:34:58,364 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:34:58,364 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:34:58,367 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:34:59,349 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:34:59,349 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:00,259 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:00,352 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:02,358 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:04,365 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:05,324 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:05,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:35:05,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:35:05,579 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:35:06,399 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:06,474 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:35:08,129 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:35:08,129 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:35:08,134 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:35:08,418 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:35:09,422 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:10,357 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:10,425 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:12,439 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:14,443 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:14,569 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:35:14,570 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:35:14,570 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:35:14,574 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:35:15,446 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:35:15,518 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:16,452 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:17,454 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:18,457 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:19,009 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:35:20,472 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:20,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:20,580 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:35:20,580 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:35:20,581 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:35:22,478 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:22,663 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:35:22,664 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:35:22,665 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:35:22,670 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:35:23,481 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:35:24,484 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:25,487 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:25,607 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:26,505 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:28,510 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:30,519 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:30,641 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:30,732 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:35:30,737 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:35:30,738 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:35:30,741 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:35:31,522 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:35:32,524 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:33,527 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:34,530 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:35,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:35:35,579 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:35:35,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:35:35,806 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:36,542 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:38,554 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:38,827 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:35:38,828 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:35:38,829 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:35:38,832 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:35:39,557 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:35:40,562 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:40,839 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:41,563 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:42,567 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:44,585 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:45,874 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:46,591 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:46,886 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:35:46,889 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:35:46,890 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:35:46,893 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:35:47,594 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:35:48,597 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:49,010 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:35:49,599 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:50,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:35:50,579 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:35:50,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:35:50,603 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:50,890 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:52,612 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:54,617 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:54,964 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:35:54,965 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:35:54,965 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:35:54,974 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:35:55,621 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:35:55,920 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:35:56,623 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:57,625 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:35:58,628 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:00,633 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:01,013 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:02,661 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:03,094 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:03,095 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:03,095 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:03,100 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:03,685 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:36:04,688 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:05,578 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:36:05,579 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:36:05,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:36:05,691 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:06,015 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:06,694 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:08,700 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:10,705 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:11,037 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:11,125 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:11,126 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:11,127 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:11,133 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:11,707 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:36:12,709 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:13,710 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:14,713 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:16,099 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:16,718 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:18,746 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:19,010 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:36:19,244 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:19,245 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:19,246 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:19,249 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:19,751 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:36:20,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:36:20,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:36:20,579 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:36:20,754 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:21,132 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:21,757 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:22,760 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:24,766 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:26,201 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:26,771 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:27,348 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:27,350 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:27,350 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:27,353 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:27,775 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:36:28,778 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:29,781 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:30,784 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:31,276 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:32,789 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:34,795 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:35,493 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:35,494 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:35,494 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:35,501 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:35,580 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:36:35,581 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:36:35,581 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:36:35,801 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:36:36,458 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:36,803 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:37,806 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:38,809 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:40,814 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:41,519 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:42,820 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:43,604 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:43,606 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:43,606 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:43,611 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:43,825 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:36:44,829 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:45,831 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:46,567 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:46,834 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:48,840 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:49,011 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:36:50,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:36:50,579 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:36:50,581 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:36:50,846 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:51,632 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:51,724 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:51,726 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:51,726 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:51,733 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:51,855 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:36:52,857 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:53,864 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:54,867 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:56,682 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:36:56,873 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:58,920 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:36:59,825 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:36:59,826 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:36:59,826 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:36:59,835 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:36:59,923 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:00,925 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:01,727 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:01,928 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:02,931 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:04,936 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:05,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:37:05,580 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:37:05,581 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:37:06,941 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:07,940 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:37:08,161 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:37:08,161 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:08,162 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:37:08,164 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:37:08,951 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:09,962 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:10,968 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:12,976 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:13,240 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:14,986 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:15,964 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:37:15,965 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:37:15,965 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:37:15,970 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:37:15,989 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:16,991 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:17,993 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:18,240 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:18,995 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:19,011 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:37:20,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:37:20,580 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:37:20,581 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:37:21,000 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:23,005 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:23,309 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:24,054 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:37:24,056 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:37:24,057 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:37:24,060 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:37:25,018 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:25,018 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:26,021 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:27,023 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:28,424 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:29,030 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:31,034 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:32,074 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:37:32,075 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:37:32,075 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:37:32,080 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:37:33,043 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:33,044 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:33,561 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:34,045 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:35,048 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:35,579 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:37:35,580 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:37:35,581 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:37:37,052 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:38,604 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:39,057 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:40,145 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:37:40,147 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:37:40,147 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:37:40,151 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:37:41,064 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:41,065 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:42,066 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:43,068 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:43,624 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:45,071 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:47,077 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:48,233 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:37:48,234 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:37:48,234 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:37:48,242 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:37:48,879 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:49,013 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:37:49,083 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:49,083 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:50,084 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:50,580 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: stop_status
+2024-03-16 00:37:50,580 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: stop_status
+2024-03-16 00:37:50,581 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:37:51,093 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:53,110 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:53,902 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:55,114 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:56,404 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:37:56,405 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:37:56,406 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:37:56,408 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:37:57,119 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:37:57,119 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:58,122 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:37:58,978 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:37:59,139 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:01,145 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:03,150 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:04,035 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:38:04,524 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: partial_history
+2024-03-16 00:38:04,524 DEBUG   SenderThread:290706 [sender.py:send():378] send: history
+2024-03-16 00:38:04,525 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: summary_record
+2024-03-16 00:38:04,528 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:38:04,532 DEBUG   SenderThread:290706 [sender.py:send():378] send: alert
+2024-03-16 00:38:05,189 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:38:05,204 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:05,537 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-16 00:38:06,200 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:07,215 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:08,063 DEBUG   SenderThread:290706 [sender.py:send():378] send: telemetry
+2024-03-16 00:38:08,064 DEBUG   SenderThread:290706 [sender.py:send():378] send: exit
+2024-03-16 00:38:08,066 INFO    SenderThread:290706 [sender.py:send_exit():585] handling exit code: 0
+2024-03-16 00:38:08,067 INFO    SenderThread:290706 [sender.py:send_exit():587] handling runtime: 255
+2024-03-16 00:38:08,072 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:38:08,075 INFO    SenderThread:290706 [sender.py:send_exit():593] send defer
+2024-03-16 00:38:08,076 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: poll_exit
+2024-03-16 00:38:08,076 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,077 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 0
+2024-03-16 00:38:08,078 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,078 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 0
+2024-03-16 00:38:08,078 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 1
+2024-03-16 00:38:08,078 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,078 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 1
+2024-03-16 00:38:08,079 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,079 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 1
+2024-03-16 00:38:08,079 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 2
+2024-03-16 00:38:08,079 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,079 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 2
+2024-03-16 00:38:08,079 INFO    HandlerThread:290706 [system_monitor.py:finish():203] Stopping system monitor
+2024-03-16 00:38:08,079 DEBUG   SystemMonitor:290706 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-03-16 00:38:08,080 DEBUG   SystemMonitor:290706 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-03-16 00:38:08,080 INFO    HandlerThread:290706 [interfaces.py:finish():202] Joined cpu monitor
+2024-03-16 00:38:08,080 INFO    HandlerThread:290706 [interfaces.py:finish():202] Joined disk monitor
+2024-03-16 00:38:08,084 INFO    HandlerThread:290706 [interfaces.py:finish():202] Joined gpu monitor
+2024-03-16 00:38:08,084 INFO    HandlerThread:290706 [interfaces.py:finish():202] Joined memory monitor
+2024-03-16 00:38:08,084 INFO    HandlerThread:290706 [interfaces.py:finish():202] Joined network monitor
+2024-03-16 00:38:08,085 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,085 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 2
+2024-03-16 00:38:08,085 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 3
+2024-03-16 00:38:08,085 DEBUG   SenderThread:290706 [sender.py:send():378] send: stats
+2024-03-16 00:38:08,085 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,085 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 3
+2024-03-16 00:38:08,085 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,085 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 3
+2024-03-16 00:38:08,085 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 4
+2024-03-16 00:38:08,086 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,086 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 4
+2024-03-16 00:38:08,086 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,086 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 4
+2024-03-16 00:38:08,086 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 5
+2024-03-16 00:38:08,086 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,086 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 5
+2024-03-16 00:38:08,086 DEBUG   SenderThread:290706 [sender.py:send():378] send: summary
+2024-03-16 00:38:08,087 INFO    SenderThread:290706 [sender.py:_save_file():1365] saving file wandb-summary.json with policy end
+2024-03-16 00:38:08,088 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,088 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 5
+2024-03-16 00:38:08,088 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 6
+2024-03-16 00:38:08,088 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,088 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 6
+2024-03-16 00:38:08,088 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,089 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 6
+2024-03-16 00:38:08,090 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: status_report
+2024-03-16 00:38:08,227 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:38:08,274 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 7
+2024-03-16 00:38:08,275 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:08,276 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 7
+2024-03-16 00:38:08,277 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:08,277 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 7
+2024-03-16 00:38:08,539 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-16 00:38:09,239 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/config.yaml
+2024-03-16 00:38:10,404 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 8
+2024-03-16 00:38:10,405 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: poll_exit
+2024-03-16 00:38:10,406 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:10,408 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 8
+2024-03-16 00:38:10,409 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:10,410 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 8
+2024-03-16 00:38:10,411 INFO    SenderThread:290706 [job_builder.py:build():298] Attempting to build job artifact
+2024-03-16 00:38:10,415 INFO    SenderThread:290706 [job_builder.py:_get_source_type():428] is repo sourced job
+2024-03-16 00:38:10,431 INFO    SenderThread:290706 [job_builder.py:build():404] adding wandb-job metadata file
+2024-03-16 00:38:10,439 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 9
+2024-03-16 00:38:10,439 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:10,439 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 9
+2024-03-16 00:38:10,440 DEBUG   SenderThread:290706 [sender.py:send():378] send: artifact
+2024-03-16 00:38:10,540 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-16 00:38:11,259 INFO    SenderThread:290706 [sender.py:send_artifact():1443] sent artifact job-https___github.com_takumi0shibata_DVRL.git_train_BERT.py - {'id': 'QXJ0aWZhY3Q6NzU3MTE5MDEw', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjE0OTEyNjIzNQ==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6NzU3MTE5MDEw', 'versionIndex': 1}}}
+2024-03-16 00:38:11,260 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:11,260 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 9
+2024-03-16 00:38:11,260 INFO    SenderThread:290706 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-03-16 00:38:11,265 INFO    Thread-12 :290706 [dir_watcher.py:_on_file_modified():288] file/dir modified: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:11,270 INFO    SenderThread:290706 [dir_watcher.py:finish():388] scan: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files
+2024-03-16 00:38:11,271 INFO    SenderThread:290706 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/conda-environment.yaml conda-environment.yaml
+2024-03-16 00:38:11,274 INFO    SenderThread:290706 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/config.yaml config.yaml
+2024-03-16 00:38:11,277 INFO    SenderThread:290706 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log output.log
+2024-03-16 00:38:11,279 INFO    SenderThread:290706 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/requirements.txt requirements.txt
+2024-03-16 00:38:11,284 INFO    SenderThread:290706 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-metadata.json wandb-metadata.json
+2024-03-16 00:38:11,284 INFO    SenderThread:290706 [dir_watcher.py:finish():402] scan save: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json wandb-summary.json
+2024-03-16 00:38:11,288 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 10
+2024-03-16 00:38:11,289 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: poll_exit
+2024-03-16 00:38:11,289 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:11,289 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 10
+2024-03-16 00:38:11,290 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:11,290 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 10
+2024-03-16 00:38:11,291 INFO    SenderThread:290706 [file_pusher.py:finish():172] shutting down file pusher
+2024-03-16 00:38:11,540 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-16 00:38:11,541 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: poll_exit
+2024-03-16 00:38:11,743 INFO    wandb-upload_1:290706 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/config.yaml
+2024-03-16 00:38:11,798 INFO    wandb-upload_3:290706 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/requirements.txt
+2024-03-16 00:38:11,832 INFO    wandb-upload_2:290706 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/output.log
+2024-03-16 00:38:11,846 INFO    wandb-upload_4:290706 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/wandb-summary.json
+2024-03-16 00:38:11,852 INFO    wandb-upload_0:290706 [upload_job.py:push():131] Uploaded file /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/files/conda-environment.yaml
+2024-03-16 00:38:12,053 INFO    Thread-11 (_thread_body):290706 [sender.py:transition_state():613] send defer: 11
+2024-03-16 00:38:12,055 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:12,056 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 11
+2024-03-16 00:38:12,057 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:12,058 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 11
+2024-03-16 00:38:12,059 INFO    SenderThread:290706 [file_pusher.py:join():178] waiting for file pusher
+2024-03-16 00:38:12,061 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 12
+2024-03-16 00:38:12,062 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:12,063 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 12
+2024-03-16 00:38:12,063 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:12,064 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 12
+2024-03-16 00:38:12,064 INFO    SenderThread:290706 [file_stream.py:finish():595] file stream finish called
+2024-03-16 00:38:12,217 INFO    SenderThread:290706 [file_stream.py:finish():599] file stream finish is done
+2024-03-16 00:38:12,218 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 13
+2024-03-16 00:38:12,220 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:12,220 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 13
+2024-03-16 00:38:12,222 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:12,222 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 13
+2024-03-16 00:38:12,223 INFO    SenderThread:290706 [sender.py:transition_state():613] send defer: 14
+2024-03-16 00:38:12,224 DEBUG   SenderThread:290706 [sender.py:send():378] send: final
+2024-03-16 00:38:12,224 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: defer
+2024-03-16 00:38:12,224 DEBUG   SenderThread:290706 [sender.py:send():378] send: footer
+2024-03-16 00:38:12,224 INFO    HandlerThread:290706 [handler.py:handle_request_defer():172] handle defer: 14
+2024-03-16 00:38:12,225 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: defer
+2024-03-16 00:38:12,226 INFO    SenderThread:290706 [sender.py:send_request_defer():609] handle sender defer: 14
+2024-03-16 00:38:12,227 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: poll_exit
+2024-03-16 00:38:12,227 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: poll_exit
+2024-03-16 00:38:12,229 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: internal_messages
+2024-03-16 00:38:12,230 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: server_info
+2024-03-16 00:38:12,230 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: server_info
+2024-03-16 00:38:12,230 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: get_summary
+2024-03-16 00:38:12,231 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: sampled_history
+2024-03-16 00:38:12,231 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: job_info
+2024-03-16 00:38:12,232 DEBUG   SenderThread:290706 [sender.py:send_request():405] send_request: job_info
+2024-03-16 00:38:12,273 DEBUG   HandlerThread:290706 [handler.py:handle_request():146] handle_request: shutdown
+2024-03-16 00:38:12,274 INFO    HandlerThread:290706 [handler.py:finish():869] shutting down handler
+2024-03-16 00:38:13,232 INFO    WriterThread:290706 [datastore.py:close():296] close: /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240316_003348-rt238qbd/run-rt238qbd.wandb
+2024-03-16 00:38:13,232 INFO    SenderThread:290706 [sender.py:finish():1521] shutting down sender
+2024-03-16 00:38:13,234 INFO    SenderThread:290706 [file_pusher.py:finish():172] shutting down file pusher
+2024-03-16 00:38:13,235 INFO    SenderThread:290706 [file_pusher.py:join():178] waiting for file pusher

@@ -1,0 +1,55 @@
+Saving the initial model...
+Training the original model...
+  0%|                                                                                          | 0/1000 [00:00<?, ?it/s]/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:40: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  x_train = torch.tensor(x_train, dtype=torch.float)
+/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:41: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  y_train = torch.tensor(y_train, dtype=torch.float)
+Training the validation model...
+Training DVRL...
+Origin model Performance QWK:  0.678
+  0%|                                                                                | 1/1000 [00:05<1:27:38,  5.26s/it]/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:40: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  x_train = torch.tensor(x_train, dtype=torch.float)
+/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:41: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  y_train = torch.tensor(y_train, dtype=torch.float)
+Iteration: 1, Reward: 0.115, DVRL Loss: 777.874, Prob MAX: 0.414, Prob MIN: 0.396, QWK: 0.792
+  0%|▏                                                                               | 2/1000 [00:10<1:24:45,  5.10s/it]/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:40: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  x_train = torch.tensor(x_train, dtype=torch.float)
+/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:41: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  y_train = torch.tensor(y_train, dtype=torch.float)
+Iteration: 2, Reward: 0.034, DVRL Loss: 232.724, Prob MAX: 0.432, Prob MIN: 0.413, QWK: 0.712
+  0%|▏                                                                               | 3/1000 [00:15<1:22:09,  4.94s/it]/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:40: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  x_train = torch.tensor(x_train, dtype=torch.float)
+/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:41: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  y_train = torch.tensor(y_train, dtype=torch.float)
+Iteration: 3, Reward: 0.121, DVRL Loss: 829.379, Prob MAX: 0.451, Prob MIN: 0.422, QWK: 0.799
+  0%|▎                                                                               | 4/1000 [00:19<1:20:37,  4.86s/it]/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:40: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  x_train = torch.tensor(x_train, dtype=torch.float)
+/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:41: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  y_train = torch.tensor(y_train, dtype=torch.float)
+Iteration: 4, Reward: 0.137, DVRL Loss: 935.622, Prob MAX: 0.453, Prob MIN: 0.424, QWK: 0.814
+  0%|▍                                                                               | 5/1000 [00:24<1:19:36,  4.80s/it]/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:40: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  x_train = torch.tensor(x_train, dtype=torch.float)
+/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py:41: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  y_train = torch.tensor(y_train, dtype=torch.float)
+Iteration: 5, Reward: 0.175, DVRL Loss: 1198.616, Prob MAX: 0.454, Prob MIN: 0.426, QWK: 0.853
+  0%|▍                                                                               | 5/1000 [00:26<1:29:16,  5.38s/it]
+Traceback (most recent call last):
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_DVRL_DomainAdaptation_FeatureModel.py", line 182, in <module>
+    main(args)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_DVRL_DomainAdaptation_FeatureModel.py", line 146, in main
+    dvrl_class.train_dvrl(args.metric)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/dvrl/dvrl.py", line 229, in train_dvrl
+    history = fit_func(new_model, x_batch, y_batch, 512, self.inner_iterations, self.device, sel_prob_curr)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/dvrl_utils.py", line 64, in fit_func
+    optimizer.step()
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/optim/optimizer.py", line 385, in wrapper
+    out = func(*args, **kwargs)
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/optim/optimizer.py", line 76, in _use_grad
+    ret = func(self, *args, **kwargs)
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/optim/adam.py", line 166, in step
+    adam(
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/optim/adam.py", line 316, in adam
+    func(params,
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/optim/adam.py", line 508, in _multi_tensor_adam
+    torch._foreach_add_(device_state_steps, torch.tensor(1.0, device='cpu'), alpha=1.0)
+KeyboardInterrupt

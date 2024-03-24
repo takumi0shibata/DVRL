@@ -1,0 +1,368 @@
+load data from data/cross_prompt_attributes/1/...
+Loading embedding from cache...
+Selected 30 samples.
+Selected sample indices: [1691, 446, 689, 653, 945, 1548, 1244, 452, 1413, 916, 1447, 871, 1645, 476, 1368, 878, 746, 282, 1509, 1347, 151, 1577, 622, 1549, 1570, 915, 1348, 690, 794, 1359]
+================================
+x_train shape: (11193,)
+y_train shape: (11193,)
+================================
+x_dev shape: (30,)
+y_dev shape: (30,)
+================================
+x_test shape: (1753,)
+y_test shape: (1753,)
+================================
+/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/transformers/utils/generic.py:260: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  torch.utils._pytree._register_pytree_node(
+Training:   0%|                                                          | 0/700 [00:00<?, ?batch/s]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training: 100%|███████████████████████████████████| 700/700 [02:16<00:00,  5.40batch/s, loss=0.0234]
+Training: 100%|███████████████████████████████████| 700/700 [02:16<00:00,  5.12batch/s, loss=0.0234]
+Evaluation: 100%|█████████████████████████████████████| 2/2 [00:00<00:00,  9.55batch/s, loss=0.0196]
+
+
+Evaluation: 100%|█████████████████████████████████| 110/110 [00:07<00:00, 14.71batch/s, loss=0.0263]
+Training:   0%|                                     | 1/700 [00:00<02:25,  4.80batch/s, loss=0.0125]
+[0.45711999]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training: 100%|███████████████████████████████████| 700/700 [02:16<00:00,  5.11batch/s, loss=0.0162]
+Evaluation: 100%|█████████████████████████████████████| 2/2 [00:00<00:00,  8.43batch/s, loss=0.0157]
+Evaluation:  17%|█████▊                            | 19/110 [00:01<00:06, 14.55batch/s, loss=0.0218]
+
+
+
+Evaluation:  97%|████████████████████████████████ | 107/110 [00:07<00:00, 14.76batch/s, loss=0.0233]
+[0.52985394]
+Evaluation: 100%|█████████████████████████████████| 110/110 [00:07<00:00, 14.60batch/s, loss=0.0234]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training: 100%|███████████████████████████████████| 700/700 [02:16<00:00,  5.12batch/s, loss=0.0122]
+Evaluation: 100%|█████████████████████████████████████| 2/2 [00:00<00:00,  9.64batch/s, loss=0.0139]
+Evaluation:  15%|█████▎                            | 17/110 [00:01<00:06, 14.57batch/s, loss=0.0217]
+
+
+
+Evaluation: 100%|█████████████████████████████████| 110/110 [00:07<00:00, 14.63batch/s, loss=0.0229]
+Training:   1%|▍                                   | 9/700 [00:01<02:15,  5.11batch/s, loss=0.00912]
+[0.56008358]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training: 100%|██████████████████████████████████| 700/700 [02:16<00:00,  5.13batch/s, loss=0.00934]
+Evaluation: 100%|█████████████████████████████████████| 2/2 [00:00<00:00,  9.65batch/s, loss=0.0185]
+Evaluation:  12%|████                              | 13/110 [00:01<00:06, 14.58batch/s, loss=0.0281]
+
+
+
+Evaluation: 100%|██████████████████████████████████| 110/110 [00:07<00:00, 14.85batch/s, loss=0.029]
+Training:   1%|▍                                   | 8/700 [00:01<02:14,  5.16batch/s, loss=0.00635]
+[0.46023204]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Training:  63%|█████████████████████▌            | 443/700 [01:46<01:01,  4.15batch/s, loss=0.00772]
+Traceback (most recent call last):
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT_fullsource.py", line 163, in <module>
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT_fullsource.py", line 112, in main
+    train_loss = train_epoch(model, train_loader, loss_fn, optimizer, device, scheduler, use_weight=False)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/evaluation.py", line 205, in train_epoch
+    losses.append(loss.item())
+KeyboardInterrupt

@@ -4,25 +4,18 @@ import pandas as pd
 import os
 import random
 import torch
-from configs.configs import Configs
-from models.predictor_model import EssayScorer
+from PAES.configs import PAESConfig
+from dvrl.predictor_model import MLP
 from transformers import AutoConfig
 from utils.create_embedding_feautres import create_embedding_features
 from utils.dvrl_utils import remove_top_p_sample, fit_func, pred_func, calc_qwk, random_remove_sample, get_dev_sample
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
-import japanize_matplotlib
-import seaborn as sns
-from sklearn.model_selection import train_test_split
-import pickle
 
-# %%
+
 for test_prompt_id in range(1, 9):
     print('Prompt: ', test_prompt_id)
     test_prompt_id = test_prompt_id
-    # output_path = f'outputs/DVRL_DomainAdaptation/'
-    # output_path = f'outputs/DVRL_DomainAdaptation{test_prompt_id}/'
-    # output_path = f'outputs/DVRL_DomainAdaptation{test_prompt_id}_devsize0.01/'
     output_path = f'outputs/DVRL_DomainAdaptation{test_prompt_id}_devsize30/'
 
     seed = 12
@@ -35,14 +28,16 @@ for test_prompt_id in range(1, 9):
     # parameters
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(device)
-    configs = Configs()
+    configs = PAESConfig()
     attribute_name = 'score'
 
     # Load data
-    data_path = configs.DATA_PATH3 + str(test_prompt_id) + '/'
+    data_path = 'data/cross_prompt_attributes/' + str(test_prompt_id) + '/'
     model_name = 'microsoft/deberta-v3-large'
 
-    # %%
+    ###################################################
+    # Training MLP
+    ###################################################
     def set_seed(seed):
         np.random.seed(seed)
         random.seed(seed)
@@ -52,7 +47,7 @@ for test_prompt_id in range(1, 9):
 
     def train_and_evaluate(x_source, y_source, x_dev, y_dev, x_test, y_test, test_prompt_id, weights, model_name, device):
         config = AutoConfig.from_pretrained(model_name)
-        pred_model = EssayScorer(config.hidden_size)
+        pred_model = MLP(config.hidden_size)
 
         history = fit_func(pred_model, x_source, y_source, batch_size=256, epochs=100, device=device, sample_weight=weights)
 
@@ -177,97 +172,93 @@ for test_prompt_id in range(1, 9):
     # CSVファイルに保存
     metrics_df.to_csv(output_path + 'metrics_summary.csv', index=False)
 
-    # %% [markdown]
-    # ### Train BERT by development set
+    # ###################################################
+    # # Train BERT by development set
+    # ###################################################
+    # from utils.create_embedding_feautres import load_data, normalize_scores, create_data_loader
+    # from transformers import AutoTokenizer, AutoModel, AutoConfig
 
-    # %%
-    from utils.create_embedding_feautres import load_data, normalize_scores, create_data_loader
-    from transformers import AutoTokenizer, AutoModel, AutoConfig
+    # data = load_data(data_path)
 
-    # %%
-    data = load_data(data_path)
-
-    features = np.array(data['test']['feature'])
-    labels = np.array(data['test']['label'])
-    prompts = np.array(data['test']['essay_set'])
-    ids = np.array(data['test']['essay_id'])
-    # Normalize scores
-    normalized_labels = normalize_scores(labels, prompts, attribute_name)
+    # features = np.array(data['test']['feature'])
+    # labels = np.array(data['test']['label'])
+    # prompts = np.array(data['test']['essay_set'])
+    # ids = np.array(data['test']['essay_id'])
+    # # Normalize scores
+    # normalized_labels = normalize_scores(labels, prompts, attribute_name)
 
 
-    sample_id = np.load(output_path + 'dev_ids.npy')
-    not_sample_id = np.array([i for i in range(len(features)) if i not in sample_id])
+    # sample_id = np.load(output_path + 'dev_ids.npy')
+    # not_sample_id = np.array([i for i in range(len(features)) if i not in sample_id])
 
-    # %%
-    train_data = {}
-    test_data = {}
+    # train_data = {}
+    # test_data = {}
 
-    train_data['feature'] = features[sample_id]
-    train_data['normalized_label'] = normalized_labels[sample_id]
-    train_data['essay_set'] = prompts[sample_id]
+    # train_data['feature'] = features[sample_id]
+    # train_data['normalized_label'] = normalized_labels[sample_id]
+    # train_data['essay_set'] = prompts[sample_id]
 
-    test_data['feature'] = features[not_sample_id]
-    test_data['normalized_label'] = normalized_labels[not_sample_id]
-    test_data['essay_set'] = prompts[not_sample_id]
+    # test_data['feature'] = features[not_sample_id]
+    # test_data['normalized_label'] = normalized_labels[not_sample_id]
+    # test_data['essay_set'] = prompts[not_sample_id]
 
-    print(train_data['feature'].shape)
-    print(test_data['feature'].shape)
+    # print(train_data['feature'].shape)
+    # print(test_data['feature'].shape)
 
-    # %%
-    import torch
-    import torch.nn as nn
-    from torch.optim import AdamW
-    from transformers import get_linear_schedule_with_warmup
-    from utils.evaluation import train_epoch, evaluate_epoch
-    from models.AES_BERT import PreTrainedScorer
+    # import torch
+    # import torch.nn as nn
+    # from torch.optim import AdamW
+    # from transformers import get_linear_schedule_with_warmup
+    # from utils.evaluation import train_epoch, evaluate_epoch
+    # from models.AES import BERT_Regressor
 
 
-    model_name = 'bert-base-uncased'
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModel.from_pretrained(model_name).to(device)
-    config = AutoConfig.from_pretrained(model_name)
+    # model_name = 'bert-base-uncased'
+    # tokenizer = AutoTokenizer.from_pretrained(model_name)
+    # model = AutoModel.from_pretrained(model_name).to(device)
+    # config = AutoConfig.from_pretrained(model_name)
 
-    train_loader = create_data_loader(train_data, tokenizer, max_length=512, batch_size=32)
-    test_loader = create_data_loader(test_data, tokenizer, max_length=512, batch_size=32)
+    # train_loader = create_data_loader(train_data, tokenizer, max_length=512, batch_size=32)
+    # test_loader = create_data_loader(test_data, tokenizer, max_length=512, batch_size=32)
 
-    # set parameters
-    EPOCHS = 30
+    # # set parameters
+    # EPOCHS = 30
 
-    # Define the device
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using {device}")
+    # # Define the device
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # print(f"Using {device}")
 
-    # Initialize the model
-    model = PreTrainedScorer(model, hidden_size=config.hidden_size).to(device)
+    # # Initialize the model
+    # model = BERT_Regressor(model, hidden_size=config.hidden_size).to(device)
 
-    # Define loss function, optimizer, and scheduler
-    loss_fn = nn.MSELoss(reduction='none').to(device)
-    optimizer = AdamW(model.parameters(), lr=2e-5)
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=len(train_loader)*EPOCHS)
+    # # Define loss function, optimizer, and scheduler
+    # loss_fn = nn.MSELoss(reduction='none').to(device)
+    # optimizer = AdamW(model.parameters(), lr=2e-5)
+    # scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=len(train_loader)*EPOCHS)
 
-    # Training loop
-    for epoch in range(EPOCHS):
-        print('valuationに使用したデータだけで訓練中')
-        print(f"Epoch {epoch+1}/{EPOCHS}")
+    # # Training loop
+    # for epoch in range(EPOCHS):
+    #     print('valuationに使用したデータだけで訓練中')
+    #     print(f"Epoch {epoch+1}/{EPOCHS}")
 
-        # Training Set
-        train_loss = train_epoch(model, train_loader, loss_fn, optimizer, device, scheduler, use_weight=False)
-        print(f"Training loss: {train_loss}")
+    #     # Training Set
+    #     train_loss = train_epoch(model, train_loader, loss_fn, optimizer, device, scheduler, use_weight=False)
+    #     print(f"Training loss: {train_loss}")
 
-        # Test Set
-        eval_history = evaluate_epoch(model, test_loader, loss_fn, device, attribute_name)
-        print(f"Test loss: {eval_history['loss']:.4f}")
+    #     # Test Set
+    #     eval_history = evaluate_epoch(model, test_loader, loss_fn, device, attribute_name)
+    #     print(f"Test loss: {eval_history['loss']:.4f}")
 
-        print(f'[TEST] -> QWK: {eval_history["qwk"]: .3f}, CORR: {eval_history["corr"]: .3f}, RMSE: {eval_history["rmse"]: .3f}')
+    #     print(f'[TEST] -> QWK: {eval_history["qwk"]: .3f}, CORR: {eval_history["corr"]: .3f}, RMSE: {eval_history["rmse"]: .3f}')
 
-    best_val_metrics = [eval_history[met] for met in ['qwk', 'lwk', 'corr', 'rmse', 'mae']]
+    # best_val_metrics = [eval_history[met] for met in ['qwk', 'lwk', 'corr', 'rmse', 'mae']]
 
-    pd.DataFrame(np.array(best_val_metrics).reshape(1, 5), columns=['qwk', 'lwk', 'corr', 'rmse', 'mae']).to_csv(output_path + f'BERT-onlydev{test_prompt_id}.csv', index=False, header=True)
+    # pd.DataFrame(np.array(best_val_metrics).reshape(1, 5), columns=['qwk', 'lwk', 'corr', 'rmse', 'mae']).to_csv(output_path + f'BERT-onlydev{test_prompt_id}.csv', index=False, header=True)
 
-    # %% [markdown]
-    # ## Train BERT by valuable data.
 
-    # %%
+    ##################################################
+    # Train BERT by valuable data.
+    ##################################################
     low_mean_mse = np.array(low_mse).mean()
     high_mean_mse = np.array(high_mse).mean()
 
@@ -276,7 +267,6 @@ for test_prompt_id in range(1, 9):
     else:
         逆張り = False
 
-    # %%
     from utils.create_embedding_feautres import load_data, normalize_scores, create_data_loader
     from transformers import AutoTokenizer, AutoModel, AutoConfig
     import torch
@@ -284,9 +274,8 @@ for test_prompt_id in range(1, 9):
     from torch.optim import AdamW
     from transformers import get_linear_schedule_with_warmup
     from utils.evaluation import train_epoch, evaluate_epoch
-    from models.AES_BERT import PreTrainedScorer
+    from models.AES import BERT_Regressor
 
-    # %%
     qwks = []
     corr = []
     dev_loss = []
@@ -365,7 +354,7 @@ for test_prompt_id in range(1, 9):
         print(f"Using {device}")
         
         # Initialize the model
-        model = PreTrainedScorer(model, hidden_size=config.hidden_size).to(device)
+        model = BERT_Regressor(model, hidden_size=config.hidden_size).to(device)
         
         # Define loss function, optimizer, and scheduler
         loss_fn = nn.MSELoss(reduction='none').to(device)
@@ -415,184 +404,183 @@ for test_prompt_id in range(1, 9):
     print('QWK: ', qwks[min_index])
     print('Correlation: ', corr[min_index])
 
-    # %% [markdown]
-    # ## Train PAES by valuable data
 
-    # %%
-    qwks = []
-    corr = []
-    dev_loss = []
-    interval = 0.1
-    for p in np.arange(0.0, 1.0, interval):
-        from utils.read_data import read_essays_single_score, read_pos_vocab
-        from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences
-        from torch.utils.data import TensorDataset, DataLoader
-        from models.PAES import PAES, fastPAES
-        from utils.evaluation import train_model, evaluate_model
-        
-        # Load configs
-        configs = Configs()
-        
-        data_path = configs.DATA_PATH3
-        print(f'load data from {data_path}...')
-        train_path = data_path + str(test_prompt_id) + '/train.pk'
-        dev_path = data_path + str(test_prompt_id) + '/dev.pk'
-        test_path = data_path + str(test_prompt_id) + '/test.pk'
-        features_path = configs.FEATURES_PATH
-        readability_path = configs.READABILITY_PATH
-        vocab_size = configs.VOCAB_SIZE
-        epochs = configs.EPOCHS
-        batch_size = configs.BATCH_SIZE
-        
-        read_configs = {
-            'train_path': train_path,
-            'dev_path': dev_path,
-            'test_path': test_path,
-            'features_path': features_path,
-            'readability_path': readability_path,
-            'vocab_size': vocab_size
-        }
-        
-        # Read data
-        pos_vocab = read_pos_vocab(read_configs)
-        train_data, dev_data, test_data = read_essays_single_score(read_configs, pos_vocab, attribute_name)
-        
-        # Get max sentence length and max sentence number
-        max_sentnum = max(train_data['max_sentnum'], dev_data['max_sentnum'], test_data['max_sentnum'])
-        max_sentlen = max(train_data['max_sentlen'], dev_data['max_sentlen'], test_data['max_sentlen'])
-        
-        # Scale down the scores
-        train_data['y_scaled'] = get_single_scaled_down_score(train_data['data_y'], train_data['prompt_ids'], attribute_name)
-        dev_data['y_scaled'] = get_single_scaled_down_score(dev_data['data_y'], dev_data['prompt_ids'], attribute_name)
-        test_data['y_scaled'] = get_single_scaled_down_score(test_data['data_y'], test_data['prompt_ids'], attribute_name)
-        
-        # Pad the sequences with shape [batch, max_sentence_num, max_sentence_length]
-        X_train_pos = pad_hierarchical_text_sequences(train_data['pos_x'], max_sentnum, max_sentlen)
-        X_dev_pos = pad_hierarchical_text_sequences(dev_data['pos_x'], max_sentnum, max_sentlen)
-        X_test_pos = pad_hierarchical_text_sequences(test_data['pos_x'], max_sentnum, max_sentlen)
-        
-        X_train_pos = X_train_pos.reshape((X_train_pos.shape[0], X_train_pos.shape[1] * X_train_pos.shape[2]))
-        X_dev_pos = X_dev_pos.reshape((X_dev_pos.shape[0], X_dev_pos.shape[1] * X_dev_pos.shape[2]))
-        X_test_pos = X_test_pos.reshape((X_test_pos.shape[0], X_test_pos.shape[1] * X_test_pos.shape[2]))
-        
-        # convert to tensor
-        X_train= torch.tensor(X_train_pos, dtype=torch.long)
-        X_dev = torch.tensor(X_dev_pos, dtype=torch.long)
-        X_test= torch.tensor(X_test_pos, dtype=torch.long)
-        
-        X_train_linguistic_features = torch.tensor(np.array(train_data['features_x']), dtype=torch.float)
-        X_dev_linguistic_features = torch.tensor(np.array(dev_data['features_x']), dtype=torch.float)
-        X_test_linguistic_features = torch.tensor(np.array(test_data['features_x']), dtype=torch.float)
-        
-        X_train_readability = torch.tensor(np.array(train_data['readability_x']), dtype=torch.float)
-        X_dev_readability = torch.tensor(np.array(dev_data['readability_x']), dtype=torch.float)
-        X_test_readability = torch.tensor(np.array(test_data['readability_x']), dtype=torch.float)
-        
-        Y_train = torch.tensor(np.array(train_data['y_scaled']), dtype=torch.float)
-        Y_dev = torch.tensor(np.array(dev_data['y_scaled']), dtype=torch.float)
-        Y_test = torch.tensor(np.array(test_data['y_scaled']), dtype=torch.float)
-        
-        train_essay_set = torch.tensor(np.array(train_data['prompt_ids']), dtype=torch.long)
-        dev_essay_set = torch.tensor(np.array(dev_data['prompt_ids']), dtype=torch.long)
-        test_essay_set = torch.tensor(np.array(test_data['prompt_ids']), dtype=torch.long)
-        
-        # Load weights
-        data_values = np.load(output_path + 'estimated_data_value.npy')
-        if 逆張り:
-            weights = remove_top_p_sample(data_values, top_p=p, ascending=False)
-        else:
-            weights = remove_top_p_sample(data_values, top_p=p, ascending=True)
-        weights = (torch.tensor(weights, dtype=torch.float) == 1)
-        
-        sample_id = np.load(output_path + 'dev_ids.npy')
-        not_sample_id = np.array([i for i in range(len(y_test)) if i not in sample_id])
-        
-        X_train = torch.concat([X_train, X_dev])[weights]
-        Y_train = torch.concat([Y_train, Y_dev])[weights]
-        X_train_linguistic_features = torch.concat([X_train_linguistic_features, X_dev_linguistic_features])[weights]
-        X_train_readability = torch.concat([X_train_readability, X_dev_readability])[weights]
-        train_essay_set = torch.concat([train_essay_set, dev_essay_set])[weights]
+    # ##################################################
+    # # Train PAES by valuable data
+    # ##################################################
 
-        X_dev = X_test[sample_id]
-        Y_dev = Y_test[sample_id]
-        X_dev_linguistic_features = X_test_linguistic_features[sample_id]
-        X_dev_readability = X_test_readability[sample_id]
-        dev_essay_set = test_essay_set[sample_id]
+    # qwks = []
+    # corr = []
+    # dev_loss = []
+    # interval = 0.1
+    # for p in np.arange(0.0, 1.0, interval):
+    #     from utils.read_data import read_essays_single_score, read_pos_vocab
+    #     from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences
+    #     from torch.utils.data import TensorDataset, DataLoader
+    #     from PAES.models import PAES, fastPAES
+    #     from utils.evaluation import train_model, evaluate_model
         
-        X_test = X_test[not_sample_id]
-        Y_test = Y_test[not_sample_id]
-        X_test_linguistic_features = X_test_linguistic_features[not_sample_id]
-        X_test_readability = X_test_readability[not_sample_id]
-        test_essay_set = test_essay_set[not_sample_id]
+    #     # Load configs
+    #     configs = PAESConfig()
         
-        print(f'train size: {X_train.size()}')
-        print(f'dev size: {X_dev.size()}')
-        print(f'test size: {X_test.size()}')
+    #     data_path = configs.DATA_PATH3
+    #     print(f'load data from {data_path}...')
+    #     train_path = data_path + str(test_prompt_id) + '/train.pk'
+    #     dev_path = data_path + str(test_prompt_id) + '/dev.pk'
+    #     test_path = data_path + str(test_prompt_id) + '/test.pk'
+    #     features_path = configs.FEATURES_PATH
+    #     readability_path = configs.READABILITY_PATH
+    #     epochs = configs.EPOCHS
+    #     batch_size = configs.BATCH_SIZE
         
-        # Create Datasets
-        train_dataset = TensorDataset(X_train, Y_train, X_train_linguistic_features, X_train_readability, train_essay_set)
-        dev_dataset = TensorDataset(X_dev, Y_dev, X_dev_linguistic_features, X_dev_readability, dev_essay_set)
-        test_dataset = TensorDataset(X_test, Y_test, X_test_linguistic_features, X_test_readability, test_essay_set)
-        # Create Dataloaders
-        train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
-        dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
-        test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
+    #     read_configs = {
+    #         'train_path': train_path,
+    #         'dev_path': dev_path,
+    #         'test_path': test_path,
+    #         'features_path': features_path,
+    #         'readability_path': readability_path
+    #     }
         
-        import torch.nn as nn
-        import torch.optim as optim
-        import torch
+    #     # Read data
+    #     pos_vocab = read_pos_vocab(read_configs)
+    #     train_data, dev_data, test_data = read_essays_single_score(read_configs, pos_vocab, attribute_name)
         
-        model = fastPAES(max_sentnum, max_sentlen, X_train_linguistic_features.size(1), X_train_readability.size(1), pos_vocab=pos_vocab)
-        model = model.to(device)
-        print(model)
+    #     # Get max sentence length and max sentence number
+    #     max_sentnum = max(train_data['max_sentnum'], dev_data['max_sentnum'], test_data['max_sentnum'])
+    #     max_sentlen = max(train_data['max_sentlen'], dev_data['max_sentlen'], test_data['max_sentlen'])
         
-        # Create loss and optimizer
-        reduction = 'mean'
-        MSE_Loss = nn.MSELoss(reduction=reduction).to(device)
-        optimizer = optim.RMSprop(model.parameters(), lr=0.001)
+    #     # Scale down the scores
+    #     train_data['y_scaled'] = get_single_scaled_down_score(train_data['data_y'], train_data['prompt_ids'], attribute_name)
+    #     dev_data['y_scaled'] = get_single_scaled_down_score(dev_data['data_y'], dev_data['prompt_ids'], attribute_name)
+    #     test_data['y_scaled'] = get_single_scaled_down_score(test_data['data_y'], test_data['prompt_ids'], attribute_name)
         
-        train_history = []
-        dev_history = []
-        test_history = []
-        best_test_metrics = [-1, -1, -1, -1, -1]
-        best_val_metrics = [-1, -1, -1, -1, -1]
-        best_dev_loss = 1000
-        for epoch in range(epochs):
-            print('PAES訓練中')
-            print('{} / {} EPOCHS'.format(epoch+1, epochs))
-            print('Seed: {}, Prompt: {}'.format(seed, test_prompt_id))
+    #     # Pad the sequences with shape [batch, max_sentence_num, max_sentence_length]
+    #     X_train_pos = pad_hierarchical_text_sequences(train_data['pos_x'], max_sentnum, max_sentlen)
+    #     X_dev_pos = pad_hierarchical_text_sequences(dev_data['pos_x'], max_sentnum, max_sentlen)
+    #     X_test_pos = pad_hierarchical_text_sequences(test_data['pos_x'], max_sentnum, max_sentlen)
+        
+    #     X_train_pos = X_train_pos.reshape((X_train_pos.shape[0], X_train_pos.shape[1] * X_train_pos.shape[2]))
+    #     X_dev_pos = X_dev_pos.reshape((X_dev_pos.shape[0], X_dev_pos.shape[1] * X_dev_pos.shape[2]))
+    #     X_test_pos = X_test_pos.reshape((X_test_pos.shape[0], X_test_pos.shape[1] * X_test_pos.shape[2]))
+        
+    #     # convert to tensor
+    #     X_train= torch.tensor(X_train_pos, dtype=torch.long)
+    #     X_dev = torch.tensor(X_dev_pos, dtype=torch.long)
+    #     X_test= torch.tensor(X_test_pos, dtype=torch.long)
+        
+    #     X_train_linguistic_features = torch.tensor(np.array(train_data['features_x']), dtype=torch.float)
+    #     X_dev_linguistic_features = torch.tensor(np.array(dev_data['features_x']), dtype=torch.float)
+    #     X_test_linguistic_features = torch.tensor(np.array(test_data['features_x']), dtype=torch.float)
+        
+    #     X_train_readability = torch.tensor(np.array(train_data['readability_x']), dtype=torch.float)
+    #     X_dev_readability = torch.tensor(np.array(dev_data['readability_x']), dtype=torch.float)
+    #     X_test_readability = torch.tensor(np.array(test_data['readability_x']), dtype=torch.float)
+        
+    #     Y_train = torch.tensor(np.array(train_data['y_scaled']), dtype=torch.float)
+    #     Y_dev = torch.tensor(np.array(dev_data['y_scaled']), dtype=torch.float)
+    #     Y_test = torch.tensor(np.array(test_data['y_scaled']), dtype=torch.float)
+        
+    #     train_essay_set = torch.tensor(np.array(train_data['prompt_ids']), dtype=torch.long)
+    #     dev_essay_set = torch.tensor(np.array(dev_data['prompt_ids']), dtype=torch.long)
+    #     test_essay_set = torch.tensor(np.array(test_data['prompt_ids']), dtype=torch.long)
+        
+    #     # Load weights
+    #     data_values = np.load(output_path + 'estimated_data_value.npy')
+    #     if 逆張り:
+    #         weights = remove_top_p_sample(data_values, top_p=p, ascending=False)
+    #     else:
+    #         weights = remove_top_p_sample(data_values, top_p=p, ascending=True)
+    #     weights = (torch.tensor(weights, dtype=torch.float) == 1)
+        
+    #     sample_id = np.load(output_path + 'dev_ids.npy')
+    #     not_sample_id = np.array([i for i in range(len(y_test)) if i not in sample_id])
+        
+    #     X_train = torch.concat([X_train, X_dev])[weights]
+    #     Y_train = torch.concat([Y_train, Y_dev])[weights]
+    #     X_train_linguistic_features = torch.concat([X_train_linguistic_features, X_dev_linguistic_features])[weights]
+    #     X_train_readability = torch.concat([X_train_readability, X_dev_readability])[weights]
+    #     train_essay_set = torch.concat([train_essay_set, dev_essay_set])[weights]
+
+    #     X_dev = X_test[sample_id]
+    #     Y_dev = Y_test[sample_id]
+    #     X_dev_linguistic_features = X_test_linguistic_features[sample_id]
+    #     X_dev_readability = X_test_readability[sample_id]
+    #     dev_essay_set = test_essay_set[sample_id]
+        
+    #     X_test = X_test[not_sample_id]
+    #     Y_test = Y_test[not_sample_id]
+    #     X_test_linguistic_features = X_test_linguistic_features[not_sample_id]
+    #     X_test_readability = X_test_readability[not_sample_id]
+    #     test_essay_set = test_essay_set[not_sample_id]
+        
+    #     print(f'train size: {X_train.size()}')
+    #     print(f'dev size: {X_dev.size()}')
+    #     print(f'test size: {X_test.size()}')
+        
+    #     # Create Datasets
+    #     train_dataset = TensorDataset(X_train, Y_train, X_train_linguistic_features, X_train_readability, train_essay_set)
+    #     dev_dataset = TensorDataset(X_dev, Y_dev, X_dev_linguistic_features, X_dev_readability, dev_essay_set)
+    #     test_dataset = TensorDataset(X_test, Y_test, X_test_linguistic_features, X_test_readability, test_essay_set)
+    #     # Create Dataloaders
+    #     train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
+    #     dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
+    #     test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
+        
+    #     import torch.nn as nn
+    #     import torch.optim as optim
+    #     import torch
+        
+    #     model = fastPAES(max_sentnum, max_sentlen, X_train_linguistic_features.size(1), X_train_readability.size(1), pos_vocab=pos_vocab)
+    #     model = model.to(device)
+    #     print(model)
+        
+    #     # Create loss and optimizer
+    #     reduction = 'mean'
+    #     MSE_Loss = nn.MSELoss(reduction=reduction).to(device)
+    #     optimizer = optim.RMSprop(model.parameters(), lr=0.001)
+        
+    #     train_history = []
+    #     dev_history = []
+    #     test_history = []
+    #     best_test_metrics = [-1, -1, -1, -1, -1]
+    #     best_val_metrics = [-1, -1, -1, -1, -1]
+    #     best_dev_loss = 1000
+    #     for epoch in range(epochs):
+    #         print('PAES訓練中')
+    #         print('{} / {} EPOCHS'.format(epoch+1, epochs))
+    #         print('Seed: {}, Prompt: {}'.format(seed, test_prompt_id))
             
-            # Train the model
-            train_loss = train_model(model, train_loader, MSE_Loss, optimizer, device, weight=False)
-            print(f'Train loss: {train_loss: .4f}')
-            train_history.append(train_loss)
+    #         # Train the model
+    #         train_loss = train_model(model, train_loader, MSE_Loss, optimizer, device, weight=False)
+    #         print(f'Train loss: {train_loss: .4f}')
+    #         train_history.append(train_loss)
         
-            # Evaluate the model on dev set
-            dev_results = evaluate_model(model, dev_loader, MSE_Loss, device, attribute_name)
-            print(f'Validation loss: {dev_results["loss"]: .4f}')
-            dev_history.append(dev_results["loss"])
+    #         # Evaluate the model on dev set
+    #         dev_results = evaluate_model(model, dev_loader, MSE_Loss, device, attribute_name)
+    #         print(f'Validation loss: {dev_results["loss"]: .4f}')
+    #         dev_history.append(dev_results["loss"])
         
-            # Evaluate the model on test set
-            test_results = evaluate_model(model, test_loader, MSE_Loss, device, attribute_name)
-            print(f'Test loss: {test_results["loss"]: .4f}')
-            test_history.append(test_results["loss"])
+    #         # Evaluate the model on test set
+    #         test_results = evaluate_model(model, test_loader, MSE_Loss, device, attribute_name)
+    #         print(f'Test loss: {test_results["loss"]: .4f}')
+    #         test_history.append(test_results["loss"])
         
-            if dev_results["qwk"] > best_val_metrics[0]:
-                best_dev_loss = dev_results['loss']
-                for i, met in enumerate(['qwk', 'lwk', 'corr', 'rmse', 'mae']):
-                    best_val_metrics[i] = dev_results[met]
-                    best_test_metrics[i] = test_results[met]
+    #         if dev_results["qwk"] > best_val_metrics[0]:
+    #             best_dev_loss = dev_results['loss']
+    #             for i, met in enumerate(['qwk', 'lwk', 'corr', 'rmse', 'mae']):
+    #                 best_val_metrics[i] = dev_results[met]
+    #                 best_test_metrics[i] = test_results[met]
         
-            if epoch % 10 == 0:
-                print(f'[VAL]  -> QWK: {dev_results["qwk"]: .3f}, CORR: {dev_results["corr"]: .3f}, RMSE: {dev_results["rmse"]: .3f}')
-                print(f'[TEST] -> QWK: {test_results["qwk"]: .3f}, CORR: {test_results["corr"]: .3f}, RMSE: {test_results["rmse"]: .3f}')
-                print(f'[BEST] -> QWK: {best_test_metrics[0]: .3f}, CORR: {best_test_metrics[2]: .3f}, RMSE: {best_test_metrics[3]: .3f}')
+    #         if epoch % 10 == 0:
+    #             print(f'[VAL]  -> QWK: {dev_results["qwk"]: .3f}, CORR: {dev_results["corr"]: .3f}, RMSE: {dev_results["rmse"]: .3f}')
+    #             print(f'[TEST] -> QWK: {test_results["qwk"]: .3f}, CORR: {test_results["corr"]: .3f}, RMSE: {test_results["rmse"]: .3f}')
+    #             print(f'[BEST] -> QWK: {best_test_metrics[0]: .3f}, CORR: {best_test_metrics[2]: .3f}, RMSE: {best_test_metrics[3]: .3f}')
         
-        qwks.append(best_test_metrics[0])
-        corr.append(best_test_metrics[2])
-        dev_loss.append(best_dev_loss)
+    #     qwks.append(best_test_metrics[0])
+    #     corr.append(best_test_metrics[2])
+    #     dev_loss.append(best_dev_loss)
 
-    output_qwk = np.array([np.arange(0.0, 1.0, interval).tolist(), qwks, corr, dev_loss])
-    pd.DataFrame(output_qwk).to_csv(output_path + 'DVRL-PAES.csv', index=False, header=False)
+    # output_qwk = np.array([np.arange(0.0, 1.0, interval).tolist(), qwks, corr, dev_loss])
+    # pd.DataFrame(output_qwk).to_csv(output_path + 'DVRL-PAES.csv', index=False, header=False)
 
 

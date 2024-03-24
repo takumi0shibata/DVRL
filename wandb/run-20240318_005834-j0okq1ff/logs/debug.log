@@ -1,0 +1,33 @@
+2024-03-18 00:58:34,225 INFO    MainThread:647390 [wandb_setup.py:_flush():76] Current SDK version is 0.16.4
+2024-03-18 00:58:34,225 INFO    MainThread:647390 [wandb_setup.py:_flush():76] Configure stats pid to 647390
+2024-03-18 00:58:34,225 INFO    MainThread:647390 [wandb_setup.py:_flush():76] Loading settings from /home/takumi/.config/wandb/settings
+2024-03-18 00:58:34,226 INFO    MainThread:647390 [wandb_setup.py:_flush():76] Loading settings from /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/settings
+2024-03-18 00:58:34,228 INFO    MainThread:647390 [wandb_setup.py:_flush():76] Loading settings from environment variables: {'api_key': '***REDACTED***'}
+2024-03-18 00:58:34,228 INFO    MainThread:647390 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-03-18 00:58:34,233 INFO    MainThread:647390 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train_DVRL_DomainAdaptation_FeatureModel.py', 'program_abspath': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_DVRL_DomainAdaptation_FeatureModel.py', 'program': '/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_DVRL_DomainAdaptation_FeatureModel.py'}
+2024-03-18 00:58:34,233 INFO    MainThread:647390 [wandb_init.py:_log_setup():526] Logging user logs to /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240318_005834-j0okq1ff/logs/debug.log
+2024-03-18 00:58:34,233 INFO    MainThread:647390 [wandb_init.py:_log_setup():527] Logging internal logs to /mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/wandb/run-20240318_005834-j0okq1ff/logs/debug-internal.log
+2024-03-18 00:58:34,233 INFO    MainThread:647390 [wandb_init.py:init():566] calling init triggers
+2024-03-18 00:58:34,233 INFO    MainThread:647390 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'hidden_dim': 100, 'comb_dim': 10, 'iterations': 1000, 'activation': Tanh(), 'layer_number': 5, 'learning_rate': 0.001, 'batch_size': 10000, 'inner_iterations': 100, 'batch_size_predictor': 512, 'moving_average_window': 10, 'moving_average': False, 'std_penalty_weight': None, 'test_prompt_id': 1, 'seed': 12, 'dev_size': 40}
+2024-03-18 00:58:34,234 INFO    MainThread:647390 [wandb_init.py:init():616] starting backend
+2024-03-18 00:58:34,234 INFO    MainThread:647390 [wandb_init.py:init():620] setting up manager
+2024-03-18 00:58:34,236 INFO    MainThread:647390 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-03-18 00:58:34,237 INFO    MainThread:647390 [wandb_init.py:init():628] backend started and connected
+2024-03-18 00:58:34,242 INFO    MainThread:647390 [wandb_init.py:init():720] updated telemetry
+2024-03-18 00:58:34,272 INFO    MainThread:647390 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-03-18 00:58:34,734 INFO    MainThread:647390 [wandb_run.py:_on_init():2262] communicating current version
+2024-03-18 00:58:39,737 INFO    MainThread:647390 [wandb_run.py:_on_init():2271] got version response 
+2024-03-18 00:58:39,738 INFO    MainThread:647390 [wandb_init.py:init():804] starting run threads in backend
+2024-03-18 00:58:41,420 INFO    MainThread:647390 [wandb_run.py:_console_start():2241] atexit reg
+2024-03-18 00:58:41,420 INFO    MainThread:647390 [wandb_run.py:_redirect():2096] redirect: wrap_raw
+2024-03-18 00:58:41,421 INFO    MainThread:647390 [wandb_run.py:_redirect():2161] Wrapping output streams.
+2024-03-18 00:58:41,421 INFO    MainThread:647390 [wandb_run.py:_redirect():2186] Redirects installed.
+2024-03-18 00:58:41,422 INFO    MainThread:647390 [wandb_init.py:init():847] run started, returning control to user process
+2024-03-18 02:20:21,630 INFO    MainThread:647390 [wandb_run.py:_finish():1970] finishing run shibata/DVRL-FeatureModel/j0okq1ff
+2024-03-18 02:20:21,630 INFO    MainThread:647390 [wandb_run.py:_atexit_cleanup():2210] got exitcode: 0
+2024-03-18 02:20:21,631 INFO    MainThread:647390 [wandb_run.py:_restore():2193] restore
+2024-03-18 02:20:21,631 INFO    MainThread:647390 [wandb_run.py:_restore():2199] restore done
+2024-03-18 02:29:21,305 INFO    MainThread:647390 [wandb_run.py:_footer_history_summary_info():3851] rendering history
+2024-03-18 02:29:21,306 INFO    MainThread:647390 [wandb_run.py:_footer_history_summary_info():3883] rendering summary
+2024-03-18 02:29:21,312 INFO    MainThread:647390 [wandb_run.py:_footer_sync_info():3810] logging synced files

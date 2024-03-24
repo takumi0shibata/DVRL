@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT.py", line 137, in <module>
+    main(args)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_BERT.py", line 44, in main
+    _, _, test_data = create_embedding_features(data_path, attribute_name, model_name, device)
+UnboundLocalError: local variable 'model_name' referenced before assignment

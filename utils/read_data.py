@@ -181,12 +181,65 @@ def read_pos_vocab(read_configs):
 def get_readability_features(readability_path):
     with open(readability_path, 'rb') as fp:
         readability_features = pickle.load(fp)
+    # return pd.DataFrame(readability_features, index=None, columns=[f'dim{i+1}' for i in range(readability_features.shape[1])])
     return readability_features
 
 
 def get_linguistic_features(linguistic_features_path):
     features_df = pd.read_csv(linguistic_features_path)
     return features_df
+
+def get_features_by_id(features_df, ids, id_name):
+        order_dict = {value: index for index, value in enumerate(ids)}
+        features_df = features_df[features_df[id_name].isin(ids)]
+        features_df_ordered = features_df.iloc[features_df[id_name].map(order_dict).argsort()]
+        return features_df_ordered
+
+def scale_features(df):
+    from sklearn.preprocessing import MinMaxScaler
+
+    df = df.astype(float)
+    # スケーリング対象の特徴量を選択
+    features = df.columns.drop(['item_id', 'prompt_id', 'score'])
+
+    # prompt_idごとにグループ化してスケーリング
+    scaled_df = df.copy()
+    for prompt_id in df['prompt_id'].unique():
+        mask = df['prompt_id'] == prompt_id
+        scaler = MinMaxScaler()
+        scaled_df.loc[mask, features] = scaler.fit_transform(df.loc[mask, features])
+
+    return scaled_df
+
+def scale_features_separately(df, target_prompt_id, dev_item_ids):
+    from sklearn.preprocessing import MinMaxScaler
+
+    df = df.astype(float)
+    # スケーリング対象の特徴量を選択
+    features = df.columns.drop(['item_id', 'prompt_id', 'score'])
+
+    # DataFrameをコピー
+    scaled_df = df.copy()
+
+    # target_prompt_id以外のprompt_idに対してスケーリング
+    non_target_mask = df['prompt_id'] != target_prompt_id
+    for prompt_id in df[non_target_mask]['prompt_id'].unique():
+        mask = df['prompt_id'] == prompt_id
+        scaler = MinMaxScaler()
+        scaled_df.loc[mask, features] = scaler.fit_transform(df.loc[mask, features])
+
+    # target_prompt_idに対してdevとtestで分けてスケーリング
+    # devデータのスケーリング
+    dev_mask = df['item_id'].isin(dev_item_ids) & (df['prompt_id'] == target_prompt_id)
+    scaler = MinMaxScaler()
+    scaled_df.loc[dev_mask, features] = scaler.fit_transform(df.loc[dev_mask, features])
+
+    # testデータのスケーリング
+    test_mask = ~df['item_id'].isin(dev_item_ids) & (df['prompt_id'] == target_prompt_id)
+    scaler = MinMaxScaler()
+    scaled_df.loc[test_mask, features] = scaler.fit_transform(df.loc[test_mask, features])
+
+    return scaled_df
 
 
 def get_normalized_features(features_df):
@@ -586,6 +639,24 @@ def read_essays_single_score(read_configs, pos_tags, attribute_name):
     readability_features = get_readability_features(read_configs['readability_path'])
     linguistic_features = get_linguistic_features(read_configs['features_path'])
     normalized_linguistic_features = get_normalized_features(linguistic_features)
+    with open(read_configs['train_path'], 'rb') as train_file:
+        train_essays_list = pickle.load(train_file)
+    with open(read_configs['dev_path'], 'rb') as dev_file:
+        dev_essays_list = pickle.load(dev_file)
+    with open(read_configs['test_path'], 'rb') as test_file:
+        test_essays_list = pickle.load(test_file)
+    train_data = read_essay_sets_single_score(
+        train_essays_list, readability_features, normalized_linguistic_features, pos_tags, attribute_name)
+    dev_data = read_essay_sets_single_score(
+        dev_essays_list, readability_features, normalized_linguistic_features, pos_tags, attribute_name)
+    test_data = read_essay_sets_single_score(
+        test_essays_list, readability_features, normalized_linguistic_features, pos_tags, attribute_name)
+    return train_data, dev_data, test_data
+
+def read_essays_single_score_fullsource(read_configs, pos_tags, attribute_name, test_prompt_id, dev_item_ids):
+    readability_features = get_readability_features(read_configs['readability_path'])
+    linguistic_features = get_linguistic_features(read_configs['features_path'])
+    normalized_linguistic_features = scale_features_separately(linguistic_features, test_prompt_id, dev_item_ids).drop(['prompt_id', 'score'], axis=1)
     with open(read_configs['train_path'], 'rb') as train_file:
         train_essays_list = pickle.load(train_file)
     with open(read_configs['dev_path'], 'rb') as dev_file:

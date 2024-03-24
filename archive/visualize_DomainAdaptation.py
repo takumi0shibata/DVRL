@@ -14,8 +14,8 @@ import pandas as pd
 import os
 import random
 import torch
-from configs.configs import Configs
-from models.predictor_model import EssayScorer
+from PAES.configs import Configs
+from dvrl.predictor_model import EssayScorer
 from transformers import AutoConfig
 from utils.create_embedding_feautres import create_embedding_features
 from utils.dvrl_utils import remove_top_p_sample, fit_func, pred_func, calc_qwk, random_remove_sample, get_dev_sample
@@ -540,7 +540,7 @@ for p in np.arange(0.0, 1.0, 0.1):
     from utils.read_data import read_essays_single_score, read_pos_vocab
     from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences
     from torch.utils.data import TensorDataset, DataLoader
-    from models.PAES import PAES, fastPAES
+    from PAES.models import PAES, fastPAES
     from utils.evaluation import train_model, evaluate_model
     
     # Load configs
