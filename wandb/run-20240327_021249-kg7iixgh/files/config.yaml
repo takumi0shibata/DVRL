@@ -1,0 +1,98 @@
+wandb_version: 1
+
+pj_name:
+  desc: null
+  value: PAES (モデル選択をDVRLで使用する開発データを用いて実施)
+test_prompt_id:
+  desc: null
+  value: 4
+seed:
+  desc: null
+  value: 22
+device:
+  desc: null
+  value: cuda
+attribute_name:
+  desc: null
+  value: score
+output_dir:
+  desc: null
+  value: outputs/
+data_dir:
+  desc: null
+  value: data/cross_prompt_attributes/
+features_path:
+  desc: null
+  value: data/hand_crafted_v3.csv
+readability_path:
+  desc: null
+  value: data/allreadability.pickle
+epochs:
+  desc: null
+  value: 50
+batch_size:
+  desc: null
+  value: 10
+lr:
+  desc: null
+  value: 0.001
+embed_dim:
+  desc: null
+  value: 50
+cnn_filters:
+  desc: null
+  value: 100
+cnn_kernel_size:
+  desc: null
+  value: 5
+lstm_units:
+  desc: null
+  value: 100
+dropout:
+  desc: null
+  value: 0.5
+model_type:
+  desc: null
+  value: normal
+dev_size:
+  desc: null
+  value: 30
+embedding_model:
+  desc: null
+  value: microsoft/deberta-v3-large
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.13
+    cli_version: 0.16.4
+    framework: huggingface
+    huggingface_version: 4.32.1
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1711473169.0
+    t:
+      1:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 53
+      - 55
+      2:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 53
+      - 55
+      3:
+      - 2
+      - 13
+      - 16
+      - 23
+      4: 3.10.13
+      5: 0.16.4
+      6: 4.32.1
+      8:
+      - 5
+      13: linux-x86_64

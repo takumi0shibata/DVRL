@@ -5,12 +5,17 @@ import torch.nn as nn
 
 
 class DvrlLoss(nn.Module):
-    def __init__(self, epsilon: float, threshold: float, std_penalty_weight: float = None) -> None:
+    def __init__(
+        self,
+        epsilon: float,
+        threshold: float,
+        std_penalty_weight: float = None
+    ) -> None:
         """
-        Construct class
         Args:
             epsilon: Small value to avoid overflow
             threshold: Encourages exploration
+            std_penalty_weight: Weight for the standard deviation penalty term
         """
         super().__init__()
         self.epsilon = epsilon

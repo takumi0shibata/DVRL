@@ -7,7 +7,7 @@ import torch.nn as nn
 from torch.optim import AdamW
 from transformers import get_linear_schedule_with_warmup
 from utils.evaluation import train_epoch, evaluate_epoch
-from models.AES import BERT_Regressor
+from models.transfomer_enc import BERT_Regressor
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 from utils.create_embedding_feautres import load_data, normalize_scores, create_data_loader, create_embedding_features
 from utils.dvrl_utils import get_dev_sample

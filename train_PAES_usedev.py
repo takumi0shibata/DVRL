@@ -13,77 +13,44 @@ from torch.utils.data import TensorDataset, DataLoader
 import wandb
 
 # import my modules
-from PAES.configs import PAESConfig
-from utils.read_data import read_essays_single_score, read_pos_vocab, read_essays_single_score_fullsource
-from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences
-from PAES.models import fastPAES
+from utils.read_data import read_essays_single_score, read_pos_vocab
+from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences, set_seed
+from models.paes import PAES, tinyPAES
 from utils.evaluation import train_model, evaluate_model
 
 def main(args):
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
     seed = args.seed
-
-    # Set device
-    pf = platform.system()
-    if pf == 'Windows' or pf == 'Linux':
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    elif pf == 'Darwin':
-        device = torch.device('mps')
-    else:
-        raise Exception('Unknown platform')
-    
-    # fix random seed
-    np.random.seed(seed)
-    random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-
-    print("Test prompt id is {} of type {}".format(test_prompt_id, type(test_prompt_id)))
-    print("Attribute: {}".format(attribute_name))
-    print("Seed: {}".format(seed))
-    print("Device: {}".format(device))
-
-    # Load configs
-    configs = PAESConfig()
+    device = torch.device(args.device)
+    set_seed(seed)
 
     data_path = args.data_dir
-    print(f'load data from {data_path}...')
     train_path = data_path + str(test_prompt_id) + '/train.pk'
     dev_path = data_path + str(test_prompt_id) + '/dev.pk'
     test_path = data_path + str(test_prompt_id) + '/test.pk'
-    features_path = configs.FEATURES_PATH
-    readability_path = configs.READABILITY_PATH
-    epochs = configs.EPOCHS
-    batch_size = configs.BATCH_SIZE
+    epochs = args.epochs
+    batch_size = args.batch_size
 
     read_configs = {
         'train_path': train_path,
         'dev_path': dev_path,
         'test_path': test_path,
-        'features_path': features_path,
-        'readability_path': readability_path
+        'features_path': args.features_path,
+        'readability_path': args.readability_path
     }
 
     ########################################################
-    from utils.create_embedding_feautres import load_data, normalize_scores, create_data_loader, create_embedding_features
+    from utils.create_embedding_feautres import create_embedding_features
     from utils.dvrl_utils import get_dev_sample
     # Load data
     data_path = args.data_dir + str(test_prompt_id) + '/'
-    data = load_data(data_path)
-
     _, _, test_data = create_embedding_features(data_path, attribute_name, args.embedding_model, device)
-    _, _, y_dev, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
-
-    dev_essay_id = np.array(data['test']['essay_id'])[dev_idx]
-
-    wandb.init(project=args.wandb_pjname, name=f'PAES-fullsource{args.dev_size}-{test_prompt_id}', config=dict(args._get_kwargs()))
+    _, _, _, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
     ########################################################
 
     # Read data
     pos_vocab = read_pos_vocab(read_configs)
-    # train_data, dev_data, test_data = read_essays_single_score_fullsource(read_configs, pos_vocab, attribute_name, test_prompt_id, dev_essay_id)
     train_data, dev_data, test_data = read_essays_single_score(read_configs, pos_vocab, attribute_name)
 
 
@@ -106,23 +73,23 @@ def main(args):
     X_test_pos = X_test_pos.reshape((X_test_pos.shape[0], X_test_pos.shape[1] * X_test_pos.shape[2]))
 
     # convert to tensor
-    X_source = torch.tensor(np.concatenate([X_train_pos, X_dev_pos], axis=0), dtype=torch.long)
+    X_source = torch.tensor(np.concatenate([X_train_pos, X_dev_pos, X_test_pos[dev_idx]], axis=0), dtype=torch.long)
     X_dev = torch.tensor(X_test_pos[dev_idx], dtype=torch.long)
     X_target = torch.tensor(X_test_pos[test_idx], dtype=torch.long)
 
-    X_source_linguistic_features = torch.tensor(np.concatenate([train_data['features_x'], dev_data['features_x']], axis=0), dtype=torch.float)
+    X_source_linguistic_features = torch.tensor(np.concatenate([train_data['features_x'], dev_data['features_x'], np.array(test_data['features_x'])[dev_idx]], axis=0), dtype=torch.float)
     X_dev_linguistic_features = torch.tensor(np.array(test_data['features_x'])[dev_idx], dtype=torch.float)
     X_target_linguistic_features = torch.tensor(np.array(test_data['features_x'])[test_idx], dtype=torch.float)
 
-    X_source_readability = torch.tensor(np.concatenate([train_data['readability_x'], dev_data['readability_x']], axis=0), dtype=torch.float)
+    X_source_readability = torch.tensor(np.concatenate([train_data['readability_x'], dev_data['readability_x'], np.array(test_data['readability_x'])[dev_idx]], axis=0), dtype=torch.float)
     X_dev_readability = torch.tensor(np.array(test_data['readability_x'])[dev_idx], dtype=torch.float)
     X_target_readability = torch.tensor(np.array(test_data['readability_x'])[test_idx], dtype=torch.float)
 
-    Y_train = torch.tensor(np.concatenate([train_data['y_scaled'], dev_data['y_scaled']], axis=0), dtype=torch.float)
+    Y_train = torch.tensor(np.concatenate([train_data['y_scaled'], dev_data['y_scaled'], np.array(test_data['y_scaled'])[dev_idx]], axis=0), dtype=torch.float)
     Y_dev = torch.tensor(np.array(test_data['y_scaled'])[dev_idx], dtype=torch.float)
     Y_test = torch.tensor(np.array(test_data['y_scaled'])[test_idx], dtype=torch.float)
 
-    train_essay_set = torch.tensor(np.concatenate([train_data['prompt_ids'], dev_data['prompt_ids']], axis=0), dtype=torch.long)
+    train_essay_set = torch.tensor(np.concatenate([train_data['prompt_ids'], dev_data['prompt_ids'], np.array(test_data['prompt_ids'])[dev_idx]], axis=0), dtype=torch.long)
     dev_essay_set = torch.tensor(np.array(test_data['prompt_ids'])[dev_idx], dtype=torch.long)
     test_essay_set = torch.tensor(np.array(test_data['prompt_ids'])[test_idx], dtype=torch.long)
 
@@ -161,77 +128,90 @@ def main(args):
     print('================================')
 
     # Create model
-    model = fastPAES(max_sentnum, max_sentlen, X_source_linguistic_features.size(1), X_source_readability.size(1), pos_vocab=pos_vocab)
-    model = model.to(device)
-    print(model)
+    model = PAES(
+        max_sentnum,
+        max_sentlen,
+        X_source_linguistic_features.size(1),
+        X_source_readability.size(1),
+        pos_vocab,
+        args.embed_dim,
+        args.cnn_filters,
+        args.cnn_kernel_size,
+        args.lstm_units,
+        args.dropout
+    ).to(device)
 
     # Create loss and optimizer
     MSE_Loss = nn.MSELoss(reduction='mean').to(device)
-    optimizer = torch.optim.RMSprop(model.parameters(), lr=0.001)
+    optimizer = torch.optim.RMSprop(model.parameters(), lr=args.lr)
 
-    train_history = []
-    dev_history = []
-    test_history = []
+    wandb.init(project=args.pj_name, name=args.pj_name+str(test_prompt_id), config=dict(args._get_kwargs()))
+    # Train loop
     best_test_metrics = [-1, -1, -1, -1, -1]
     best_val_metrics = [-1, -1, -1, -1, -1]
     for epoch in range(epochs):
-        print('{} / {} EPOCHS'.format(epoch+1, epochs))
-        print('Seed: {}, Prompt: {}'.format(seed, test_prompt_id))
-        
+        print(f'Seed: {seed}, Prompt: {test_prompt_id}, Epoch: {epoch+1}/{epochs}')
         # Train the model
         train_loss = train_model(model, train_loader, MSE_Loss, optimizer, device)
-        print(f'Train loss: {train_loss: .4f}')
-        train_history.append(train_loss)
-
         # Evaluate the model on dev set
         dev_results = evaluate_model(model, dev_loader, MSE_Loss, device, attribute_name)
-        print(f'Validation loss: {dev_results["loss"]: .4f}')
-        dev_history.append(dev_results["loss"])
-
         # Evaluate the model on test set
         test_results = evaluate_model(model, test_loader, MSE_Loss, device, attribute_name)
-        print(f'Test loss: {test_results["loss"]: .4f}')
-        test_history.append(test_results["loss"])
-
-        print(f'[VAL]  -> QWK: {dev_results["qwk"]: .3f}, CORR: {dev_results["corr"]: .3f}, RMSE: {dev_results["rmse"]: .3f}')
-        print(f'[TEST] -> QWK: {test_results["qwk"]: .3f}, CORR: {test_results["corr"]: .3f}, RMSE: {test_results["rmse"]: .3f}')
 
         if dev_results["qwk"] > best_val_metrics[0]:
             for i, met in enumerate(['qwk', 'lwk', 'corr', 'rmse', 'mae']):
                 best_val_metrics[i] = dev_results[met]
                 best_test_metrics[i] = test_results[met]
 
-        print(f'[BEST] -> QWK: {best_test_metrics[0]: .3f}, CORR: {best_test_metrics[2]: .3f}, RMSE: {best_test_metrics[3]: .3f}')
-
         wandb.log({
             'train_loss': train_loss,
-            'dev_loss': dev_results["loss"],
-            'test_loss': test_results["loss"],
-            'best_qwk': best_test_metrics[0],
-            'best_lwk': best_test_metrics[1],
-            'best_corr': best_test_metrics[2],
-            'best_rmse': best_test_metrics[3],
-            'best_mae': best_test_metrics[4]
+            'dev_loss': dev_results['loss'],
+            'test_loss': test_results['loss'],
+            'dev_qwk': dev_results['qwk'],
+            'dev_lwk': dev_results['lwk'],
+            'dev_corr': dev_results['corr'],
+            'dev_rmse': dev_results['rmse'],
+            'dev_mae': dev_results['mae'],
+            'test_qwk': test_results['qwk'],
+            'test_lwk': test_results['lwk'],
+            'test_corr': test_results['corr'],
+            'test_rmse': test_results['rmse'],
+            'test_mae': test_results['mae'],
+            'best_test_qwk': best_test_metrics[0],
+            'best_test_lwk': best_test_metrics[1],
+            'best_test_corr': best_test_metrics[2],
+            'best_test_rmse': best_test_metrics[3],
+            'best_test_mae': best_test_metrics[4],
         })
-
-    wandb.alert(title=args.wandb_pjname, text='Training finished!')
+    
+    wandb.alert(title=args.pj_name, text='Training finished!')
     wandb.finish()
 
 if __name__ == '__main__':
-
     # Set up the argument parser
-    parser = argparse.ArgumentParser(description="PAES_on_torch model")
+    parser = argparse.ArgumentParser(description="Training PAES model")
+    parser.add_argument('--pj_name', type=str, default='PAES (モデル選択をDVRLで使用する開発データを用いて実施)', help='wandb project name for logging')
     parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
+    parser.add_argument('--device', type=str, default='cuda', help='device to run the model on', choices=['cuda', 'cpu', 'mps'])
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
     parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
-    parser.add_argument('--experiment_name', type=str, default='fastPAES', help='name of the experiment')
     parser.add_argument('--data_dir', type=str, default='data/cross_prompt_attributes/', help='data directory')
+    parser.add_argument('--features_path', type=str, default='data/hand_crafted_v3.csv', help='path to hand crafted features')
+    parser.add_argument('--readability_path', type=str, default='data/allreadability.pickle', help='path to readability features')
+    parser.add_argument('--epochs', type=int, default=50, help='number of epochs')
+    parser.add_argument('--batch_size', type=int, default=10, help='batch size')
+    parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
+    parser.add_argument('--embed_dim', type=int, default=50, help='pos embedding dimension')
+    parser.add_argument('--cnn_filters', type=int, default=100, help='number of cnn filters')
+    parser.add_argument('--cnn_kernel_size', type=int, default=5, help='cnn kernel size')
+    parser.add_argument('--lstm_units', type=int, default=100, help='number of lstm units')
+    parser.add_argument('--dropout', type=float, default=0.5, help='dropout rate')
+    parser.add_argument('--model_type', type=str, default='normal', help='type of model to train', choices=['normal', 'tiny'])
+    parser.add_argument('--dev_size', type=int, default=30, help='size of development set')
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large', help='name of the embedding model')
-    parser.add_argument('--dev_size', type=int, default=30, help='size of the dev set')
-    parser.add_argument('--wandb_pjname', type=str, default='PAES-fullsource', help='name of the wandb project')
+    
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
-    args = parser.parse_args()
 
     main(args)

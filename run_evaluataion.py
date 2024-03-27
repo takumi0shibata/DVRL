@@ -274,7 +274,7 @@ for test_prompt_id in range(1, 9):
     from torch.optim import AdamW
     from transformers import get_linear_schedule_with_warmup
     from utils.evaluation import train_epoch, evaluate_epoch
-    from models.AES import BERT_Regressor
+    from models.transfomer_enc import BERT_Regressor
 
     qwks = []
     corr = []

@@ -1,6 +1,17 @@
 """General utility functions for the project."""
 
 import numpy as np
+import random
+import os
+import torch
+
+def set_seed(seed):
+    # fix random seed
+    np.random.seed(seed)
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
 
 def get_overall_score_range():
     return {
@@ -299,6 +310,35 @@ def pad_hierarchical_text_sequences(index_sequences, max_sentnum, max_sentlen):
 
         X[i, num:, :] = 0
     return X
+
+def flatten_hierarchical_sequences(data: list) -> list:
+    """
+    Flatten hierarchical text sequences to a flat list by removing padding.
+    
+    Args:
+    - data (list): The input data with shape [batch, max_sentence_num, max_sentence_length].
+    
+    Returns:
+    - list: The flattened data with variable lengths.
+    """
+    flattened_data = []
+    for document in data:
+        # Filter out the padding values from each sentence and flatten
+        flattened_document = [word for sentence in document for word in sentence]
+        flattened_data.append(flattened_document)
+    
+    # Since the lengths are variable, we return a list of lists
+    return flattened_data
+
+def pad_text_sequences(sequences, max_length):
+    padding_value = 0
+    padded_sequences = []
+
+    for seq in sequences:
+        padded_seq = seq + [padding_value] * (max_length - len(seq))
+        padded_sequences.append(padded_seq)
+
+    return np.array(padded_sequences)
 
 
 def get_attribute_masks(score_matrix):

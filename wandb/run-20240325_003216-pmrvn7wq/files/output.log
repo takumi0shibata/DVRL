@@ -1,0 +1,17 @@
+
+Seed: 12, Prompt: 1, Epoch: 1/50
+Training:   0%|                                                          | 0/952 [00:00<?, ?batch/s]
+Traceback (most recent call last):
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_PAES.py", line 229, in <module>
+    main(args)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/train_PAES.py", line 168, in main
+    train_loss = train_model(model, train_loader, MSE_Loss, optimizer, device)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/utils/evaluation.py", line 71, in train_model
+    y_pred = model(x_train, linguistic_train, readability_train)
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/takumi/anaconda3/envs/torch/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/c/Users/tandf/OneDrive - 電気通信大学/Src/DVRL/models/paes.py", line 136, in forward
+    cnn_output.view(-1, x.size(1), self.cnn_filters) # size: (batch_size, num_token, cnn_filters)
+RuntimeError: shape '[-1, 1173, 100]' is invalid for input of size 1169000

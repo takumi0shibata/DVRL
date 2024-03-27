@@ -151,7 +151,7 @@ class Dvrl(object):
         self.ori_model = copy.deepcopy(self.pred_model)
         self.ori_model.load_state_dict(torch.load('tmp/init_model.pth'))
         print('Training the original model...')
-        history = fit_func(self.ori_model, self.x_train, self.y_train, self.batch_size_predictor, self.inner_iterations, self.device)
+        fit_func(self.ori_model, self.x_train, self.y_train, self.batch_size_predictor, self.inner_iterations, self.device)
 
         self.val_model = copy.deepcopy(self.pred_model)
         self.val_model.load_state_dict(torch.load('tmp/init_model.pth'))

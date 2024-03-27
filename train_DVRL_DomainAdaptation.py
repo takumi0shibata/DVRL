@@ -6,7 +6,6 @@ import torch
 import numpy as np
 import argparse
 import random
-import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import wandb
@@ -15,6 +14,7 @@ from dvrl import dvrl
 from utils.dvrl_utils import calc_qwk, get_dev_sample
 from transformers import AutoConfig
 from utils.create_embedding_feautres import create_embedding_features
+from utils.general_utils import set_seed
 from dvrl.predictor_model import MLP
 
 
@@ -27,22 +27,8 @@ def main(args):
     seed = args.seed
     save_dir = args.output_dir + args.experiment_name + '/'
     os.makedirs(save_dir, exist_ok=True)
-
-    # Set device
-    pf = platform.system()
-    if pf == 'Windows' or pf == 'Linux':
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    elif pf == 'Darwin':
-        device = torch.device('mps')
-    else:
-        raise Exception('Unknown platform')
-    
-    # fix random seed
-    np.random.seed(seed)
-    random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
+    device = torch.device(args.device)
+    set_seed(seed)
 
     ###################################################
     # Step1. Create/Load Text Embedding
@@ -143,6 +129,7 @@ if __name__ == '__main__':
     parser.add_argument('--data_dir', type=str, default='data/cross_prompt_attributes/', help='data directory')
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large', help='name of the embedding model')
     parser.add_argument('--wandb_pjname', type=str, default='テスト', help='name of the wandb project')
+    parser.add_argument('--device', type=str, default='cuda', help='device to be used', choices=['cuda', 'cpu', 'mps'])
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 
