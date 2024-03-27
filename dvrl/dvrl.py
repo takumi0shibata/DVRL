@@ -161,16 +161,13 @@ class Dvrl(object):
 
     def train_dvrl(
         self,
-        metric: str = 'mse'
-    ) -> tuple[list[float], list[float]]:
+        metric: str
+    ) -> None:
         """
         Train the DVRL model
         Args:
             metric: Metric to use for the DVRL
                 mse or qwk or corr
-        Returns:
-            rewards_history: History of rewards
-            losses_history: History of losses
         """
         # selection network
         self.value_estimator = DataValueEstimator(self.data_dim+self.label_dim, self.hidden_dim, self.comb_dim, self.layer_number, self.act_fn)
@@ -196,12 +193,11 @@ class Dvrl(object):
         y_train_valid_pred = pred_func(self.val_model, self.x_train, self.batch_size_predictor, self.device)
         y_pred_diff = np.abs(self.y_train - y_train_valid_pred)
 
-        rewards_history = []
-        losses_history = []
         if self.moving_average:
             baseline = 0
         else:
             baseline = valid_perf
+        
         for iter in tqdm(range(self.outter_iterations)):
             self.value_estimator.train()
             dvrl_optimizer.zero_grad()
@@ -226,7 +222,7 @@ class Dvrl(object):
 
             new_model = self.pred_model
             new_model.load_state_dict(torch.load('tmp/init_model.pth'))
-            history = fit_func(new_model, x_batch, y_batch, 512, self.inner_iterations, self.device, sel_prob_curr)
+            fit_func(new_model, x_batch, y_batch, 512, self.inner_iterations, self.device, sel_prob_curr)
             y_valid_hat = pred_func(new_model, self.x_dev, self.batch_size_predictor, self.device)
 
             # reward computation
@@ -246,8 +242,9 @@ class Dvrl(object):
             loss = dvrl_criterion(est_dv_curr, sel_prob_curr, reward)
             loss.backward()
             dvrl_optimizer.step()
+
+            # update the baseline
             if self.moving_average:
-                # update baseline
                 baseline = ((self.moving_average_window - 1) / self.moving_average_window) * baseline + (dvrl_perf / self.moving_average_window)
 
             if metric == 'mse':
@@ -256,8 +253,7 @@ class Dvrl(object):
                 print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, QWK: {dvrl_perf:.3f}')
             elif metric == 'corr':
                 print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, Corr: {dvrl_perf:.3f}')
-            rewards_history.append(reward.item())
-            losses_history.append(loss.item())
+
             wandb.log({
                 'Reward': reward.item(),
                 'DVRL Loss': loss.item(),
@@ -275,7 +271,6 @@ class Dvrl(object):
         self.final_model.load_state_dict(torch.load('tmp/init_model.pth'))
         fit_func(self.final_model, self.x_train, self.y_train, self.batch_size_predictor, self.inner_iterations, self.device, final_data_value)
 
-        return rewards_history, losses_history
 
     def dvrl_valuator(self, x_train: np.ndarray, y_train: np.ndarray) -> np.ndarray:
         """
