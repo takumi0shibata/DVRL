@@ -178,7 +178,8 @@ def evaluate_model(
         'lwk': avg_lwk,
         'corr': corr,
         'rmse': rmse,
-        'mae': mae
+        'mae': mae,
+        'y_pred': y_pred_list
     }
 
 # 訓練関数の定義

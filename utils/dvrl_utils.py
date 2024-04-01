@@ -8,6 +8,7 @@ import torch.nn as nn
 from sklearn.metrics import cohen_kappa_score
 from utils.general_utils import get_min_max_scores
 import matplotlib.pyplot as plt
+import os
 
 
 def fit_func(
@@ -273,3 +274,80 @@ def get_dev_sample(
     print('Selected sample indices:', selected_sample_indices)
 
     return selected_samples_array, unselected_samples_array, selected_labels_array, unselected_labels_array, selected_sample_indices, unselected_sample_indices
+
+
+def fit_func_for_PAES(
+        model: nn.Module,
+        x_train: np.ndarray,
+        y_train: np.ndarray,
+        batch_size: int,
+        epochs: int,
+        device: torch.device,
+        sample_weight: np.ndarray = None
+) -> None:
+    """
+    Fit the model with the given data.
+    Args:
+        model: Model to train
+        x_train: Training data
+        y_train: Training labels
+        batch_size: Batch size
+        epochs: Number of epochs
+        device: Device to run the model
+        sample_weight: Sample weight for each data
+    """
+    model = model.to(device)
+    optimizer = torch.optim.RMSprop(model.parameters(), lr=0.001)
+    if sample_weight is not None:
+        sample_weight = torch.tensor(sample_weight, dtype=torch.float)
+        MSE_Loss = nn.MSELoss(reduction='none').to(device)
+        train_dataset = TensorDataset(x_train[0], y_train, x_train[1], x_train[2], x_train[3], sample_weight)
+    else:
+        # Create loss and optimizer
+        MSE_Loss = nn.MSELoss(reduction='mean').to(device)
+        # Create Datasets
+        train_dataset = TensorDataset(x_train[0], y_train, x_train[1], x_train[2], x_train[3])
+    # Create Dataloaders
+    train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=True)
+
+    from utils.evaluation import train_model
+    if sample_weight is not None:
+        for _ in range(epochs):
+            train_model(model, train_loader, MSE_Loss, optimizer, device, weight=True)
+    else:
+        for _ in range(epochs):
+            train_model(model, train_loader, MSE_Loss, optimizer, device)
+
+
+def pred_func_for_PAES(
+        model: nn.Module,
+        x_test: np.ndarray,
+        y_test: np.ndarray,
+        batch_size: int,
+        device: torch.device,
+        attribute_name: str,
+        metric: str
+        ) -> list:
+    """
+    Predict with the given model.
+    Args:
+        model: Model to predict
+        x_test: Test data
+        batch_size: Batch size
+        device: Device to run the model
+        attribute_name: Attribute name
+        metric: Metric to use
+    Returns:
+        list: Predicted results
+    """
+    model = model.to(device)
+    model.eval()
+
+    test_data = TensorDataset(x_test[0], y_test, x_test[1], x_test[2], x_test[3])
+    test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=True)
+    MSE_Loss = nn.MSELoss(reduction='mean').to(device)
+
+    from utils.evaluation import evaluate_model
+    test_results = evaluate_model(model, test_loader, MSE_Loss, device, attribute_name)
+
+    return test_results[metric], test_results['y_pred']
