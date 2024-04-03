@@ -6,7 +6,6 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 import wandb
 
-
 from utils.dvrl_utils import get_dev_sample, remove_top_p_sample
 from utils.create_embedding_feautres import create_embedding_features
 from utils.read_data import read_essays_single_score, read_pos_vocab
@@ -20,13 +19,11 @@ def main(args):
     data_value_path = 'outputs/DVRL_DomainAdaptation/'
     seed = args.seed
     set_seed(seed)
-    dev_size = args.dev_size
     batch_size = args.batch_size
     epochs = args.epochs
     device = args.device
     attribute_name = args.attribute_name
     data_path = args.data_dir
-    model_name = 'microsoft/deberta-v3-large'
     train_path = data_path + str(test_prompt_id) + '/train.pk'
     dev_path = data_path + str(test_prompt_id) + '/dev.pk'
     test_path = data_path + str(test_prompt_id) + '/test.pk'
@@ -39,11 +36,11 @@ def main(args):
         'readability_path': args.readability_path
     }
 
-    # Load data
-    train_data, val_data, test_data = create_embedding_features(data_path+str(test_prompt_id) + '/', attribute_name, model_name, device)
-    x_source_embedding, y_source_embedding = np.concatenate([train_data['essay'], val_data['essay']]), np.concatenate([train_data['normalized_label'], val_data['normalized_label']])
-    # split test data into dev and test
-    _, _, _, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=dev_size)
+    ########################################################
+    # get dev and test indices
+    _, _, test_data = create_embedding_features(args.data_dir + str(test_prompt_id) + '/', attribute_name, args.embedding_model, device)
+    _, _, _, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
+    ########################################################
 
     # Read data
     pos_vocab = read_pos_vocab(read_configs)
@@ -112,29 +109,22 @@ def main(args):
 
     # print info
     print('================================')
-    print('X_source_embedding: ', x_source_embedding.shape)
     print('X_source: ', X_source.shape)
     print('X_source_linguistic_features: ', X_source_linguistic_features.shape)
     print('X_source_readability: ', X_source_readability.shape)
     print('Y_source: ', Y_source.shape)
-    print('Y_source max: ', torch.max(Y_source))
-    print('Y_source min: ', torch.min(Y_source))
 
     print('================================')
     print('X_dev: ', X_dev.shape)
     print('X_dev_linguistic_features: ', X_dev_linguistic_features.shape)
     print('X_dev_readability: ', X_dev_readability.shape)
     print('Y_dev: ', Y_dev.shape)
-    print('Y_dev max: ', torch.max(Y_dev))
-    print('Y_dev min: ', torch.min(Y_dev))
 
     print('================================')
     print('X_target: ', X_target.shape)
     print('X_target_linguistic_features: ', X_target_linguistic_features.shape)
     print('X_target_readability: ', X_target_readability.shape)
     print('Y_target: ', Y_target.shape)
-    print('Y_target max: ', torch.max(Y_target))
-    print('Y_target min: ', torch.min(Y_target))
     print('================================')
 
     # Create predictor
@@ -169,7 +159,7 @@ def main(args):
 
     data_value = np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy')
 
-    wandb.init(project='DVRL-PAES', name=args.run_name+str(test_prompt_id), config=dict(args._get_kwargs()))
+    wandb.init(project=args.pj_name, name=args.run_name+str(test_prompt_id), config=args)
     for p in np.arange(0.0, 1.0, 0.1):
         # データの価値が低いものを削除
         set_seed(seed)
@@ -184,9 +174,9 @@ def main(args):
         train_dataset = TensorDataset(X_source_set_tmp[0], Y_source_tmp, X_source_set_tmp[1], X_source_set_tmp[2], X_source_set_tmp[3])
         dev_dataset = TensorDataset(X_dev_set[0], Y_dev, X_dev_set[1], X_dev_set[2], X_dev_set[3])
         test_dataset = TensorDataset(X_target_set[0], Y_target, X_target_set[1], X_target_set[2], X_target_set[3])
-        train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
-        dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=False)
-        test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=False)
+        train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+        dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
         best_dev_qwk_high = 0
         best_test_qwk_high = 0
         best_dev_loss_high = 1000
@@ -213,9 +203,9 @@ def main(args):
         train_dataset = TensorDataset(X_source_set_tmp[0], Y_source_tmp, X_source_set_tmp[1], X_source_set_tmp[2], X_source_set_tmp[3])
         dev_dataset = TensorDataset(X_dev_set[0], Y_dev, X_dev_set[1], X_dev_set[2], X_dev_set[3])
         test_dataset = TensorDataset(X_target_set[0], Y_target, X_target_set[1], X_target_set[2], X_target_set[3])
-        train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=False)
-        dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=False)
-        test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False, num_workers=0, pin_memory=False)
+        train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+        dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
         best_dev_qwk_low = 0
         best_test_qwk_low = 0
         best_dev_loss_low = 100
@@ -244,27 +234,27 @@ def main(args):
 
 if __name__ == '__main__':
     # Set up the argument parser
-    parser = argparse.ArgumentParser(description="Training PAES model")
-    parser.add_argument('--pj_name', type=str, default='DVRL-PAES', help='wandb project name for logging')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--pj_name', type=str, default='DVRL', help='wandb project name for logging')
+    parser.add_argument('--run_name', type=str, default='PAES-DVRL', help='name of the experiment')
     parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
-    parser.add_argument('--device', type=str, default='cuda', help='device to run the model on', choices=['cuda', 'cpu', 'mps'])
+    parser.add_argument('--model_type', type=str, default='normal', help='type of model to train', choices=['normal', 'tiny'])
+    parser.add_argument('--device', type=str, default='cuda', help='device to run the model on')
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
-    parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
     parser.add_argument('--data_dir', type=str, default='data/cross_prompt_attributes/', help='data directory')
     parser.add_argument('--features_path', type=str, default='data/hand_crafted_v3.csv', help='path to hand crafted features')
     parser.add_argument('--readability_path', type=str, default='data/allreadability.pickle', help='path to readability features')
-    parser.add_argument('--epochs', type=int, default=30, help='number of epochs')
-    parser.add_argument('--batch_size', type=int, default=512, help='batch size')
+    parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large', help='name of the embedding model')
+    parser.add_argument('--dev_size', type=int, default=30, help='size of development set')
+    parser.add_argument('--epochs', type=int, default=50, help='number of epochs')
+    parser.add_argument('--batch_size', type=int, default=10, help='batch size')
     parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
     parser.add_argument('--embed_dim', type=int, default=50, help='pos embedding dimension')
     parser.add_argument('--cnn_filters', type=int, default=100, help='number of cnn filters')
     parser.add_argument('--cnn_kernel_size', type=int, default=5, help='cnn kernel size')
     parser.add_argument('--lstm_units', type=int, default=100, help='number of lstm units')
     parser.add_argument('--dropout', type=float, default=0.5, help='dropout rate')
-    parser.add_argument('--model_type', type=str, default='normal', help='type of model to train', choices=['normal', 'tiny'])
-    parser.add_argument('--dev_size', type=int, default=30, help='size of dev set')
-    parser.add_argument('--run_name', type=str, default='PAES', help='run name for wandb')
     
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
