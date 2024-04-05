@@ -1,66 +1,56 @@
-import os
-import random
 import numpy as np
-import pandas as pd
-import torch
 import torch.nn as nn
 from torch.optim import AdamW
 from transformers import get_linear_schedule_with_warmup
+import argparse
+import wandb
+
+# my packages
 from utils.evaluation import train_epoch, evaluate_epoch
 from models.transfomer_enc import BERT_Regressor
 from transformers import AutoTokenizer, AutoModel, AutoConfig
 from utils.create_embedding_feautres import load_data, normalize_scores, create_data_loader, create_embedding_features
 from utils.dvrl_utils import get_dev_sample
-import argparse
-import wandb
+from utils.general_utils import set_seed
+
 
 
 def main(args):
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
-    output_path = args.output_dir + args.experiment_name + '/'
     seed = args.seed
-
-    np.random.seed(seed)
-    random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
+    set_seed(seed)
+    device = args.device
+    data_path = args.data_dir + str(test_prompt_id) + '/'
 
     # parameters
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     MAX_LEN = args.max_length
     BATCH_SIZE = args.batch_size
     EPOCHS = args.epochs
-    LR = args.lr
 
-    wandb.init(project=args.wandb_pjname, name=f'BERT-onlydev{args.dev_size}-{test_prompt_id}', config=dict(args._get_kwargs()))
+    # Init wandb
+    wandb.init(project=args.pj_name, name=args.run_name+str(test_prompt_id), config=args)
 
     # Load data
-    data_path = args.data_dir + str(test_prompt_id) + '/'
     data = load_data(data_path)
-
     _, _, test_data = create_embedding_features(data_path, attribute_name, args.embedding_model, device)
-    _, _, _, _, dev_idx, _ = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
+    _, _, _, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
 
     features = np.array(data['test']['feature'])
     labels = np.array(data['test']['label'])
     prompts = np.array(data['test']['essay_set'])
     normalized_labels = normalize_scores(labels, prompts, attribute_name)
 
-    sample_id = dev_idx
-    not_sample_id = np.array([i for i in range(len(features)) if i not in sample_id])
-
     train_data = {}
     test_data = {}
 
-    train_data['feature'] = features[sample_id]
-    train_data['normalized_label'] = normalized_labels[sample_id]
-    train_data['essay_set'] = prompts[sample_id]
+    train_data['feature'] = features[dev_idx]
+    train_data['normalized_label'] = normalized_labels[dev_idx]
+    train_data['essay_set'] = prompts[dev_idx]
 
-    test_data['feature'] = features[not_sample_id]
-    test_data['normalized_label'] = normalized_labels[not_sample_id]
-    test_data['essay_set'] = prompts[not_sample_id]
+    test_data['feature'] = features[test_idx]
+    test_data['normalized_label'] = normalized_labels[test_idx]
+    test_data['essay_set'] = prompts[test_idx]
 
     print('================================')
     print(f'x_dev shape: {train_data["feature"].shape}')
@@ -70,7 +60,7 @@ def main(args):
     print(f'y_test shape: {test_data["normalized_label"].shape}')
     print('================================')
 
-    model_name = 'bert-base-uncased'
+    model_name = args.model_name
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name).to(device)
     config = AutoConfig.from_pretrained(model_name)
@@ -84,7 +74,7 @@ def main(args):
 
     # Define loss function, optimizer, and scheduler
     loss_fn = nn.MSELoss(reduction='none').to(device)
-    optimizer = AdamW(model.parameters(), lr=LR)
+    optimizer = AdamW(model.parameters(), lr=args.lr)
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=len(train_loader)*EPOCHS)
 
     # Training loop
@@ -106,30 +96,27 @@ def main(args):
             'mae': eval_history['mae']
             })
 
-    # Save the metrics
-    best_val_metrics = [eval_history[met] for met in ['qwk', 'lwk', 'corr', 'rmse', 'mae']]
-    pd.DataFrame(np.array(best_val_metrics).reshape(1, 5), columns=['qwk', 'lwk', 'corr', 'rmse', 'mae']).to_csv(output_path + f'BERT-onlydev{args.dev_size}-{test_prompt_id}.csv', index=False, header=True)
-
-    wandb.alert(title=args.wandb_pjname, text='Training finished!')
     wandb.finish()
 
 
 if __name__ == '__main__':
     # Set up the argument parser
-    parser = argparse.ArgumentParser(description="BERT")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--pj_name', type=str, default='DVRL', help='wandb project name for logging')
+    parser.add_argument('--run_name', type=str, default='BERT-DevOnly', help='name of the experiment')
     parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
+    parser.add_argument('--device', type=str, default='cuda', help='device to run the model on')
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
-    parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
-    parser.add_argument('--experiment_name', type=str, default='DVRL_DomainAdaptation', help='name of the experiment')
-    parser.add_argument('--dev_size', type=int, default=30, help='size of the dev set')
     parser.add_argument('--data_dir', type=str, default='data/cross_prompt_attributes/', help='data directory')
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large', help='name of the embedding model')
-    parser.add_argument('--wandb_pjname', type=str, default='BERT-devonly', help='name of the wandb project')
+    parser.add_argument('--dev_size', type=int, default=30, help='size of development set')
     parser.add_argument('--max_length', type=int, default=512, help='max length of the input')
     parser.add_argument('--batch_size', type=int, default=32, help='batch size')
     parser.add_argument('--epochs', type=int, default=30, help='number of epochs')
     parser.add_argument('--lr', type=float, default=2e-5, help='learning rate')
+    parser.add_argument('--model_name', type=str, default='bert-base-uncased', help='name of the pre-trained model')
+
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 
