@@ -102,7 +102,7 @@ def main(args):
         
         # Define loss function, optimizer, and scheduler
         loss_fn = nn.MSELoss(reduction='none').to(device)
-        optimizer = AdamW(model.parameters(), lr=2e-5)
+        optimizer = AdamW(model.parameters(), lr=args.lr)
         scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=len(train_loader)*EPOCHS)
         
         # Training loop
@@ -181,7 +181,7 @@ def main(args):
             dev_history = evaluate_epoch(model, dev_loader, loss_fn, device, attribute_name)
             eval_history = evaluate_epoch(model, test_loader, loss_fn, device, attribute_name)
         
-            if dev_history["qwk"] > best_val_metrics_high[0]:
+            if dev_history["qwk"] > best_val_metrics_low[0]:
                 best_dev_loss_low = dev_history['loss']
                 for i, met in enumerate(['qwk', 'lwk', 'corr', 'rmse', 'mae']):
                     best_val_metrics_low[i] = dev_history[met]

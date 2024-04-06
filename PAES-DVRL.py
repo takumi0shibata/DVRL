@@ -16,7 +16,7 @@ from models.paes import tinyPAES, PAES
 
 def main(args):
     test_prompt_id = args.test_prompt_id
-    data_value_path = 'outputs/DVRL_DomainAdaptation/'
+    data_value_path = 'outputs/DVRL-PAES/'
     seed = args.seed
     set_seed(seed)
     batch_size = args.batch_size
@@ -236,7 +236,7 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser()
     parser.add_argument('--pj_name', type=str, default='DVRL', help='wandb project name for logging')
-    parser.add_argument('--run_name', type=str, default='PAES-DVRL', help='name of the experiment')
+    parser.add_argument('--run_name', type=str, default='PAES-DVRL(Predictor normal)', help='name of the experiment')
     parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
     parser.add_argument('--model_type', type=str, default='normal', help='type of model to train', choices=['normal', 'tiny'])
