@@ -21,7 +21,7 @@ def main(args):
     set_seed(seed)
     device = args.device
     data_path = args.data_dir + str(test_prompt_id) + '/'
-    data_value_path = f'outputs/DVRL_DomainAdaptation{test_prompt_id}_devsize30/'
+    data_value_path = 'outputs/Estimated_Data_Value/MLP/'
 
     # set parameters
     EPOCHS = args.epochs
@@ -60,7 +60,7 @@ def main(args):
         # データの価値が低いものを削除
         ###################################################
         set_seed(seed)
-        weights = remove_top_p_sample(np.load(data_value_path + 'estimated_data_value.npy'), top_p=p, ascending=False)
+        weights = remove_top_p_sample(np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy'), top_p=p, ascending=False)
         weights = np.concatenate([weights, np.array([1]*len(dev_idx))])
         weights = (torch.tensor(weights, dtype=torch.float) == 1)
         train_data['feature'] = train_features[weights]
@@ -126,7 +126,7 @@ def main(args):
         # データの価値が高いものを削除
         ###################################################
         set_seed(seed)
-        weights = remove_top_p_sample(np.load(data_value_path + 'estimated_data_value.npy'), top_p=p, ascending=True)
+        weights = remove_top_p_sample(np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy'), top_p=p, ascending=True)
         weights = np.concatenate([weights, np.array([1]*len(dev_idx))])
         weights = (torch.tensor(weights, dtype=torch.float) == 1)
         train_data['feature'] = train_features[weights]

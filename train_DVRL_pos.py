@@ -25,7 +25,7 @@ def main(args):
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
     seed = args.seed
-    save_dir = args.output_dir + args.experiment_name + '/'
+    save_dir = args.data_value_dir + '/'
     os.makedirs(save_dir, exist_ok=True)
     device = torch.device(args.device)
     set_seed(seed)
@@ -169,11 +169,7 @@ def main(args):
             cnn_kernel_size=args.cnn_kernel_size,
             lstm_units=args.lstm_units,
             dropout=args.dropout
-        )
-        if ngpus > 1:
-            pred_model = nn.DataParallel(pred_model).to(device)
-        else:
-            pred_model = pred_model.to(device)
+        ).to(device)
 
     elif args.model_type == 'tiny':
         pred_model =  tinyPAES(
@@ -187,11 +183,7 @@ def main(args):
             cnn_kernel_size=args.cnn_kernel_size,
             lstm_units=args.lstm_units,
             dropout=args.dropout
-        )
-        if ngpus > 1:
-            pred_model = nn.DataParallel(pred_model).to(device)
-        else:
-            pred_model = pred_model.to(device)
+        ).to(device)
 
     # Network parameters
     print('Initialize DVRL class')
@@ -236,6 +228,7 @@ if __name__ == '__main__':
     parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
+    parser.add_argument('--data_value_dir', type=str, default='outputs/Estimated_Data_Values/PAES', help='data value directory')
     parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
     parser.add_argument('--experiment_name', type=str, default='DVRL_DomainAdaptation', help='name of the experiment')
     parser.add_argument('--dev_size', type=int, default=30, help='size of the dev set')

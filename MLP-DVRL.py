@@ -12,7 +12,7 @@ from sklearn.metrics import mean_squared_error
 
 def main(args):
     test_prompt_id = args.test_prompt_id
-    data_value_path = f'outputs/DVRL_DomainAdaptation{test_prompt_id}_devsize30/'
+    data_value_path = 'outputs/Estimated_Data_Value/MLP/'
     seed = args.seed
     set_seed(seed)
     batch_size = args.batch_size
@@ -72,19 +72,19 @@ def main(args):
     for p_val in p:
         # データの価値が低いものを削除
         set_seed(seed)
-        weights = remove_top_p_sample(np.load(data_value_path + 'estimated_data_value.npy'), top_p=p_val, ascending=False)
+        weights = remove_top_p_sample(np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy'), top_p=p_val, ascending=False)
         weights = np.concatenate([weights, np.array([1]*x_dev.shape[0])])
         qwk_high, _, _, dev_loss_high = train_and_evaluate(x_source, y_source, x_dev, y_dev, x_test, y_test, test_prompt_id, weights)
 
         # データの価値が高いものを削除
         set_seed(seed)
-        weights = remove_top_p_sample(np.load(data_value_path + 'estimated_data_value.npy'), top_p=p_val, ascending=True)
+        weights = remove_top_p_sample(np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy'), top_p=p_val, ascending=True)
         weights = np.concatenate([weights, np.array([1]*x_dev.shape[0])])
         qwk_low, _, _, dev_loss_low = train_and_evaluate(x_source, y_source, x_dev, y_dev, x_test, y_test, test_prompt_id, weights)
 
         # データをランダムに削除
         set_seed(seed)
-        weights = random_remove_sample(np.load(data_value_path + 'estimated_data_value.npy'), remove_p=p_val)
+        weights = random_remove_sample(np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy'), remove_p=p_val)
         weights = np.concatenate([weights, np.array([1]*x_dev.shape[0])])
         qwk_random, _, _, dev_loss_random = train_and_evaluate(x_source, y_source, x_dev, y_dev, x_test, y_test, test_prompt_id, weights)
 

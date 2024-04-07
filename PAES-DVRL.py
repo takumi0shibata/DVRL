@@ -16,7 +16,7 @@ from models.paes import tinyPAES, PAES
 
 def main(args):
     test_prompt_id = args.test_prompt_id
-    data_value_path = 'outputs/DVRL-PAES/'
+    data_value_path = 'outputs/Estimated_Data_Value/PAES/'
     seed = args.seed
     set_seed(seed)
     batch_size = args.batch_size

@@ -25,7 +25,7 @@ def main(args):
     test_prompt_id = args.test_prompt_id
     attribute_name = args.attribute_name
     seed = args.seed
-    save_dir = args.output_dir + args.experiment_name + '/'
+    save_dir = args.data_value_dir + '/'
     os.makedirs(save_dir, exist_ok=True)
     device = torch.device(args.device)
     set_seed(seed)
@@ -123,6 +123,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
     parser.add_argument('--attribute_name', type=str, default='score', help='name of the attribute to be trained on')
     parser.add_argument('--output_dir', type=str, default='outputs/', help='output directory')
+    parser.add_argument('--data_value_dir', type=str, default='outputs/Estimated_Data_Values/MLP', help='data value directory')
     parser.add_argument('--experiment_name', type=str, default='DVRL_DomainAdaptation', help='name of the experiment')
     parser.add_argument('--dev_size', type=int, default=30, help='size of the dev set')
     parser.add_argument('--metric', type=str, default='qwk', help='metric to be used for DVRL', choices=['corr', 'mse', 'qwk'])
