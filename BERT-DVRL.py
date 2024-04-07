@@ -42,9 +42,12 @@ def main(args):
         prompts = np.array(data['test']['essay_set'])
         normalized_labels = normalize_scores(labels, prompts, attribute_name)
 
-        train_features = np.concatenate([data['train']['feature'], data['dev']['feature'], features[dev_idx]])
-        train_labels = np.concatenate([data['train']['label'], data['dev']['label'], labels[dev_idx]])
-        train_prompts = np.concatenate([data['train']['essay_set'], data['dev']['essay_set'], prompts[dev_idx]])
+        # train_features = np.concatenate([data['train']['feature'], data['dev']['feature'], features[dev_idx]])
+        # train_labels = np.concatenate([data['train']['label'], data['dev']['label'], labels[dev_idx]])
+        # train_prompts = np.concatenate([data['train']['essay_set'], data['dev']['essay_set'], prompts[dev_idx]])
+        train_features = np.concatenate([data['train']['feature'], data['dev']['feature']])
+        train_labels = np.concatenate([data['train']['label'], data['dev']['label']])
+        train_prompts = np.concatenate([data['train']['essay_set'], data['dev']['essay_set']])
         train_normalized_labels = normalize_scores(train_labels, train_prompts, attribute_name)
 
         features = np.array(data['test']['feature'])
