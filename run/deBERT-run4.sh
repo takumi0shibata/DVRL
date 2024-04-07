@@ -19,7 +19,7 @@ python BERT-DVRL.py \
   --model_name $model_name \
   --device $device \
   --lr $lr \
-  --run_name "debertav3large-DVRL"
+  --run_name "debertav3large-DVRL-nodev"
 
 # seedの値を配列に格納
 seeds=(12 22 32 42 52)
@@ -36,7 +36,7 @@ do
     --model_name $model_name \
     --device $device \
     --lr $lr \
-    --run_name "debertav3large-DevOnly"
+    --run_name "debertav3large-DevOnly-nodev"
 
   python BERT-FullSource.py \
     --test_prompt_id $test_prompt_id \
@@ -47,5 +47,5 @@ do
     --model_name $model_name \
     --device $device \
     --lr $lr \
-    --run_name "debertav3large-FullSource"
+    --run_name "debertav3large-FullSource-nodev"
 done
