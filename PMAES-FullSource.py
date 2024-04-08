@@ -4,6 +4,7 @@ import argparse
 import random
 import numpy as np
 from torch.utils.data import DataLoader
+import wandb
 
 from models.PMAES import EssayEncoder, Scorer, PromptMappingCL
 from utils.read_data import read_pos_vocab, read_essays_single_score
@@ -11,6 +12,9 @@ from utils.general_utils import pad_hierarchical_text_sequences, get_single_scal
 
 import torch
 from utils.pmaes_utils import PMAESDataSet, TrainSingleOverallScoring
+from utils.general_utils import get_single_scaled_down_score, pad_hierarchical_text_sequences
+from utils.create_embedding_feautres import create_embedding_features
+from utils.dvrl_utils import get_dev_sample
 
 
 def seed_all(seed_value):
@@ -32,9 +36,13 @@ def seed_all(seed_value):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="PAES_attributes models")
+    parser.add_argument('--pj_name', type=str, default='DVRL', help='wandb project name for logging')
+    parser.add_argument('--run_name', type=str, default='PMAES-FullSource-nodev', help='name of the experiment')
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
-    parser.add_argument('--target_prompt_id', type=int, default=1, help='set random seed')
+    parser.add_argument('--target_id', type=int, default=1, help='set random seed')
     parser.add_argument('--attribute_name', type=str, default='score', help='set random seed')
+    parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large', help='name of the embedding model')
+    parser.add_argument('--dev_size', type=int, default=30, help='size of development set')
     parser.add_argument('--data_dir', type=str, default='data/cross_prompt_attributes/', help='data directory')
     parser.add_argument('--features_path', type=str, default='data/hand_crafted_v3.csv', help='path to hand crafted features')
     parser.add_argument('--readability_path', type=str, default='data/allreadability.pickle', help='path to readability features')
@@ -48,10 +56,12 @@ if __name__ == '__main__':
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Initial learning rate')
     parser.add_argument('--dropout', type=float, default=0.2, help='Dropout rate for layers')
     parser.add_argument('--device', type=str, help='cpu or gpu', default='cuda')
-    parser.add_argument('--batch_num', type=int, default=2, help='Number of batches')
+    parser.add_argument('--batch_num', type=int, default=20, help='Number of batches')
+    parser.add_argument('--max_sentlen', type=int, default=50, help='Max sentence length')
+    parser.add_argument('--max_sentnum', type=int, default=100, help='Max sentence number')
 
     args = parser.parse_args()
-    test_prompt_id = args.target_prompt_id
+    test_prompt_id = args.target_id
     seed = args.seed
 
     seed_all(seed)
@@ -74,11 +84,17 @@ if __name__ == '__main__':
         'readability_path': readability_path,
     }
 
+    ########################################################
+    # get dev and test indices
+    _, _, test_data = create_embedding_features(args.data_dir + str(test_prompt_id) + '/', 'score', args.embedding_model, args.device)
+    _, _, _, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
+    ########################################################
+
     pos_vocab = read_pos_vocab(read_configs)
     train_data, valid_data, test_data = read_essays_single_score(read_configs, pos_vocab, args.attribute_name)
 
-    max_sent_len = max(train_data['max_sentlen'], valid_data['max_sentlen'], test_data['max_sentlen'])
-    max_sent_num = max(train_data['max_sentnum'], valid_data['max_sentnum'], test_data['max_sentnum'])
+    max_sent_len = min(max(train_data['max_sentlen'], valid_data['max_sentlen'], test_data['max_sentlen']), args.max_sentlen)
+    max_sent_num = min(max(train_data['max_sentnum'], valid_data['max_sentnum'], test_data['max_sentnum']), args.max_sentnum)
     print('max sent length: {}'.format(max_sent_len))
     print('max sent num: {}'.format(max_sent_num))
     train_data['score_scaled'] = get_single_scaled_down_score(train_data['data_y'], train_data['prompt_ids'], args.attribute_name)
@@ -96,17 +112,25 @@ if __name__ == '__main__':
     valid_essay_pos = valid_essay_pos.reshape((valid_essay_pos.shape[0], valid_essay_pos.shape[1] * valid_essay_pos.shape[2]))
     test_essay_pos = test_essay_pos.reshape((test_essay_pos.shape[0], test_essay_pos.shape[1] * test_essay_pos.shape[2]))
 
-    train_score = np.array(train_data['score_scaled'])
-    valid_score = np.array(valid_data['score_scaled'])
-    test_score = np.array(test_data['score_scaled'])
+    train_prompt_ids = np.concatenate([train_prompt_ids, dev_prompt_ids], axis=0)
+    dev_prompt_ids = np.array(test_prompt_ids)[dev_idx]
+    test_prompt_ids = np.array(test_prompt_ids)[test_idx]
 
-    train_linguistic = np.array(train_data['features_x'])
-    valid_linguistic = np.array(valid_data['features_x'])
-    test_linguistic = np.array(test_data['features_x'])
+    train_essay_pos = np.concatenate([train_essay_pos, valid_essay_pos], axis=0)
+    valid_essay_pos = test_essay_pos[dev_idx]
+    test_essay_pos = test_essay_pos[test_idx]
 
-    train_readability = np.array(train_data['readability_x'])
-    valid_readability = np.array(valid_data['readability_x'])
-    test_readability = np.array(test_data['readability_x'])
+    train_score = np.concatenate([train_data['score_scaled'], valid_data['score_scaled']], axis=0)
+    valid_score = np.array(test_data['score_scaled'])[dev_idx]
+    test_score = np.array(test_data['score_scaled'])[test_idx]
+
+    train_linguistic = np.concatenate([train_data['features_x'], valid_data['features_x']], axis=0)
+    valid_linguistic = np.array(test_data['features_x'])[dev_idx]
+    test_linguistic = np.array(test_data['features_x'])[test_idx]
+
+    train_readability = np.concatenate([train_data['readability_x'], valid_data['readability_x']], axis=0)
+    valid_readability = np.array(test_data['readability_x'])[dev_idx]
+    test_readability = np.array(test_data['readability_x'])[test_idx]
 
     tr_s_num, tr_t_num = len(train_essay_pos), len(test_essay_pos)
     batch_num = args.batch_num
@@ -132,17 +156,23 @@ if __name__ == '__main__':
         'Epoch_best_dev_qwk': [0, 0, 0],
         'Best_dev_qwk': [0, 0],
     }
-    epochs = 50
+    epochs = args.num_epochs
+    wandb.init(project=args.pj_name, name=args.run_name+str(test_prompt_id), config=args)
     for e_index in range(1, epochs+1):
 
-        TrainSingleOverallScoring(args,
-                                  essay_encoder, scorer, pm_cl, optims,
-                                  tr_s_loader, va_s_loader, te_t_loader,
-                                  args.target_prompt_id, e_index,
-                                  tr_log, args.attribute_name)
-    file_time = time.strftime("%Y-%m-%d", time.localtime())
-    result_file = 'outputs/PMAES/PMAES-{}.txt'.format(seed)
-    with open(result_file, 'a', encoding='utf-8') as f:
-        f.write(file_time + 'TargetPrompt: {} Trait: {}'.format(args.target_id, args.attribute_name) + '\n')
-        for key, value in tr_log.items():
-            f.write(key + ':' + str(value) + '\n')
+        va_loss, te_loss, va_qwk, te_qwk, best_qwk = TrainSingleOverallScoring(args,
+                                                                                essay_encoder, scorer, pm_cl, optims,
+                                                                                tr_s_loader, va_s_loader, te_t_loader,
+                                                                                args.target_id, e_index,
+                                                                                tr_log, args.attribute_name
+                                                                                )
+
+        wandb.log({
+            'dev_loss': va_loss,
+            'test_loss': te_loss,
+            'dev_qwk': va_qwk,
+            'test_qwk': te_qwk,
+            'best_qwk': best_qwk
+        })
+
+    wandb.finish()

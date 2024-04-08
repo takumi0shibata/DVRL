@@ -522,6 +522,8 @@ def TrainSingleOverallScoring(args,
         epoch_msg = epoch_msg.format(va_qwk, te_qwk, tr_log['Epoch_best_dev_qwk'][1])
         logger.info(epoch_msg)
 
+        return va_loss, te_loss, va_qwk, te_qwk, tr_log['Epoch_best_dev_qwk'][1]
+
     else:  #  args.source2target == 'many2many' or args.source2target == 'one2many'
         va_qwk, va_loss = TestSingleOverallScoringForMultiTarget(args, essay_encoder, scorer, va_s_loader, 'valid', attribute_name)
         te_qwk, te_loss = TestSingleOverallScoringForMultiTarget(args, essay_encoder, scorer, te_t_loader, 'test', attribute_name)
