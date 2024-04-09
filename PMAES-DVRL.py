@@ -59,6 +59,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch_num', type=int, default=2, help='Number of batches')
     parser.add_argument('--max_sentlen', type=int, default=50, help='Max sentence length')
     parser.add_argument('--max_sentnum', type=int, default=100, help='Max sentence number')
+    parser.add_argument('--max_batch_size', type=int, default=320, help='Max batch size')
 
     args = parser.parse_args()
     test_prompt_id = args.target_id
@@ -173,8 +174,8 @@ if __name__ == '__main__':
         t_batch_size = int(len(test_essay_pos) / batch_num)
         print('s_batch_size: {}'.format(s_batch_size))
         print('t_batch_size: {}'.format(t_batch_size))
-        while s_batch_size > 450:
-            tr_s_num, tr_t_num = len(train_essay_pos), len(test_essay_pos)
+        while s_batch_size > args.max_batch_size:
+            tr_s_num, tr_t_num = len(train_essay_pos_tmp), len(test_essay_pos)
             s_batch_size = int(tr_s_num / batch_num)
             t_batch_size = int(tr_t_num / batch_num)
             s_batch_num = int(tr_s_num / s_batch_size)
@@ -229,8 +230,8 @@ if __name__ == '__main__':
         t_batch_size = int(len(test_essay_pos) / batch_num)
         print('s_batch_size: {}'.format(s_batch_size))
         print('t_batch_size: {}'.format(t_batch_size))
-        while s_batch_size > 450:
-            tr_s_num, tr_t_num = len(train_essay_pos), len(test_essay_pos)
+        while s_batch_size > args.max_batch_size:
+            tr_s_num, tr_t_num = len(train_essay_pos_tmp), len(test_essay_pos)
             s_batch_size = int(tr_s_num / batch_num)
             t_batch_size = int(tr_t_num / batch_num)
             s_batch_num = int(tr_s_num / s_batch_size)
