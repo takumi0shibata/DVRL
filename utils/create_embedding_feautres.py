@@ -118,7 +118,7 @@ def create_embedding_features(
     return train_data, dev_data, test_data
 
 
-def load_data(data_path: str) -> dict:
+def load_data(data_path: str, attribute: str = 'score') -> dict:
     """
     Load data from the given path.
     Args:
@@ -138,7 +138,7 @@ def load_data(data_path: str) -> dict:
             read_data = pd.read_pickle(data_path + file + '.pk')
         for i in range(len(read_data)):
             feature.append(read_data[i]['content_text'])
-            label.append(int(read_data[i]['score']))
+            label.append(int(read_data[i][attribute]))
             essay_id.append(int(read_data[i]['essay_id']))
             essay_set.append(int(read_data[i]['prompt_id']))
         data[file] = {'feature': feature, 'label': label, 'essay_id': essay_id, 'essay_set': essay_set}

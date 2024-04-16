@@ -108,7 +108,7 @@ def pred_func(
             preds.extend(y_pred.cpu().tolist())
     return preds
 
-def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str) -> float:
+def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str, weights='quadratic') -> float:
     """
     Calculate the quadratic weighted kappa.
     Args:
@@ -125,7 +125,7 @@ def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str) -> floa
     y_true = np.round((maxscore - minscore) * np.array(y_true) + minscore)
     y_pred = np.round((maxscore - minscore) * np.array(y_pred) + minscore).flatten()
     
-    return cohen_kappa_score(y_true, y_pred, weights='quadratic', labels=[i for i in range(minscore, maxscore+1)])
+    return cohen_kappa_score(y_true, y_pred, weights=weights, labels=[i for i in range(minscore, maxscore+1)])
 
 def remove_top_p_sample(data_value: np.ndarray, top_p: float, ascending: bool =True):
     """
