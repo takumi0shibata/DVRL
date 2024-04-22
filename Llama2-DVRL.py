@@ -63,7 +63,7 @@ def main(args):
     batch_size = args.batch_size
     num_epochs = args.num_epochs
     lr = args.lr
-    data_value_path = 'outputs/Estimated_Data_Value/MLP/'
+    data_value_path = 'outputs/Estimated_Data_Values/MLP/'
     set_seed(seed)
 
     if args.wandb:
@@ -181,6 +181,7 @@ def main(args):
     train_args = TrainingArguments(
         output_dir=args.output_dir,
         learning_rate=lr,
+        lr_scheduler_type='constant',
         num_train_epochs=num_epochs,
         per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size,
@@ -195,7 +196,7 @@ def main(args):
         metric_for_best_model="eval_dev_QWK",
         label_names=["labels"],
         warmup_ratio=0.1,
-        weight_decay=0.01,
+        weight_decay=0.001,
     )
 
     # Define trainer
@@ -246,21 +247,20 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=12)
     parser.add_argument('--max_seq_length', type=int, default=512)
     parser.add_argument('--batch_size', type=int, default=8)
-    parser.add_argument('--num_epochs', type=float, default=20)
-    parser.add_argument('--lr', type=float, default=5e-4)
+    parser.add_argument('--num_epochs', type=float, default=5)
+    parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--logging_steps', type=int, default=10)
     parser.add_argument('--save_model', action='store_true')
     parser.add_argument('--wandb', action='store_true')
     parser.add_argument('--pjname', type=str, default='DVRL')
     parser.add_argument('--run_name', type=str, default='Llama2-7b-DVRL')
-    parser.add_argument('--lora_r', type=int, default=32)
+    parser.add_argument('--lora_r', type=int, default=16)
     parser.add_argument('--lora_alpha', type=int, default=16)
-    parser.add_argument('--lora_dropout', type=float, default=0.1)
+    parser.add_argument('--lora_dropout', type=float, default=0.05)
     parser.add_argument('--dev_size', type=int, default=30)
-    parser.add_argument('--top_p', type=float, default=0.1)
+    parser.add_argument('--top_p', type=float, default=0.05)
     parser.add_argument('--ascending', action='store_true')
     parser.add_argument('--device', type=str, default='auto')
-    parser.add_argument()
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 

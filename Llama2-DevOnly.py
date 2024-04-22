@@ -162,7 +162,7 @@ def main(args):
         return tokenizer(example['essay'], truncation=True, max_length=max_length, padding='max_length')
     
     train_dataset = train_dataset.map(tokenize_func, batched=True)
-    dev_dataset = dev_dataset.map(tokenize_func, batched=True)
+    # dev_dataset = dev_dataset.map(tokenize_func, batched=True)
     test_dataset = test_dataset.map(tokenize_func, batched=True)
 
     ############################################################
@@ -177,6 +177,7 @@ def main(args):
     train_args = TrainingArguments(
         output_dir=args.output_dir,
         learning_rate=lr,
+        lr_scheduler_type='constant',
         num_train_epochs=num_epochs,
         per_device_train_batch_size=batch_size,
         per_device_eval_batch_size=batch_size,
@@ -191,7 +192,7 @@ def main(args):
         metric_for_best_model="eval_QWK",
         label_names=["labels"],
         warmup_ratio=0.1,
-        weight_decay=0.01,
+        weight_decay=0.001,
     )
 
     # Define trainer
@@ -240,15 +241,15 @@ if __name__ == '__main__':
     parser.add_argument('--max_seq_length', type=int, default=512)
     parser.add_argument('--batch_size', type=int, default=8)
     parser.add_argument('--num_epochs', type=float, default=10)
-    parser.add_argument('--lr', type=float, default=5e-4)
+    parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--logging_steps', type=int, default=10)
     parser.add_argument('--save_model', action='store_true')
     parser.add_argument('--wandb', action='store_true')
     parser.add_argument('--pjname', type=str, default='DVRL')
     parser.add_argument('--run_name', type=str, default='Llama2-7b-DevOnly')
-    parser.add_argument('--lora_r', type=int, default=32)
+    parser.add_argument('--lora_r', type=int, default=16)
     parser.add_argument('--lora_alpha', type=int, default=16)
-    parser.add_argument('--lora_dropout', type=float, default=0.1)
+    parser.add_argument('--lora_dropout', type=float, default=0.05)
     parser.add_argument('--dev_size', type=int, default=30)
     parser.add_argument('--device', type=str, default='auto')
     args = parser.parse_args()
