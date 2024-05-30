@@ -5,6 +5,7 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig, get_linear_schedu
 import torch.nn as nn
 from torch.optim import AdamW
 import wandb
+from sklearn.model_selection import train_test_split
 
 # my packages
 from utils.dvrl_utils import remove_top_p_sample, get_dev_sample 
@@ -21,7 +22,7 @@ def main(args):
     set_seed(seed)
     device = args.device
     data_path = args.data_dir + str(test_prompt_id) + '/'
-    data_value_path = 'outputs/Estimated_Data_Value/MLP/'
+    data_value_path = 'outputs/Estimated_Data_Values/MLP/'
 
     # set parameters
     EPOCHS = args.epochs
@@ -37,26 +38,17 @@ def main(args):
         _, _, test_data = create_embedding_features(data_path, attribute_name, args.embedding_model, device)
         _, _, _, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
 
-        features = np.array(data['test']['feature'])
-        labels = np.array(data['test']['label'])
-        prompts = np.array(data['test']['essay_set'])
-        normalized_labels = normalize_scores(labels, prompts, attribute_name)
-
-        # train_features = np.concatenate([data['train']['feature'], data['dev']['feature'], features[dev_idx]])
-        # train_labels = np.concatenate([data['train']['label'], data['dev']['label'], labels[dev_idx]])
-        # train_prompts = np.concatenate([data['train']['essay_set'], data['dev']['essay_set'], prompts[dev_idx]])
         train_features = np.concatenate([data['train']['feature'], data['dev']['feature']])
         train_labels = np.concatenate([data['train']['label'], data['dev']['label']])
         train_prompts = np.concatenate([data['train']['essay_set'], data['dev']['essay_set']])
         train_normalized_labels = normalize_scores(train_labels, train_prompts, attribute_name)
 
-        features = np.array(data['test']['feature'])
-        labels = np.array(data['test']['label'])
-        prompts = np.array(data['test']['essay_set'])
-        normalized_labels = normalize_scores(labels, prompts, attribute_name)
+        test_features = np.array(data['test']['feature'])
+        test_labels = np.array(data['test']['label'])
+        test_prompts = np.array(data['test']['essay_set'])
+        test_normalized_labels = normalize_scores(test_labels, test_prompts, attribute_name)
 
         train_data = {}
-        dev_data = {}
         test_data = {}
 
         ###################################################
@@ -64,27 +56,37 @@ def main(args):
         ###################################################
         set_seed(seed)
         weights = remove_top_p_sample(np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy'), top_p=p, ascending=False)
-        weights = np.concatenate([weights, np.array([1]*len(dev_idx))])
         weights = (torch.tensor(weights, dtype=torch.float) == 1)
         train_data['feature'] = train_features[weights]
         train_data['normalized_label'] = train_normalized_labels[weights]
         train_data['essay_set'] = train_prompts[weights]
 
-        dev_data['feature'] = features[dev_idx]
-        dev_data['normalized_label'] = normalized_labels[dev_idx]
-        dev_data['essay_set'] = prompts[dev_idx]
+        # Split train_data into training and validation sets (80% train, 20% validation)
+        train_indices, val_indices = train_test_split(np.arange(len(train_data['feature'])), test_size=0.2, random_state=seed)
 
-        test_data['feature'] = features[test_idx]
-        test_data['normalized_label'] = normalized_labels[test_idx]
-        test_data['essay_set'] = prompts[test_idx]
+        # Create validation data
+        val_data = {
+            'feature': train_data['feature'][val_indices],
+            'normalized_label': train_data['normalized_label'][val_indices],
+            'essay_set': train_data['essay_set'][val_indices]
+        }
+
+        # Update train_data to exclude validation data
+        train_data['feature'] = np.concatenate([train_data['feature'][train_indices], test_features[dev_idx]])
+        train_data['normalized_label'] = np.concatenate([train_data['normalized_label'][train_indices], test_normalized_labels[dev_idx]])
+        train_data['essay_set'] = np.concatenate([train_data['essay_set'][train_indices], test_prompts[dev_idx]])
+
+        test_data['feature'] = test_features[test_idx]
+        test_data['normalized_label'] = test_normalized_labels[test_idx]
+        test_data['essay_set'] = test_prompts[test_idx]
 
 
         print('================================')
         print(f'x_train shape: {train_data["feature"].shape}')
         print(f'y_train shape: {train_data["normalized_label"].shape}')
         print('================================')
-        print(f'x_dev shape: {dev_data["feature"].shape}')
-        print(f'y_dev shape: {dev_data["normalized_label"].shape}')
+        print(f'x_dev shape: {val_data["feature"].shape}')
+        print(f'y_dev shape: {val_data["normalized_label"].shape}')
         print('================================')
         print(f'x_test shape: {test_data["feature"].shape}')
         print(f'y_test shape: {test_data["normalized_label"].shape}')
@@ -97,7 +99,7 @@ def main(args):
         
 
         train_loader = create_data_loader(train_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
-        dev_loader = create_data_loader(dev_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
+        dev_loader = create_data_loader(val_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
         test_loader = create_data_loader(test_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
         
         # Initialize the model
@@ -130,27 +132,37 @@ def main(args):
         ###################################################
         set_seed(seed)
         weights = remove_top_p_sample(np.load(data_value_path + f'estimated_data_value{test_prompt_id}.npy'), top_p=p, ascending=True)
-        weights = np.concatenate([weights, np.array([1]*len(dev_idx))])
         weights = (torch.tensor(weights, dtype=torch.float) == 1)
         train_data['feature'] = train_features[weights]
         train_data['normalized_label'] = train_normalized_labels[weights]
         train_data['essay_set'] = train_prompts[weights]
 
-        dev_data['feature'] = features[dev_idx]
-        dev_data['normalized_label'] = normalized_labels[dev_idx]
-        dev_data['essay_set'] = prompts[dev_idx]
+        # Split train_data into training and validation sets (80% train, 20% validation)
+        train_indices, val_indices = train_test_split(np.arange(len(train_data['feature'])), test_size=0.2, random_state=seed)
 
-        test_data['feature'] = features[test_idx]
-        test_data['normalized_label'] = normalized_labels[test_idx]
-        test_data['essay_set'] = prompts[test_idx]
+        # Create validation data
+        val_data = {
+            'feature': train_data['feature'][val_indices],
+            'normalized_label': train_data['normalized_label'][val_indices],
+            'essay_set': train_data['essay_set'][val_indices]
+        }
+
+        # Update train_data to exclude validation data
+        train_data['feature'] = np.concatenate([train_data['feature'][train_indices], test_features[dev_idx]])
+        train_data['normalized_label'] = np.concatenate([train_data['normalized_label'][train_indices], test_normalized_labels[dev_idx]])
+        train_data['essay_set'] = np.concatenate([train_data['essay_set'][train_indices], test_prompts[dev_idx]])
+
+        test_data['feature'] = test_features[test_idx]
+        test_data['normalized_label'] = test_normalized_labels[test_idx]
+        test_data['essay_set'] = test_prompts[test_idx]
 
 
         print('================================')
         print(f'x_train shape: {train_data["feature"].shape}')
         print(f'y_train shape: {train_data["normalized_label"].shape}')
         print('================================')
-        print(f'x_dev shape: {dev_data["feature"].shape}')
-        print(f'y_dev shape: {dev_data["normalized_label"].shape}')
+        print(f'x_dev shape: {val_data["feature"].shape}')
+        print(f'y_dev shape: {val_data["normalized_label"].shape}')
         print('================================')
         print(f'x_test shape: {test_data["feature"].shape}')
         print(f'y_test shape: {test_data["normalized_label"].shape}')
@@ -163,7 +175,7 @@ def main(args):
         
 
         train_loader = create_data_loader(train_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
-        dev_loader = create_data_loader(dev_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
+        dev_loader = create_data_loader(val_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
         test_loader = create_data_loader(test_data, tokenizer, max_length=MAX_LEN, batch_size=BATCH_SIZE)
         
         # Initialize the model
