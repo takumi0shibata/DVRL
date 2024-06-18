@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 import wandb
+from sklearn.model_selection import train_test_split
 
 from utils.dvrl_utils import get_dev_sample, remove_top_p_sample
 from utils.create_embedding_feautres import create_embedding_features
@@ -16,7 +17,7 @@ from models.paes import tinyPAES, PAES
 
 def main(args):
     test_prompt_id = args.test_prompt_id
-    data_value_path = 'outputs/Estimated_Data_Value/PAES/'
+    data_value_path = 'outputs/Estimated_Data_Values/PAES/'
     seed = args.seed
     set_seed(seed)
     batch_size = args.batch_size
@@ -82,28 +83,22 @@ def main(args):
             X_test_pos = X_test_pos[:, :512]
 
     # convert to tensor
-    X_source = torch.tensor(np.concatenate([X_train_pos, X_dev_pos, X_test_pos[dev_idx]], axis=0), dtype=torch.long)
-    X_dev = torch.tensor(X_test_pos[dev_idx], dtype=torch.long)
+    X_source = torch.tensor(np.concatenate([X_train_pos, X_dev_pos], axis=0), dtype=torch.long)
     X_target = torch.tensor(X_test_pos[test_idx], dtype=torch.long)
 
-    X_source_linguistic_features = torch.tensor(np.concatenate([train_data['features_x'], dev_data['features_x'], np.array(test_data['features_x'])[dev_idx]], axis=0), dtype=torch.float)
-    X_dev_linguistic_features = torch.tensor(np.array(test_data['features_x'])[dev_idx], dtype=torch.float)
+    X_source_linguistic_features = torch.tensor(np.concatenate([train_data['features_x'], dev_data['features_x']], axis=0), dtype=torch.float)
     X_target_linguistic_features = torch.tensor(np.array(test_data['features_x'])[test_idx], dtype=torch.float)
 
-    X_source_readability = torch.tensor(np.concatenate([train_data['readability_x'], dev_data['readability_x'], np.array(test_data['readability_x'])[dev_idx]], axis=0), dtype=torch.float)
-    X_dev_readability = torch.tensor(np.array(test_data['readability_x'])[dev_idx], dtype=torch.float)
+    X_source_readability = torch.tensor(np.concatenate([train_data['readability_x'], dev_data['readability_x']], axis=0), dtype=torch.float)
     X_target_readability = torch.tensor(np.array(test_data['readability_x'])[test_idx], dtype=torch.float)
 
-    Y_source = torch.tensor(np.concatenate([train_data['y_scaled'], dev_data['y_scaled'], np.array(test_data['y_scaled'])[dev_idx]], axis=0), dtype=torch.float)
-    Y_dev = torch.tensor(np.array(test_data['y_scaled'])[dev_idx], dtype=torch.float)
+    Y_source = torch.tensor(np.concatenate([train_data['y_scaled'], dev_data['y_scaled']], axis=0), dtype=torch.float)
     Y_target = torch.tensor(np.array(test_data['y_scaled'])[test_idx], dtype=torch.float)
 
-    source_essay_set = torch.tensor(np.concatenate([train_data['prompt_ids'], dev_data['prompt_ids'], np.array(test_data['prompt_ids'])[dev_idx]], axis=0), dtype=torch.long)
-    dev_essay_set = torch.tensor(np.array(test_data['prompt_ids'])[dev_idx], dtype=torch.long)
+    source_essay_set = torch.tensor(np.concatenate([train_data['prompt_ids'], dev_data['prompt_ids']], axis=0), dtype=torch.long)
     target_essay_set = torch.tensor(np.array(test_data['prompt_ids'])[test_idx], dtype=torch.long)
 
     X_source_set = (X_source, X_source_linguistic_features, X_source_readability, source_essay_set)
-    X_dev_set = (X_dev, X_dev_linguistic_features, X_dev_readability, dev_essay_set)
     X_target_set = (X_target, X_target_linguistic_features, X_target_readability, target_essay_set)
 
 
@@ -113,12 +108,6 @@ def main(args):
     print('X_source_linguistic_features: ', X_source_linguistic_features.shape)
     print('X_source_readability: ', X_source_readability.shape)
     print('Y_source: ', Y_source.shape)
-
-    print('================================')
-    print('X_dev: ', X_dev.shape)
-    print('X_dev_linguistic_features: ', X_dev_linguistic_features.shape)
-    print('X_dev_readability: ', X_dev_readability.shape)
-    print('Y_dev: ', Y_dev.shape)
 
     print('================================')
     print('X_target: ', X_target.shape)
@@ -164,15 +153,22 @@ def main(args):
         # データの価値が低いものを削除
         set_seed(seed)
         weights = remove_top_p_sample(data_value, top_p=p, ascending=False)
-        weights = np.concatenate([weights, np.array([1]*len(dev_idx))])
         weights = (torch.tensor(weights, dtype=torch.float) == 1)
         X_source_set_tmp = (X_source[weights], X_source_linguistic_features[weights], X_source_readability[weights], source_essay_set[weights])
         Y_source_tmp = Y_source[weights]
         pred_model = get_model()
         optimizer = torch.optim.RMSprop(pred_model.parameters(), lr=args.lr)
         MSE_Loss = nn.MSELoss(reduction='mean').to(device)
-        train_dataset = TensorDataset(X_source_set_tmp[0], Y_source_tmp, X_source_set_tmp[1], X_source_set_tmp[2], X_source_set_tmp[3])
-        dev_dataset = TensorDataset(X_dev_set[0], Y_dev, X_dev_set[1], X_dev_set[2], X_dev_set[3])
+        
+        # Split data into training and validation sets
+        train_indices, val_indices = train_test_split(np.arange(len(X_source_set_tmp[0])), test_size=0.2, random_state=seed)
+        X_source_set_train = tuple(x[train_indices] for x in X_source_set_tmp)
+        Y_source_train = Y_source_tmp[train_indices]
+        X_source_set_val = tuple(x[val_indices] for x in X_source_set_tmp)
+        Y_source_val = Y_source_tmp[val_indices]
+
+        train_dataset = TensorDataset(X_source_set_train[0], Y_source_train, X_source_set_train[1], X_source_set_train[2], X_source_set_train[3])
+        dev_dataset = TensorDataset(X_source_set_val[0], Y_source_val, X_source_set_val[1], X_source_set_val[2], X_source_set_val[3])
         test_dataset = TensorDataset(X_target_set[0], Y_target, X_target_set[1], X_target_set[2], X_target_set[3])
         train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
         dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=True)
@@ -193,15 +189,22 @@ def main(args):
         # データの価値が高いものを削除
         set_seed(seed)
         weights = remove_top_p_sample(data_value, top_p=p, ascending=True)
-        weights = np.concatenate([weights, np.array([1]*len(dev_idx))])
         weights = (torch.tensor(weights, dtype=torch.float) == 1)
         X_source_set_tmp = (X_source[weights], X_source_linguistic_features[weights], X_source_readability[weights], source_essay_set[weights])
         Y_source_tmp = Y_source[weights]
         pred_model = get_model()
         optimizer = torch.optim.RMSprop(pred_model.parameters(), lr=0.001)
         MSE_Loss = nn.MSELoss(reduction='mean').to(device)
-        train_dataset = TensorDataset(X_source_set_tmp[0], Y_source_tmp, X_source_set_tmp[1], X_source_set_tmp[2], X_source_set_tmp[3])
-        dev_dataset = TensorDataset(X_dev_set[0], Y_dev, X_dev_set[1], X_dev_set[2], X_dev_set[3])
+        
+        # Split data into training and validation sets
+        train_indices, val_indices = train_test_split(np.arange(len(X_source_set_tmp[0])), test_size=0.2, random_state=seed)
+        X_source_set_train = tuple(x[train_indices] for x in X_source_set_tmp)
+        Y_source_train = Y_source_tmp[train_indices]
+        X_source_set_val = tuple(x[val_indices] for x in X_source_set_tmp)
+        Y_source_val = Y_source_tmp[val_indices]
+
+        train_dataset = TensorDataset(X_source_set_train[0], Y_source_train, X_source_set_train[1], X_source_set_train[2], X_source_set_train[3])
+        dev_dataset = TensorDataset(X_source_set_val[0], Y_source_val, X_source_set_val[1], X_source_set_val[2], X_source_set_val[3])
         test_dataset = TensorDataset(X_target_set[0], Y_target, X_target_set[1], X_target_set[2], X_target_set[3])
         train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
         dev_loader = DataLoader(dataset=dev_dataset, batch_size=batch_size, shuffle=True)
@@ -236,7 +239,7 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser()
     parser.add_argument('--pj_name', type=str, default='DVRL', help='wandb project name for logging')
-    parser.add_argument('--run_name', type=str, default='PAES-DVRL(Predictor normal)', help='name of the experiment')
+    parser.add_argument('--run_name', type=str, default='DVRL-PAES', help='name of the experiment')
     parser.add_argument('--test_prompt_id', type=int, default=1, help='prompt id of test essay set')
     parser.add_argument('--seed', type=int, default=12, help='set random seed')
     parser.add_argument('--model_type', type=str, default='normal', help='type of model to train', choices=['normal', 'tiny'])
