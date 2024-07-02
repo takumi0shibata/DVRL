@@ -58,7 +58,7 @@ def main(args):
     ###################################################
     # Step2. Training LOO
     ###################################################
-    wandb.init(project=args.pjname, name=args.run_name, config=args)
+    wandb.init(project=args.pjname, name=args.run_name+str(test_prompt_id), config=args)
     # Create predictor
     print('Creating predictor model...')
     config = AutoConfig.from_pretrained(model_name)
