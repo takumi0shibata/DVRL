@@ -8,8 +8,6 @@ import torch.nn as nn
 from sklearn.metrics import cohen_kappa_score
 from utils.general_utils import get_min_max_scores
 import matplotlib.pyplot as plt
-import os
-
 
 def fit_func(
         model: nn.Module,
@@ -19,7 +17,7 @@ def fit_func(
         epochs: int,
         device: torch.device,
         sample_weight: np.ndarray = None
-        ) -> list:
+) -> list:
     """
     Fit the model with the given data.
     Args:
@@ -33,49 +31,51 @@ def fit_func(
     Returns:
         list: Loss history
     """
-
-    model = model.to(device)
+    
+    model.to(device)
     model.train()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
+    
+    if not isinstance(x_train, torch.Tensor):
+        x_train = torch.tensor(x_train, dtype=torch.float)
+    if not isinstance(y_train, torch.Tensor):
+        y_train = torch.tensor(y_train, dtype=torch.float)
 
-    x_train = torch.tensor(x_train, dtype=torch.float)
-    y_train = torch.tensor(y_train, dtype=torch.float)
+    x_train = x_train.clone().detach().to(device)
+    y_train = y_train.clone().detach().to(device)
 
     if sample_weight is not None:
+        if not isinstance(sample_weight, torch.Tensor):
+            sample_weight = torch.tensor(sample_weight, dtype=torch.float)
+        sample_weight = sample_weight.clone().detach().to(device)
+        dataset = TensorDataset(x_train, y_train, sample_weight)
         loss_fn = nn.MSELoss(reduction='none')
-        sample_weight = torch.tensor(sample_weight, dtype=torch.float)
-        train_data = TensorDataset(x_train, y_train, sample_weight)
     else:
+        dataset = TensorDataset(x_train, y_train)
         loss_fn = nn.MSELoss(reduction='mean')
-        train_data = TensorDataset(x_train, y_train)
-    train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True, pin_memory=False, num_workers=0)
+
+    train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
     history = []
     for epoch in range(epochs):
-        losses = []
-        if sample_weight is not None:
-            for x_batch, y_batch, w_batch in train_loader:
-                optimizer.zero_grad()
-                x_batch, y_batch, w_batch = x_batch.to(device), y_batch.to(device), w_batch.to(device)
+        epoch_loss = 0
+        for batch in train_loader:
+            optimizer.zero_grad()
+            if sample_weight is not None:
+                x_batch, y_batch, w_batch = batch
                 y_pred = model(x_batch)
-                loss = loss_fn(y_pred.squeeze(), y_batch.squeeze()) * w_batch
-                loss = loss.mean()
-                losses.append(loss.item())
-                loss.backward()
-                optimizer.step()
-        else:
-            for x_batch, y_batch in train_loader:
-                optimizer.zero_grad()
-                x_batch, y_batch = x_batch.to(device), y_batch.to(device)
+                loss = (loss_fn(y_pred.squeeze(), y_batch.squeeze()) * w_batch).mean()
+            else:
+                x_batch, y_batch = batch
                 y_pred = model(x_batch)
                 loss = loss_fn(y_pred.squeeze(), y_batch.squeeze())
-                losses.append(loss.item())
-                loss.backward()
-                optimizer.step()
-        history.append(np.mean(losses))
-        # if (epoch) % 10 == 0:
-        #     print(f'Epoch: {epoch}, Loss:  {loss.item()}')
-    
+            
+            loss.backward()
+            optimizer.step()
+            epoch_loss += loss.item()
+
+        history.append(epoch_loss / len(train_loader))
+
     return history
 
 def pred_func(
@@ -83,7 +83,7 @@ def pred_func(
         x_test: np.ndarray,
         batch_size: int,
         device: torch.device
-        ) -> list:
+    ) -> np.ndarray:
     """
     Predict with the given model.
     Args:
@@ -92,7 +92,7 @@ def pred_func(
         batch_size: Batch size
         device: Device to run the model
     Returns:
-        list: Predicted results
+        np.ndarray: Predicted results
     """
     model = model.to(device)
     model.eval()
@@ -106,7 +106,7 @@ def pred_func(
             x_batch = x_batch[0].to(device)
             y_pred = model(x_batch)
             preds.extend(y_pred.cpu().tolist())
-    return preds
+    return np.array(preds)
 
 def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str, weights='quadratic') -> float:
     """

@@ -9,7 +9,6 @@ class DvrlLoss(nn.Module):
         self,
         epsilon: float,
         threshold: float,
-        std_penalty_weight: float = None
     ) -> None:
         """
         Args:
@@ -20,7 +19,6 @@ class DvrlLoss(nn.Module):
         super().__init__()
         self.epsilon = epsilon
         self.threshold = threshold
-        self.std_penalty_weight = std_penalty_weight
 
     def forward(self, est_data_value, s_input, reward_input):
         """
@@ -44,10 +42,5 @@ class DvrlLoss(nn.Module):
         dve_loss = (-reward_input * prob) + \
                    1e3 * torch.maximum(torch.mean(est_data_value) - self.threshold, zero) + \
                    1e3 * torch.maximum(1 - self.threshold - torch.mean(est_data_value), zero)
-        
-        # Variance penalty term
-        if self.std_penalty_weight is not None:
-            variance_penalty = self.std_penalty_weight * torch.var(est_data_value)
-            dve_loss -= variance_penalty
 
         return dve_loss

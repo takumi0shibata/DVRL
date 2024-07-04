@@ -11,9 +11,14 @@ class ConcatenateLayer(nn.Module):
         return torch.cat(inputs, self.dim)
 
 
-class FeatureModel(nn.Module):
-    def __init__(self, readability_size: int, linguistic_size: int, num_labels=1):
-        super(FeatureModel, self).__init__()
+class FeaturesModel(nn.Module):
+    def __init__(
+        self,
+        readability_size: int = 35,
+        linguistic_size: int = 51,
+        num_labels=1
+    ):
+        super(FeaturesModel, self).__init__()
         self.linear = nn.Linear(readability_size+linguistic_size, num_labels)
         self.sigmoid = nn.Sigmoid()
         
