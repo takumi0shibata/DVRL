@@ -195,11 +195,11 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="PAES_attributes models")
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--pjname', type=str, default='DVRL')
+    parser.add_argument('--pjname', type=str, default='DVRL', choices=['DVRL', 'LOO', 'DataShapley'])
     parser.add_argument('--run_name', type=str, default='train-PMAES')
     parser.add_argument('--target_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
-    parser.add_argument('--device', type=str, default='cpu', choices=['cuda', 'cpu', 'mps'])
+    parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--attribute_name', type=str, default='score')
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
     parser.add_argument('--dev_size', type=int, default=30)

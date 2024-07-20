@@ -1,9 +1,25 @@
 #!/usr/bin/env bash
-for prompt in {1..8}
+pjname=("DVRL" "LOO" "Data Shapley")
+batch_size=10
+epochs=50
+run_name="train-PAES"
+valuation_method=("DVRL-pos" "LOO-pos" "DataShapley-pos")
+seed=12
+device="cuda"
+
+for ((i=0; i<${#pjname[@]}; i++))
 do
-    python PAES-DVRL.py --test_prompt_id ${prompt} --model_type normal --epochs 50 --batch_size 10
-    # for seed in 12 22 32 42 52
-    # do
-    #     python PAES-FullSource.py --test_prompt_id ${prompt} --seed ${seed} --model_type normal --epochs 50 --batch_size 10
-    # done
+    for prompt in {1..8}
+    do
+        python train_PAES.py \
+            --wandb \
+            --pjname ${pjname[i]} \
+            --run_name ${run_name} \
+            --valuation_method ${valuation_method[i]} \
+            --target_prompt_id ${prompt} \
+            --seed ${seed} \
+            --batch_size ${batch_size} \
+            --epochs ${epochs} \
+            --device ${device}
+    done
 done

@@ -9,6 +9,8 @@ import numpy as np
 from transformers import AutoConfig
 import wandb
 import torch
+import warnings
+warnings.filterwarnings('ignore')
 
 from utils.general_utils import set_seed
 from utils.load_data import load_data_DVRL, load_data_PAES
@@ -146,7 +148,7 @@ def main(args):
             args.valuation_method,
         )
 
-        print(f'p: {p_val}, QWK[High]: {qwk_high}, QWK[Low]: {qwk_low}')
+        print(f'p: {p_val:.1f}, QWK[High]: {qwk_high:.3f}, QWK[Low]: {qwk_low:.3f}, Dev Loss[High]: {dev_loss_high:.10f}, Dev Loss[Low]: {dev_loss_low:.10f}')
 
         if args.wandb:
             wandb.log({
@@ -165,11 +167,11 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser()
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--pjname', type=str, default='DVRL')
+    parser.add_argument('--pjname', type=str, default='LOO')
     parser.add_argument('--run_name', type=str, default='train-MLP')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
-    parser.add_argument('--device', type=str, default='cpu', choices=['cuda', 'cpu', 'mps'])
+    parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--attribute_name', type=str, default='score')
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
     parser.add_argument('--dev_size', type=int, default=30)

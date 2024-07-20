@@ -13,7 +13,7 @@ from dvrl.predictor import MLP
 from models.features import FeaturesModel
 
 # Data Shapley 値計算関数
-def data_shapley(X_train, y_train, X_test, y_test,  input_seq, max_iter=1000, threshold=0.05):
+def data_shapley(X_train, y_train, X_test, y_test,  input_seq, max_iter=5000, threshold=0.05):
     n_samples = X_train.shape[0]
     input_dim = X_train.shape[1]
     shapley_values = np.zeros(n_samples)
@@ -112,7 +112,7 @@ def main(args):
     ###################################################
     if args.wandb:
         wandb.init(
-            project=args.wandb_pjname,
+            project=args.pjname,
             name=args.experiment_name + f'_{target_prompt_id}_{args.input_seq}',
             config=dict(args._get_kwargs())
         )
@@ -123,7 +123,7 @@ def main(args):
         dvrl_data['x_dev'],
         dvrl_data['y_dev'],
         args.input_seq,
-        max_iter=1000,
+        max_iter=5000,
         threshold=0.05,
     )
     
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser(description="Data Shapley")
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--wandb_pjname', type=str, default='テスト')
+    parser.add_argument('--pjname', type=str, default='Data Shapley')
     parser.add_argument('--experiment_name', type=str, default='DataShapley_DataValueEstimation')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     parser.add_argument('--dev_size', type=int, default=30)
     parser.add_argument('--metric', type=str, default='qwk', choices=['corr', 'mse', 'qwk'])
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
-    parser.add_argument('--device', type=str, default='mps', choices=['cuda', 'cpu', 'mps'])
+    parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--input_seq', type=str, default='word', choices=['word', 'pos'])
     args = parser.parse_args()
     print(dict(args._get_kwargs()))

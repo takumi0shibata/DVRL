@@ -1,10 +1,37 @@
 #!/usr/bin/env bash
-for prompt in {1..8}
+pjname=("DVRL" "LOO" "Data Shapley")
+batch_size=512
+epochs=100
+run_name="train-MLP"
+valuation_method_word=("DVRL-word" "LOO-word" "DataShapley-word")
+valuation_method_pos=("DVRL-pos" "LOO-pos" "DataShapley-pos")
+seed=12
+device="cuda"
+
+for ((i=0; i<${#pjname[@]}; i++))
 do
-    python MLP-DVRL.py --test_prompt_id ${prompt}
-    for seed in 12 22 32 42 52
+    for prompt in {1..8}
     do
-        python MLP-DevOnly.py --test_prompt_id ${prompt} --seed ${seed}
-        python MLP-FullSource.py --test_prompt_id ${prompt} --seed ${seed}
+        python train_MLP.py \
+            --wandb \
+            --pjname ${pjname[i]} \
+            --run_name ${run_name} \
+            --valuation_method ${valuation_method_word[i]} \
+            --target_prompt_id ${prompt} \
+            --seed ${seed} \
+            --batch_size ${batch_size} \
+            --epochs ${epochs} \
+            --device ${device}
+        
+        python train_MLP.py \
+            --wandb \
+            --pjname ${pjname[i]} \
+            --run_name ${run_name} \
+            --valuation_method ${valuation_method_pos[i]} \
+            --target_prompt_id ${prompt} \
+            --seed ${seed} \
+            --batch_size ${batch_size} \
+            --epochs ${epochs} \
+            --device ${device}
     done
 done

@@ -1,10 +1,31 @@
 #!/usr/bin/env bash
-for prompt in {1..8}
+pjname=("DVRL" "LOO" "Data Shapley")
+max_length=512
+batch_size=16
+epochs=10
+lr=2e-5
+model_name="bert-base-uncased"
+run_name="train-BERT"
+valuation_method=("DVRL-word" "LOO-word" "DataShapley-word")
+seed=12
+device="cuda"
+
+for ((i=0; i<${#pjname[@]}; i++))
 do
-    python BERT-DVRL.py --test_prompt_id ${prompt} --max_length 512 --batch_size 16 --epochs 10 --model_name bert-base-uncased
-    for seed in 12 22 32 42 52
-    do  
-        python BERT-DevOnly.py --test_prompt_id ${prompt} --seed ${seed} --max_length 512 --batch_size 16 --epochs 30 --model_name bert-base-uncased
-        python BERT-FullSource.py --test_prompt_id ${prompt} --seed ${seed} --max_length 512 --batch_size 16 --epochs 10 --model_name bert-base-uncased
+    for prompt in {1..8}
+    do
+        python train_Transformers.py \
+            --wandb \
+            --pjname ${pjname[i]} \
+            --run_name ${run_name} \
+            --valuation_method ${valuation_method[i]} \
+            --target_prompt_id ${prompt} \
+            --seed ${seed} \
+            --max_length ${max_length} \
+            --batch_size ${batch_size} \
+            --epochs ${epochs} \
+            --model_name ${model_name} \
+            --lr ${lr} \
+            --device ${device}
     done
 done

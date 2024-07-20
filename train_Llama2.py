@@ -30,12 +30,12 @@ from utils.general_utils import set_seed
 
 
 # Custom function to prepare compute metrics
-def prepare_compute_metrics(test_prompt_id, attribute_name):
+def prepare_compute_metrics(target_prompt_id, attribute_name):
     # 評価データのプロンプトがデータセット内で一意であることに注意（特にCross-promptの状況のとき）
     def compute_metrics(p: EvalPrediction):
         preds = np.squeeze(p.predictions)
-        qwk = calc_qwk(p.label_ids, preds, test_prompt_id, attribute_name)
-        lwk = calc_qwk(p.label_ids, preds, test_prompt_id, attribute_name, "linear")
+        qwk = calc_qwk(p.label_ids, preds, target_prompt_id, attribute_name)
+        lwk = calc_qwk(p.label_ids, preds, target_prompt_id, attribute_name, "linear")
         correlation = np.corrcoef(p.label_ids, preds)[0, 1]
         rmse = np.sqrt(mean_squared_error(p.label_ids, preds))
         mae = mean_absolute_error(p.label_ids, preds)
@@ -57,28 +57,27 @@ def main(args):
     # Set Parameters
     ############################################################
     attribute_name = args.attribute_name
-    test_prompt_id = args.test_prompt_id
+    target_prompt_id = args.target_prompt_id
     seed = args.seed
     max_length = args.max_seq_length
     batch_size = args.batch_size
     num_epochs = args.num_epochs
     lr = args.lr
-    data_value_path = 'outputs/Estimated_Data_Values/MLP/'
     set_seed(seed)
 
     if args.wandb:
-        wandb.init(project=args.pjname, name=f"{args.run_name}-{test_prompt_id}", config=args)
+        wandb.init(project=args.pjname, name=f"{args.run_name}-{target_prompt_id}", config=args)
 
     ############################################################
     # Load data
     ############################################################
     if args.data_dir == 'data/cross_prompt_attributes/':
-        data = load_data(f'{args.data_dir}{test_prompt_id}/', attribute_name)
+        data = load_data(f'{args.data_dir}{target_prompt_id}/', attribute_name)
     elif args.data_dir == 'data/prompt-specific/':
-        data = load_data(f'{args.data_dir}{test_prompt_id}/fold-{args.fold}/', attribute_name)
+        data = load_data(f'{args.data_dir}{target_prompt_id}/fold-{args.fold}/', attribute_name)
 
     # get dev & test index
-    _, _, test_data = create_embedding_features(f'{args.data_dir}{test_prompt_id}/', attribute_name, 'microsoft/deberta-v3-large', 'cpu')
+    _, _, test_data = create_embedding_features(f'{args.data_dir}{target_prompt_id}/', attribute_name, 'microsoft/deberta-v3-large', 'cpu')
     _, _, _, _, dev_idx, test_idx = get_dev_sample(test_data['essay'], test_data['normalized_label'], dev_size=args.dev_size)
 
     # Load features
@@ -103,15 +102,24 @@ def main(args):
 
     # Remove top p samples
     weights = remove_top_p_sample(
-        np.load(f'outputs/Estimated_Data_Values/{args.valuation_method}/estimated_data_value{test_prompt_id}.npy'),
+        np.load(f'outputs/Estimated_Data_Values/{args.valuation_method}/estimated_data_value{target_prompt_id}.npy'),
         args.top_p,
         args.ascending
     )
     
     # Create dataset
-    train_data = {'essay': np.concatenate([train_features, dev_features])[weights==1].tolist(), 'labels': np.concatenate([y_train, y_dev])[weights==1].tolist()}
-    dev_data = {'essay': test_features[dev_idx].tolist(), 'labels': y_test[dev_idx].tolist()}
-    test_data = {'essay': test_features[test_idx].tolist(), 'labels': y_test[test_idx].tolist()}
+    train_data = {
+        'essay': np.concatenate([train_features, dev_features])[weights==1].tolist(),
+        'labels': np.concatenate([y_train, y_dev])[weights==1].tolist()
+    }
+    dev_data = {
+        'essay': test_features[dev_idx].tolist(),
+        'labels': y_test[dev_idx].tolist()
+    }
+    test_data = {
+        'essay': test_features[test_idx].tolist(),
+        'labels': y_test[test_idx].tolist()
+    }
 
     train_dataset = Dataset.from_dict(train_data)
     dev_dataset = Dataset.from_dict(dev_data)
@@ -212,7 +220,7 @@ def main(args):
             'dev': dev_dataset,
             'test': test_dataset,
         },
-        compute_metrics=prepare_compute_metrics(test_prompt_id, attribute_name),
+        compute_metrics=prepare_compute_metrics(target_prompt_id, attribute_name),
     )
 
     # Train model
@@ -226,7 +234,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test_prompt_id', type=int, default=1)
+    parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument(
         '--data_dir',
         type=str,
@@ -257,7 +265,7 @@ if __name__ == '__main__':
     parser.add_argument('--save_model', action='store_true')
     parser.add_argument('--wandb', action='store_true')
     parser.add_argument('--pjname', type=str, default='DVRL')
-    parser.add_argument('--run_name', type=str, default='Llama2-7b-DVRL')
+    parser.add_argument('--run_name', type=str, default='train-Llama2')
     parser.add_argument('--lora_r', type=int, default=16)
     parser.add_argument('--lora_alpha', type=int, default=16)
     parser.add_argument('--lora_dropout', type=float, default=0.05)
@@ -269,9 +277,9 @@ if __name__ == '__main__':
         '--valuation_method',
         default='DVRL-word',
         choices=[
-            'DVRL-pos',
-            'LOO-pos',
-            'DataShapley-pos',
+            'DVRL-word',
+            'LOO-word',
+            'DataShapley-word',
         ],
     )
     args = parser.parse_args()

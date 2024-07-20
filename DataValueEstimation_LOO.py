@@ -55,7 +55,7 @@ def main(args):
     ###################################################
     if args.wandb:
         wandb.init(
-            project=args.wandb_pjname,
+            project=args.pjname,
             name=args.experiment_name + f'_{target_prompt_id}_{args.input_seq}',
             config=dict(args._get_kwargs())
         )
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser(description="LOO")
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--wandb_pjname', type=str, default='テスト')
+    parser.add_argument('--pjname', type=str, default='LOO')
     parser.add_argument('--experiment_name', type=str, default='LOO_DataValueEstimation')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     parser.add_argument('--dev_size', type=int, default=30)
     parser.add_argument('--metric', type=str, default='qwk', choices=['corr', 'mse', 'qwk'])
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
-    parser.add_argument('--device', type=str, default='cpu', choices=['cuda', 'cpu', 'mps'])
+    parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--input_seq', type=str, default='pos', choices=['word', 'pos'])
     parser.add_argument('--batch_size', type=int, default=512)
     parser.add_argument('--epochs', type=int, default=100)

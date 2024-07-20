@@ -3,8 +3,6 @@ This script is used to train the model using the Transformer-based model.
     - BERT
     - DeBERTa-v3-large
 '''
-
-
 import numpy as np
 import argparse
 import torch
@@ -24,14 +22,14 @@ from utils.load_data import load_data_Transformers
 
 def train_and_evaluate(
         data,
-        p,
-        seed,
-        estimated_data_value,
-        attribute_name,
-        device,
-        EPOCHS,
-        MAX_LEN,
-        BATCH_SIZE,
+        p: float,
+        seed: int,
+        estimated_data_value: np.ndarray,
+        attribute_name: str,
+        device: str,
+        EPOCHS: int,
+        MAX_LEN: int,
+        BATCH_SIZE: int,
         ascending=False
     ):
     set_seed(seed)
@@ -173,18 +171,18 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser('Training Model')
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--pjname', type=str, default='DVRL')
+    parser.add_argument('--pjname', type=str, default='DVRL', choices=['DVRL', 'LOO', 'DataShapley'])
     parser.add_argument('--run_name', type=str, default='train-BERT')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
-    parser.add_argument('--device', type=str, default='cpu', choices=['cuda', 'cpu', 'mps'])
+    parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--attribute_name', type=str, default='score')
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
     parser.add_argument('--dev_size', type=int, default=30)
-    parser.add_argument('--max_length', type=int, default=512, choices=[512, 256])
-    parser.add_argument('--batch_size', type=int, default=32, choices=[32, 8])
-    parser.add_argument('--epochs', type=int, default=10, choices=[10, 5])
-    parser.add_argument('--lr', type=float, default=2e-5, choices=[2e-5, 1e-4])
+    parser.add_argument('--max_length', type=int, default=512, choices=[512, 256]) # BERT-base: 512, DeBERTa-v3-large: 256
+    parser.add_argument('--batch_size', type=int, default=16, choices=[16, 8]) # BERT-base: 16, DeBERTa-v3-large: 8
+    parser.add_argument('--epochs', type=int, default=10, choices=[10, 5]) # BERT-base: 10, DeBERTa-v3-large: 5
+    parser.add_argument('--lr', type=float, default=2e-5)
     parser.add_argument(
         '--model_name',
         type=str,

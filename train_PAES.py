@@ -37,7 +37,7 @@ def train_and_evaluate(
         max_num=data['max_sentnum'],
         max_len=data['max_sentlen'],
         pos_vocab=data['pos_vocab'],
-    )
+    ).to(device)
     optimizer = torch.optim.RMSprop(pred_model.parameters(), lr=args.lr)
     MSE_Loss = nn.MSELoss(reduction='mean').to(device)
 
@@ -173,11 +173,11 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser()
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--pjname', type=str, default='DVRL')
+    parser.add_argument('--pjname', type=str, default='DVRL', choices=['DVRL', 'LOO', 'DataShapley'])
     parser.add_argument('--run_name', type=str, default='train-PAES')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
-    parser.add_argument('--device', type=str, default='cpu', choices=['cuda', 'cpu', 'mps'])
+    parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--attribute_name', type=str, default='score')
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
     parser.add_argument('--dev_size', type=int, default=30)
