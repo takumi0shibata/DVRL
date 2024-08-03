@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-pjname=("DVRL" "LOO" "Data Shapley")
+pjname=("DVRL" "LOO" "DataShapley")
 max_length=256
 batch_size=8
 epochs=5

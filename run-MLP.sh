@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-pjname=("DVRL" "LOO" "Data Shapley")
+pjname=("DVRL" "LOO" "DataShapley")
 batch_size=512
 epochs=100
 run_name="train-MLP"

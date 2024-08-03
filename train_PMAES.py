@@ -48,22 +48,15 @@ def train_and_evaluate(
     train_readability_tmp = data['x_source_readability'][weights]
     train_score_tmp = data['y_source'][weights]
 
+    tr_s_num, tr_t_num = len(train_essay_pos_tmp), len(data['x_target'])
     batch_num = args.batch_num
-    s_batch_size = int(len(train_essay_pos_tmp) / batch_num)
-    t_batch_size = int(len(data['x_target']) / batch_num)
-    print('s_batch_size: {}'.format(s_batch_size))
-    print('t_batch_size: {}'.format(t_batch_size))
-    while s_batch_size > args.max_batch_size:
-        tr_s_num, tr_t_num = len(train_essay_pos_tmp), len(data['x_target'])
-        s_batch_size = int(tr_s_num / batch_num)
-        t_batch_size = int(tr_t_num / batch_num)
+    s_batch_size = int(tr_s_num / batch_num)
+    t_batch_size = int(tr_t_num / batch_num)
+    s_batch_num = int(tr_s_num / s_batch_size)
+    t_batch_num = int(tr_t_num / t_batch_size)
+    while t_batch_num > s_batch_num:
+        s_batch_size -= 1
         s_batch_num = int(tr_s_num / s_batch_size)
-        t_batch_num = int(tr_t_num / t_batch_size)
-        while t_batch_num > s_batch_num:
-            s_batch_size -= 1
-            s_batch_num = int(tr_s_num / s_batch_size)
-
-        batch_num += 1
 
     print('s_batch_size: {}'.format(s_batch_size))
     print('t_batch_size: {}'.format(t_batch_size))
@@ -137,7 +130,7 @@ def main(args):
 
     if args.wandb:
         wandb.init(
-            project=args.pj_name,
+            project=args.pjname,
             name=args.run_name+str(target_id),
             config=args
         )
@@ -221,10 +214,9 @@ if __name__ == '__main__':
     parser.add_argument('--lstm_units', type=int, default=50, help='Num of hidden units in recurrent layer')
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Initial learning rate')
     parser.add_argument('--dropout', type=float, default=0.2, help='Dropout rate for layers')
-    parser.add_argument('--batch_num', type=int, default=2, help='Number of batches')
+    parser.add_argument('--batch_num', type=int, default=35, help='Number of batches')
     parser.add_argument('--max_sentlen', type=int, default=50, help='Max sentence length')
     parser.add_argument('--max_sentnum', type=int, default=100, help='Max sentence number')
-    parser.add_argument('--max_batch_size', type=int, default=320, help='Max batch size')
 
     args = parser.parse_args()
     print(dict(args._get_kwargs()))

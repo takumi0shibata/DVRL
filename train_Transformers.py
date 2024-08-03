@@ -21,17 +21,17 @@ from utils.load_data import load_data_Transformers
 
 
 def train_and_evaluate(
-        data,
-        p: float,
-        seed: int,
-        estimated_data_value: np.ndarray,
-        attribute_name: str,
-        device: str,
-        EPOCHS: int,
-        MAX_LEN: int,
-        BATCH_SIZE: int,
-        ascending=False
-    ):
+    data,
+    p: float,
+    seed: int,
+    estimated_data_value: np.ndarray,
+    attribute_name: str,
+    device: str,
+    EPOCHS: int,
+    MAX_LEN: int,
+    BATCH_SIZE: int,
+    ascending=False
+):
     set_seed(seed)
     weights = remove_top_p_sample(
         estimated_data_value,

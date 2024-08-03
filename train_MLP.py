@@ -25,15 +25,15 @@ from sklearn.metrics import mean_squared_error
 
 
 def train_and_evaluate(
-        data,
-        target_prompt_id,
-        weights,
-        model_name,
-        batch_size,
-        epochs,
-        device,
-        attribute_name,
-        valuation_method,
+    data,
+    target_prompt_id,
+    weights,
+    model_name,
+    batch_size,
+    epochs,
+    device,
+    attribute_name,
+    valuation_method,
 ):
     
     weights = (torch.tensor(weights, dtype=torch.float) == 1)

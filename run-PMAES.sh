@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-pjname=("DVRL" "LOO" "Data Shapley")
+pjname=("DVRL" "LOO" "DataShapley")
 max_batch_size=320
 num_epochs=50
 run_name="train-PMAES"
@@ -18,8 +18,7 @@ do
             --valuation_method ${valuation_method[i]} \
             --target_id ${prompt} \
             --seed ${seed} \
-            --max_batch_size ${max_batch_size} \
-            --num_epochs ${epochs} \
+            --num_epochs ${num_epochs} \
             --device ${device}
     done
 done
