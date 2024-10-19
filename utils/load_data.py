@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn.cluster import DBSCAN
 
 from utils.create_embedding_feautres import (
     create_embedding_features,
@@ -29,6 +30,7 @@ def load_data_DVRL(
     )
     x_source = np.concatenate([train_data['essay'], val_data['essay']])
     y_source = np.concatenate([train_data['normalized_label'], val_data['normalized_label']])
+    x_source_prompt = np.concatenate([train_data['essay_set'], val_data['essay_set']])
 
     # split test data into dev and test
     x_dev, x_target, y_dev, y_target, dev_ids, target_ids = get_dev_sample(
@@ -59,6 +61,7 @@ def load_data_DVRL(
 
     return {
         'x_source': x_source,
+        'x_source_prompt': x_source_prompt,
         'y_source': y_source,
         'x_dev': x_dev,
         'y_dev': y_dev,
@@ -66,6 +69,114 @@ def load_data_DVRL(
         'y_target': y_target,
         'dev_ids': dev_ids,
         'target_ids': target_ids
+    }
+
+def load_data_DVRL_v2(
+        data_path: str,
+        attribute_name: str,
+        embedding_model: str,
+        device: str,
+        devsize: int | float = 30
+    ) -> dict[str, np.ndarray]:
+
+    # Load ASAP data
+    train_data, val_data, test_data = create_embedding_features(
+        data_path,
+        attribute_name,
+        embedding_model,
+        device
+    )
+    x_source = np.concatenate([train_data['essay'], val_data['essay']])
+    y_source = np.concatenate([train_data['normalized_label'], val_data['normalized_label']])
+    x_source_prompt = np.concatenate([train_data['essay_set'], val_data['essay_set']])
+
+    # split test data into dev and test
+    x_dev, x_target, y_dev, y_target, dev_ids, target_ids = get_dev_sample(
+        test_data['essay'],
+        test_data['normalized_label'],
+        dev_size=devsize,
+    )
+
+    # クラスタリングの割り当てを計算
+    cluster_assignments = np.full(len(x_source), -1, dtype=int)  # -1で初期化
+    cluster_centroids = np.zeros_like(x_source)  # x_sourceと同じ形状
+
+    unique_prompts = np.unique(x_source_prompt)
+    unique_labels = np.unique(y_source)
+
+    cluster_id_counter = 0  # クラスタIDをユニークにするためのカウンター
+
+    for prompt in unique_prompts:
+        for label in unique_labels:
+            # 同じプロンプトとラベルを持つデータのインデックスを取得
+            indices = np.where((x_source_prompt == prompt) & (y_source == label))[0]
+            if len(indices) == 0:
+                continue
+            embeddings = x_source[indices]
+            if len(embeddings) < 2:
+                # データポイントが少なすぎる場合はクラスタ0を割り当て
+                cluster_labels = np.zeros(len(embeddings), dtype=int)
+                centroid = embeddings[0]
+                cluster_assignments[indices] = cluster_id_counter
+                cluster_centroids[indices] = centroid
+                cluster_id_counter += 1
+            else:
+                # 埋め込みベクトルを正規化
+                norm_embeddings = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
+                # コサイン距離を使用してクラスタリング
+                clustering = DBSCAN(eps=0.1, min_samples=2, metric='cosine').fit(norm_embeddings)
+                cluster_labels = clustering.labels_
+                unique_cluster_labels = np.unique(cluster_labels)
+                for cl in unique_cluster_labels:
+                    cl_indices = indices[cluster_labels == cl]
+                    if cl == -1:
+                        # ノイズポイントは個別に扱う（必要に応じて変更可能）
+                        for idx in cl_indices:
+                            cluster_assignments[idx] = cluster_id_counter
+                            cluster_centroids[idx] = embeddings[cluster_labels == cl][0]  # データポイント自身を重心とする
+                            cluster_id_counter += 1
+                    else:
+                        cl_embeddings = embeddings[cluster_labels == cl]
+                        centroid = np.mean(cl_embeddings, axis=0)
+                        cluster_assignments[cl_indices] = cluster_id_counter
+                        cluster_centroids[cl_indices] = centroid
+                        cluster_id_counter += 1
+
+     # print info
+    print('================================')
+    print('X_source: ', x_source.shape)
+    print('Y_source: ', y_source.shape)
+    print('Y_source max: ', np.max(y_source))
+    print('Y_source min: ', np.min(y_source))
+    print('num of clusters: ', len(np.unique(cluster_assignments)))
+    print('average cluster size: ', len(x_source) / len(np.unique(cluster_assignments)))
+
+    print('================================')
+    print('X_dev: ', x_dev.shape)
+    print('Y_dev: ', y_dev.shape)
+    print('Y_dev max: ', np.max(y_dev))
+    print('Y_dev min: ', np.min(y_dev))
+
+    print('================================')
+    print('X_target: ', x_target.shape)
+    print('Y_target: ', y_target.shape)
+    print('Y_target max: ', np.max(y_target))
+    print('Y_target min: ', np.min(y_target))
+    print('================================')
+
+    # 結果を返す
+    return {
+        'x_source': x_source,
+        'x_source_prompt': x_source_prompt,
+        'y_source': y_source,
+        'x_dev': x_dev,
+        'y_dev': y_dev,
+        'x_target': x_target,
+        'y_target': y_target,
+        'dev_ids': dev_ids,
+        'target_ids': target_ids,
+        'cluster_assignments': cluster_assignments,  # クラスタの割り当て
+        'cluster_centroids': cluster_centroids       # データポイントごとの重心ベクトル
     }
 
 

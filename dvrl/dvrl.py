@@ -1,8 +1,6 @@
-
-"""DVRL class for data valuation using reinforcement learning"""
-
 import copy
-import os
+import logging
+import tempfile
 import numpy as np
 from tqdm import tqdm
 import torch
@@ -15,8 +13,15 @@ from dvrl.dvrl_loss import DvrlLoss
 from dvrl.data_value_estimator import DataValueEstimator
 from utils.dvrl_utils import fit_func, pred_func, calc_qwk
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-class Dvrl(object):
+
+class Dvrl:
+    """
+    DVRL class for data valuation using reinforcement learning.
+    """
 
     def __init__(
         self,
@@ -24,20 +29,20 @@ class Dvrl(object):
         pred_model: nn.Module,
         parameters: dict,
         device: str,
-        target_prompt_id: int
+        target_prompt_id: int,
+        temp_dir: str = None
     ) -> None:
         """
-        Args:
-            x_source: Training data
-            y_source: Training labels
-            x_dev: Validation data
-            y_dev: Validation labels
-            pred_model: Prediction model
-            parameters: Parameters for DVRL
-            device: Device to run the model
-            target_prompt_id: Prompt id for the target
-        """
+        Initializes the DVRL model.
 
+        Args:
+            dvrl_data (dict): Dictionary containing training and validation data.
+            pred_model (nn.Module): Prediction model.
+            parameters (dict): Parameters for DVRL.
+            device (str): Device to run the model ('cpu' or 'cuda').
+            target_prompt_id (int): Prompt ID for the target.
+            temp_dir (str, optional): Directory to save temporary files. If None, a temporary directory is created.
+        """
         self.x_source = dvrl_data['x_source']
         self.y_source = dvrl_data['y_source'].reshape(-1, 1)
         self.x_dev = dvrl_data['x_dev']
@@ -46,20 +51,17 @@ class Dvrl(object):
         self.target_prompt_id = target_prompt_id
 
         # Network parameters for data value estimator
-        self.hidden_dim = parameters['hidden_dim']
-        self.comb_dim = parameters['comb_dim']
-        self.outter_iterations = parameters['iterations']
-        self.act_fn = parameters['activation']
-        self.layer_number = parameters['layer_number']
-        self.inner_iterations = parameters['inner_iterations']
-        self.batch_size = int(np.min([parameters['batch_size'], self.x_source.shape[0]]))
-        self.learning_rate = parameters['learning_rate']
-        self.batch_size_predictor = parameters['batch_size_predictor']
-        if 'moving_average_window' in parameters:
-            self.moving_average = True
-            self.moving_average_window = parameters['moving_average_window']
-        else:
-            self.moving_average = False
+        self.hidden_dim = parameters.get('hidden_dim', 128)
+        self.comb_dim = parameters.get('comb_dim', 64)
+        self.outer_iterations = parameters.get('iterations', 1000)
+        self.activation_fn = parameters.get('activation', 'relu')
+        self.layer_number = parameters.get('layer_number', 2)
+        self.inner_iterations = parameters.get('inner_iterations', 100)
+        self.batch_size = int(min(parameters.get('batch_size', 32), self.x_source.shape[0]))
+        self.learning_rate = parameters.get('learning_rate', 1e-3)
+        self.batch_size_predictor = parameters.get('batch_size_predictor', 32)
+        self.moving_average = 'moving_average_window' in parameters
+        self.moving_average_window = parameters.get('moving_average_window', 100)
 
         # Basic parameters
         self.epsilon = 1e-8  # Adds to the log to avoid overflow
@@ -68,19 +70,22 @@ class Dvrl(object):
         self.label_dim = self.y_source.shape[1]
 
         self.pred_model = pred_model
-        self.final_model = pred_model
+        self.final_model = copy.deepcopy(pred_model)
 
-        self.wandb = parameters['wandb']
+        self.use_wandb = parameters.get('wandb', False)
 
-        # save initial model
-        print('Saving the initial model...')
-        os.makedirs('tmp', exist_ok=True)
-        torch.save(self.pred_model.state_dict(), f'tmp/init_model{self.target_prompt_id}.pth')
+        # Use temporary directory for saving models
+        self.temp_dir = temp_dir or tempfile.mkdtemp()
+        self.init_model_path = f'{self.temp_dir}/init_model_{self.target_prompt_id}.pth'
 
-        # train baseline model
+        # Save initial model
+        logger.info('Saving the initial model...')
+        torch.save(self.pred_model.state_dict(), self.init_model_path)
+
+        # Train baseline model
         self.ori_model = copy.deepcopy(self.pred_model)
-        self.ori_model.load_state_dict(torch.load(f'tmp/init_model{self.target_prompt_id}.pth'))
-        print('Training the original model...')
+        self.ori_model.load_state_dict(torch.load(self.init_model_path))
+        logger.info('Training the original model...')
         fit_func(
             self.ori_model,
             self.x_source,
@@ -90,9 +95,10 @@ class Dvrl(object):
             self.device
         )
 
+        # Train validation model
         self.val_model = copy.deepcopy(self.pred_model)
-        self.val_model.load_state_dict(torch.load(f'tmp/init_model{self.target_prompt_id}.pth'))
-        print('Training the validation model...')
+        self.val_model.load_state_dict(torch.load(self.init_model_path))
+        logger.info('Training the validation model...')
         fit_func(
             self.val_model,
             self.x_dev,
@@ -102,29 +108,26 @@ class Dvrl(object):
             self.device
         )
 
+    def train_dvrl(self, metric: str = 'qwk') -> None:
+        """
+        Trains the DVRL model.
 
-    def train_dvrl(
-        self,
-        metric: str = 'qwk',
-    ) -> None:
-        """
-        Train the DVRL model
         Args:
-            metric: Metric to use for the DVRL
-                mse or qwk or corr
+            metric (str): Metric to use for the DVRL ('mse', 'qwk', or 'corr').
         """
-        # selection network
+        # Initialize the data value estimator network
         self.value_estimator = DataValueEstimator(
-            self.data_dim+self.label_dim,
-            self.hidden_dim,
-            self.comb_dim,
-            self.layer_number,
-            self.act_fn
+            input_dim=self.data_dim + self.label_dim,
+            hidden_dim=self.hidden_dim,
+            comb_dim=self.comb_dim,
+            layer_number=self.layer_number,
+            activation_fn=self.activation_fn
         ).to(self.device)
+
         dvrl_criterion = DvrlLoss(self.epsilon, self.threshold).to(self.device)
         dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.learning_rate)
 
-        # baseline performance
+        # Compute baseline performance
         y_valid_hat = pred_func(
             self.ori_model,
             self.x_dev,
@@ -138,8 +141,8 @@ class Dvrl(object):
         elif metric == 'corr':
             valid_perf = np.corrcoef(self.y_dev.flatten(), y_valid_hat.flatten())[0, 1]
         else:
-            raise ValueError('Metric not supported')
-        print(f'Baseline Performance {metric}: {valid_perf:.3f}')
+            raise ValueError('Unsupported metric. Choose from "mse", "qwk", or "corr".')
+        logger.info(f'Baseline Performance ({metric}): {valid_perf:.3f}')
 
         # Prediction differences
         y_source_valid_pred = pred_func(
@@ -150,35 +153,32 @@ class Dvrl(object):
         )
         y_pred_diff = np.abs(self.y_source - y_source_valid_pred)
 
-        if self.moving_average:
-            baseline = 0
-        else:
-            baseline = valid_perf
-        
-        for iter in tqdm(range(self.outter_iterations)):
+        # Initialize baseline for reward computation
+        baseline = 0 if self.moving_average else valid_perf
+
+        for iteration in tqdm(range(self.outer_iterations), desc='Training DVRL'):
             self.value_estimator.train()
             dvrl_optimizer.zero_grad()
 
             # Batch selection
-            batch_idx = np.random.permutation(self.x_source.shape[0])[:self.batch_size]
+            batch_indices = np.random.permutation(self.x_source.shape[0])[:self.batch_size]
+            x_batch = torch.tensor(self.x_source[batch_indices], dtype=torch.float32).to(self.device)
+            y_batch = torch.tensor(self.y_source[batch_indices], dtype=torch.float32).to(self.device)
+            y_hat_batch = torch.tensor(y_pred_diff[batch_indices], dtype=torch.float32).to(self.device)
 
-            x_batch = torch.tensor(self.x_source[batch_idx], dtype=torch.float).to(self.device)
-            y_batch = torch.tensor(self.y_source[batch_idx], dtype=torch.float).to(self.device)
-            y_hat_batch = torch.tensor(y_pred_diff[batch_idx], dtype=torch.float).to(self.device)
-
-            # Generates the selection probability
+            # Generate selection probabilities
             est_dv_curr = self.value_estimator(x_batch, y_batch, y_hat_batch).squeeze()
 
-            # Samples the selection probability
-            sel_prob_curr = np.random.binomial(1, est_dv_curr.detach().cpu().numpy(), est_dv_curr.shape)
-            # Exception (When selection probability is 0)
+            # Sample selection probabilities
+            sel_prob_curr = np.random.binomial(1, est_dv_curr.detach().cpu().numpy())
             if np.sum(sel_prob_curr) == 0:
-                print('All zero selection probability')
-                est_dv_curr = 0.5 * np.ones(np.shape(est_dv_curr))
-                sel_prob_curr = np.random.binomial(1, est_dv_curr, est_dv_curr.shape)
+                logger.warning('All zero selection probability. Adjusting selection probabilities.')
+                est_dv_curr = torch.full_like(est_dv_curr, 0.5)
+                sel_prob_curr = np.random.binomial(1, est_dv_curr.cpu().numpy())
 
-            new_model = self.pred_model
-            new_model.load_state_dict(torch.load(f'tmp/init_model{self.target_prompt_id}.pth'))
+            # Train a new model with the selected data
+            new_model = copy.deepcopy(self.pred_model)
+            new_model.load_state_dict(torch.load(self.init_model_path))
             fit_func(
                 new_model,
                 x_batch,
@@ -186,8 +186,10 @@ class Dvrl(object):
                 self.batch_size_predictor,
                 self.inner_iterations,
                 self.device,
-                sel_prob_curr,
+                sel_prob_curr
             )
+
+            # Validate the new model
             y_valid_hat = pred_func(
                 new_model,
                 self.x_dev,
@@ -195,46 +197,53 @@ class Dvrl(object):
                 self.device
             )
 
-            # reward computation
+            # Compute performance metric
             if metric == 'mse':
                 dvrl_perf = metrics.mean_squared_error(self.y_dev, y_valid_hat)
             elif metric == 'qwk':
                 dvrl_perf = calc_qwk(self.y_dev, y_valid_hat, self.target_prompt_id, 'score')
             elif metric == 'corr':
                 dvrl_perf = np.corrcoef(self.y_dev.flatten(), y_valid_hat.flatten())[0, 1]
+
+            # Compute reward
             reward = dvrl_perf - baseline
 
-            # update the selection network
-            reward = torch.tensor([reward]).to(self.device)
-            sel_prob_curr = torch.tensor(sel_prob_curr, dtype=torch.float).to(self.device)
-            loss = dvrl_criterion(est_dv_curr, sel_prob_curr, reward)
+            # Update the selection network
+            reward_tensor = torch.tensor([reward], dtype=torch.float32).to(self.device)
+            sel_prob_curr_tensor = torch.tensor(sel_prob_curr, dtype=torch.float32).to(self.device)
+            loss = dvrl_criterion(est_dv_curr, sel_prob_curr_tensor, reward_tensor)
             loss.backward()
             dvrl_optimizer.step()
 
-            # update the baseline
+            # Update the baseline
             if self.moving_average:
-                baseline = ((self.moving_average_window - 1) / self.moving_average_window) * baseline + (dvrl_perf / self.moving_average_window)
+                baseline = (
+                    ((self.moving_average_window - 1) * baseline + dvrl_perf) / self.moving_average_window
+                )
 
-            print(f'Iteration: {iter+1}, Reward: {reward.item():.3f}, DVRL Loss: {loss.item():.3f}, Prob MAX: {torch.max(est_dv_curr).item():.3f}, Prob MIN: {torch.min(est_dv_curr).item():.3f}, {metric}: {dvrl_perf:.3f}')
+            logger.info(
+                f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
+                f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
+                f'{metric.upper()}: {dvrl_perf:.3f}'
+            )
 
-            if self.wandb:
+            if self.use_wandb:
                 wandb.log(
                     {
-                        'Reward': reward.item(),
+                        'Reward': reward,
                         'DVRL Loss': loss.item(),
-                        'Prob MAX': torch.max(est_dv_curr).item(),
-                        'Prob MIN': torch.min(est_dv_curr).item(),
-                        metric: dvrl_perf
+                        'Prob MAX': est_dv_curr.max().item(),
+                        'Prob MIN': est_dv_curr.min().item(),
+                        metric.upper(): dvrl_perf
                     }
                 )
 
-
         # Training the final model
-        x_source = torch.tensor(self.x_source, dtype=torch.float).to(self.device)
-        y_source = torch.tensor(self.y_source, dtype=torch.float).to(self.device)
-        y_pred_diff = torch.tensor(y_pred_diff, dtype=torch.float).to(self.device)
-        final_data_value = self.value_estimator(x_source, y_source, y_pred_diff).squeeze()
-        self.final_model.load_state_dict(torch.load(f'tmp/init_model{self.target_prompt_id}.pth'))
+        x_source_tensor = torch.tensor(self.x_source, dtype=torch.float32).to(self.device)
+        y_source_tensor = torch.tensor(self.y_source, dtype=torch.float32).to(self.device)
+        y_pred_diff_tensor = torch.tensor(y_pred_diff, dtype=torch.float32).to(self.device)
+        final_data_value = self.value_estimator(x_source_tensor, y_source_tensor, y_pred_diff_tensor).squeeze()
+        self.final_model.load_state_dict(torch.load(self.init_model_path))
         fit_func(
             self.final_model,
             self.x_source,
@@ -242,46 +251,48 @@ class Dvrl(object):
             self.batch_size_predictor,
             self.inner_iterations,
             self.device,
-            final_data_value
+            final_data_value.detach().cpu().numpy()
         )
-
 
     def dvrl_valuator(self, x_source: np.ndarray, y_source: np.ndarray) -> np.ndarray:
         """
-        Estimate the given data value.
+        Estimates the data value for the given source data.
+
         Args:
-            x_source: Training data
-            y_source: Training labels
+            x_source (np.ndarray): Source data features.
+            y_source (np.ndarray): Source data labels.
+
         Returns:
-            data_value: Estimated data value
+            np.ndarray: Estimated data values.
         """
-        x_source = torch.tensor(x_source, dtype=torch.float).to(self.device)
-        y_source = torch.tensor(y_source, dtype=torch.float).view(-1, 1).to(self.device)
+        x_source_tensor = torch.tensor(x_source, dtype=torch.float32).to(self.device)
+        y_source_tensor = torch.tensor(y_source.reshape(-1, 1), dtype=torch.float32).to(self.device)
 
-        # first calculate the prection difference
-        output = self.val_model(x_source)
-        y_pred_diff = torch.abs(y_source - output)
+        # Calculate prediction difference
+        with torch.no_grad():
+            output = self.val_model(x_source_tensor)
+            y_pred_diff = torch.abs(y_source_tensor - output)
 
-        # predict the value
-        data_value = self.value_estimator(x_source, y_source, y_pred_diff)
-        
-        return data_value.cpu().detach().numpy()
-    
+        # Predict data values
+        self.value_estimator.eval()
+        with torch.no_grad():
+            data_value = self.value_estimator(x_source_tensor, y_source_tensor, y_pred_diff).squeeze()
+
+        return data_value.cpu().numpy()
 
     def dvrl_predict(self, x_target: np.ndarray) -> np.ndarray:
         """
-        Predict the given data using the DVRL model
-        Args:
-            x_target: target data
-        Returns:
-            target_results: Predicted results
-        """
+        Predicts the target data using the trained DVRL model.
 
-        test_results = pred_func(
+        Args:
+            x_target (np.ndarray): Target data features.
+
+        Returns:
+            np.ndarray: Predicted results.
+        """
+        return pred_func(
             self.final_model,
             x_target,
             self.batch_size_predictor,
             self.device
         )
-
-        return test_results

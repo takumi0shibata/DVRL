@@ -71,3 +71,64 @@ class DataValueEstimator(nn.Module):
         x = torch.sigmoid(self.output_layer(x))
         
         return x
+    
+
+class DataValueEstimatorV2(nn.Module):
+    def __init__(
+        self,
+        input_dim: int,
+        hidden_dim: int,
+        layer_number: int,
+        activation_fn: callable
+    ) -> None:
+        """
+        Args:
+          input_dim: The dimensionality of the input features (x_input and y_input combined).
+          hidden_dim: The dimensionality of the hidden layers.
+          comb_dim: The dimensionality of the combined layer.
+          layer_number: Total number of layers in the MLP before combining with y_hat.
+          act_fn: Activation function to use.
+        """
+
+        super(DataValueEstimatorV2, self).__init__()
+        
+        self.act_fn = activation_fn
+        # Initial layer
+        self.initial_layer = nn.Linear(input_dim, hidden_dim)
+        # Intermediate layers
+        self.intermediate_layers = nn.ModuleList(
+            [nn.Linear(hidden_dim, hidden_dim) for _ in range(layer_number - 3)]
+        )
+        # Output layer
+        self.output_layer = nn.Linear(hidden_dim, 1)
+        self.output_act_fn = nn.Softplus()
+        # self.output_act_fn = nn.ReLU()
+        
+    def forward(
+        self,
+        x_input: torch.Tensor,
+        y_input: torch.Tensor,
+    ) -> torch.Tensor:
+        """
+        Args:
+          x_input: Input features.
+          y_input: Target labels.
+          y_hat_input: Predicted labels or some representation thereof.
+          
+        Returns:
+          Tensor: The estimated data values.
+        """
+        inputs = torch.cat((x_input, y_input), dim=1)
+        
+        # Initial layer
+        x = self.act_fn(self.initial_layer(inputs))
+        
+        # Intermediate layers
+        for layer in self.intermediate_layers:
+            x = self.act_fn(layer(x))
+        
+        # Output layer with sigmoid activation
+        x = self.output_layer(x)
+        x = self.output_act_fn(x)
+        
+        return x
