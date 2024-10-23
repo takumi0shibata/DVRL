@@ -11,8 +11,10 @@ import json
 
 from dvrl import dvrl_v2
 from utils.general_utils import set_seed
-from utils.load_data import load_data_DVRL_v2
+from utils.dataset import EssayDataset
+from utils.create_embedding_feautres import feature_embedding
 from dvrl.predictor import MLP
+from models.features import FeaturesModel
 
 
 def main(args):
@@ -27,20 +29,31 @@ def main(args):
     # Step1. Load Data
     ###################################################
     print('Loading data...')
-    dvrl_data = load_data_DVRL_v2(
-        f'data/cross_prompt_attributes/{target_prompt_id}/',
-        args.attribute_name,
-        args.embedding_model,
-        device,
-        devsize=args.dev_size
-    )
+    dataset = EssayDataset('data/training_set_rel3.xlsx', 'data/hand_crafted_v3.csv', 'data/readability_features.csv')
+    dataset.preprocess_dataframe()
+    train_data, dev_data, test_data = dataset.cross_prompt_split(target_prompt_set=args.target_prompt_id, dev_size=args.dev_size)
+    train_data['simple_embedding'] = feature_embedding(train_data['essay'])
+    dev_data['simple_embedding'] = feature_embedding(dev_data['essay'])
+    test_data['simple_embedding'] = feature_embedding(test_data['essay'])
+    train_data['ridley_feature'] = np.concatenate([train_data['feature'], train_data['readability']], axis=1)
+    dev_data['ridley_feature'] = np.concatenate([dev_data['feature'], dev_data['readability']], axis=1)
+    test_data['ridley_feature'] = np.concatenate([test_data['feature'], test_data['readability']], axis=1)
+    cluster_assignments, cluster_centroids = dataset.clustering(train_data['ridley_feature'], np.array(train_data['essay_set']), np.array(train_data['original_score']))
+    print(f'dev score max: {np.max(dev_data["scaled_score"])}')
+    print(f'dev score min: {np.min(dev_data["scaled_score"])}')
+    print(f'embeeding shape: {train_data["embedding"].shape}')
+    print(f'feature shape: {train_data["feature"].shape}')
+    print(f'readability shape: {train_data["readability"].shape}')
+    print(f"number of clusters: {len(np.unique(cluster_assignments))}")
+    print(f"average cluster size: {len(train_data['embedding']) / len(np.unique(cluster_assignments))}")
 
     ###################################################
     # Step2. Training DVRL
     ###################################################
     # Create predictor
     print('Creating predictor model...')
-    pred_model = MLP(input_feature=dvrl_data['x_source'].shape[1]).to(device)
+    # pred_model = MLP(input_feature=train_data['ridley_feature'].shape[1]).to(device)
+    pred_model = FeaturesModel().to(device)
 
     # Network parameters
     print('Initialize DVRL framework...')
@@ -64,7 +77,10 @@ def main(args):
 
     # Initialize DVRL
     dvrl_class = dvrl_v2.Dvrl(
-        dvrl_data,
+        train_data,
+        dev_data,
+        cluster_assignments,
+        cluster_centroids,
         pred_model,
         dvrl_params,
         device,
@@ -82,8 +98,8 @@ def main(args):
     os.makedirs(f'outputs/Estimated_Lambda/DVRLv2-{args.input_seq}', exist_ok=True)
     np.save(f'outputs/Estimated_Lambda/DVRLv2-{args.input_seq}/estimated_lambda_value{target_prompt_id}.npy', data_value)
 
-    qwk_proposed = dvrl_class.predict(dvrl_data['x_target'], dvrl_data['y_target'])
-    qwk_conventional = dvrl_class.predict_baseline(dvrl_data['x_target'], dvrl_data['y_target'])
+    qwk_proposed = dvrl_class.predict(test_data['ridley_feature'], test_data['scaled_score'])
+    qwk_conventional = dvrl_class.predict_baseline(test_data['ridley_feature'], test_data['scaled_score'])
     # Save results to a file
     results = {
         'QWK Proposed': f'{qwk_proposed:.4f}',
@@ -94,7 +110,7 @@ def main(args):
     # Create a directory for results if it doesn't exist
     os.makedirs('tmp_results', exist_ok=True)
     # Save results to a JSON file
-    result_file = f'tmp_results/dvrl_results_prompt{target_prompt_id}.json'
+    result_file = os.path.join('tmp_results', f'dvrl_results_prompt{target_prompt_id}.json')
     with open(result_file, 'w') as f:
         json.dump(results, f, indent=4)
     

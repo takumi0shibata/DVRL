@@ -25,7 +25,10 @@ class Dvrl:
 
     def __init__(
         self,
-        dvrl_data: dict,
+        train_data: dict,
+        dev_data: dict,
+        cluster_assignments: np.ndarray,
+        cluster_centroids: np.ndarray,
         pred_model: nn.Module,
         parameters: dict,
         device: str,
@@ -43,12 +46,12 @@ class Dvrl:
             target_prompt_id (int): Prompt ID for the target.
             temp_dir (str, optional): Directory to save temporary files. If None, a temporary directory is created.
         """
-        self.x_source = dvrl_data['x_source']
-        self.y_source = dvrl_data['y_source'].reshape(-1, 1)
-        self.cluster_assignments = dvrl_data['cluster_assignments']
-        self.cluster_centroids = dvrl_data['cluster_centroids']
-        self.x_dev = dvrl_data['x_dev']
-        self.y_dev = dvrl_data['y_dev'].reshape(-1, 1)
+        self.x_source = train_data['ridley_feature']
+        self.y_source = np.array(train_data['scaled_score']).reshape(-1, 1)
+        self.cluster_assignments = cluster_assignments
+        self.cluster_centroids = cluster_centroids
+        self.x_dev = dev_data['ridley_feature']
+        self.y_dev = np.array(dev_data['scaled_score']).reshape(-1, 1)
         self.device = device
         self.target_prompt_id = target_prompt_id
 
@@ -63,7 +66,6 @@ class Dvrl:
 
         # Basic parameters
         self.epsilon = 1e-8  # Adds to the log to avoid overflow
-        self.threshold = 0.9  # Encourages exploration
         self.data_dim = self.x_source.shape[1]
         self.label_dim = self.y_source.shape[1]
 
@@ -148,7 +150,7 @@ class Dvrl:
             y_input = torch.tensor(y_input, dtype=torch.float32).to(self.device)
             # Generate selection probabilities
             estimated_lambda = self.value_estimator(x_input, y_input).squeeze()
-            # logger.info(f'Estimated Lambda: {estimated_lambda}')
+            logger.info(f'Estimated Lambda: {estimated_lambda}')
 
             # Create Poisson distribution and sample number of data points per cluster
             poisson_dist = torch.distributions.Poisson(estimated_lambda)
@@ -180,7 +182,7 @@ class Dvrl:
             
             if len(x_selected) == 0:
                 dvrl_perf = baseline  # No data selected, performance is baseline
-                reward = 0
+                reward = 0.001  # Small reward to encourage exploration
             else:
                 # Concatenate selected data
                 x_selected = np.concatenate(x_selected, axis=0)
