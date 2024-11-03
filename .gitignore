@@ -1,2 +1,2 @@
-src/.embedding_cache
-.venv
+src/.embedding_cache/
+.venv/
