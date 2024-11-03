@@ -161,10 +161,7 @@ class EssayDataset:
         # Compute embeddings for source and target datasets
         source_embeddings_dict = compute_embeddings(source_data, cache_dir, tokenizer, model)
         target_embeddings_dict = compute_embeddings(target_data, cache_dir, tokenizer, model)
-        
-        # Get lists of IDs and embeddings in order
-        source_ids = source_data['essay_id'].to_list()
-        source_embeddings_array = np.vstack([source_embeddings_dict[essay_id] for essay_id in source_ids])
+        all_embeddings_dict = source_embeddings_dict | target_embeddings_dict
         
         target_ids = target_data['essay_id'].to_list()
         target_embeddings_array = np.vstack([target_embeddings_dict[essay_id] for essay_id in target_ids])
@@ -194,22 +191,33 @@ class EssayDataset:
         # Get IDs and embeddings for dev and test sets
         test_indices = [i for i in range(len(target_ids)) if i not in dev_indices]
         
-        dev_embeddings_array = target_embeddings_array[dev_indices]
-        test_embeddings_array = target_embeddings_array[test_indices]
-        
         # Function to extract data and include embeddings
-        def extract_data(df, embeddings_array):
+        def extract_data(df, embeddings_dict):
+            # Sort feature and readability DataFrames by essay_id
+            df = df.sort('essay_id')
             feature = self.feature_data.filter(pl.col('essay_id').is_in(df['essay_id']))
             readability = self.readability_data.filter(pl.col('essay_id').is_in(df['essay_id']))
+            embeddings = np.vstack([embeddings_dict[essay_id] for essay_id in df['essay_id']])
+
+            # # Print for verification
+            # print(df['essay_id'].to_list())
+            # print(feature['essay_id'].to_list())
+            # print(readability['essay_id'].to_list())
+
+            # Assertions to ensure data integrity
+            assert len(df) == len(feature) == len(readability) == embeddings.shape[0], "Data lengths must match."
+            assert df['essay_id'].to_list() == feature['essay_id'].to_list(), "Essay IDs must match."
+            assert df['essay_id'].to_list() == readability['essay_id'].to_list(), "Essay IDs must match."
+
             return {
-                'essay_id': df['essay_id'].to_list(),
-                'essay_set': df['essay_set'].to_list(),
-                'essay': df['essay'].to_list(),
-                'original_score': df['original_score'].to_list(),
-                'scaled_score': df['scaled_score'].to_list(),
+                'essay_id': df['essay_id'].to_numpy(),
+                'essay_set': df['essay_set'].to_numpy(),
+                'essay': df['essay'].to_numpy(),
+                'original_score': df['original_score'].to_numpy(),
+                'scaled_score': df['scaled_score'].to_numpy(),
                 'feature': feature.drop(['essay_id', 'essay_set']).to_numpy(),
                 'readability': readability.drop(['essay_id']).to_numpy(),
-                'embedding': embeddings_array,
+                'embedding': embeddings,
             }
 
         # Prepare DataFrames for train, dev, and test datasets
@@ -218,9 +226,9 @@ class EssayDataset:
         test_data_df = target_data[test_indices]
 
         # Extract data and include embeddings
-        train_data = extract_data(train_data_df, source_embeddings_array)
-        dev_data = extract_data(dev_data_df, dev_embeddings_array)
-        test_data = extract_data(test_data_df, test_embeddings_array)
+        train_data = extract_data(train_data_df, all_embeddings_dict)
+        dev_data = extract_data(dev_data_df, all_embeddings_dict)
+        test_data = extract_data(test_data_df, all_embeddings_dict)
 
         return train_data, dev_data, test_data
     

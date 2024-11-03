@@ -122,7 +122,7 @@ def calc_qwk(y_true: list, y_pred: list, prompt_id: int, attribute: str, weights
 
     minscore, maxscore = get_min_max_scores()[prompt_id][attribute]
 
-    y_true = np.round((maxscore - minscore) * np.array(y_true) + minscore)
+    y_true = np.round((maxscore - minscore) * np.array(y_true) + minscore).flatten()
     y_pred = np.round((maxscore - minscore) * np.array(y_pred) + minscore).flatten()
     
     return cohen_kappa_score(y_true, y_pred, weights=weights, labels=[i for i in range(minscore, maxscore+1)])

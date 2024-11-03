@@ -66,7 +66,7 @@ class Dvrl:
 
         # Basic parameters
         self.epsilon = 1e-8  # Adds to the log to avoid overflow
-        self.data_dim = self.x_source.shape[1]
+        self.data_dim = self.cluster_centroids.shape[1]
         self.label_dim = self.y_source.shape[1]
 
         self.pred_model = pred_model
@@ -132,6 +132,9 @@ class Dvrl:
 
         # Initialize baseline for reward computation
         baseline = valid_perf
+
+        # Get cluster sizes
+        cluster_sizes = np.array([len(np.where(self.cluster_assignments == cluster)[0]) for cluster in np.sort(np.unique(self.cluster_assignments))])
 
         for iteration in range(self.outer_iterations + 1):
             self.value_estimator.train()
@@ -225,9 +228,10 @@ class Dvrl:
 
             # Ensure reward is a tensor
             reward_tensor = torch.tensor([reward], dtype=torch.float32).to(self.device)
+            cluster_sizes = torch.tensor(cluster_sizes.tolist(), dtype=torch.float32).to(self.device)
 
             # Compute the loss
-            loss = dvrl_criterion(sampling_data_num, estimated_lambda, reward_tensor)
+            loss = dvrl_criterion(sampling_data_num, estimated_lambda, reward_tensor, cluster_sizes)
 
             # Backpropagate and update the policy network
             loss.backward()

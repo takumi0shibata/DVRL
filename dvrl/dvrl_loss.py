@@ -57,7 +57,7 @@ class DvrlLossV2(nn.Module):
         self.gamma = gamma
         self.penalty = penalty
 
-    def forward(self, sampling_data_num, estimated_lambda, reward):
+    def forward(self, sampling_data_num, estimated_lambda, reward, cluster_size):
         """
         Calculate the loss for the two-stage sampling process.
         Args:
@@ -77,14 +77,16 @@ class DvrlLossV2(nn.Module):
         log_factorial = torch.lgamma(sampling_data_num + 1)
 
         # Compute the log probability per cluster
-        log_prob = -estimated_lambda + sampling_data_num * torch.log(estimated_lambda + self.epsilon) - log_factorial
+        log_prob = -estimated_lambda + sampling_data_num * torch.log(estimated_lambda + self.epsilon) - log_factorial \
+                    #   - torch.lgamma(cluster_size + 1) + torch.lgamma(cluster_size - sampling_data_num + 1) + torch.lgamma(sampling_data_num + 1)
 
         # Sum log probabilities over all clusters
         total_log_prob = log_prob.sum()
 
         if self.penalty:
             # Add penalty to encourage higher estimated_lambda
-            lambda_penalty = -self.gamma * estimated_lambda.mean()
+            # lambda_penalty = -self.gamma * estimated_lambda.mean()
+            lambda_penalty = -self.gamma * torch.std(estimated_lambda)
             # Compute the loss using the REINFORCE algorithm
             dve_loss = -reward * total_log_prob + lambda_penalty
 

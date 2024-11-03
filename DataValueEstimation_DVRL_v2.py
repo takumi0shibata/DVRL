@@ -11,7 +11,7 @@ import json
 
 from dvrl import dvrl_v2
 from utils.general_utils import set_seed
-from utils.dataset import EssayDataset
+from dvrl.dataset import EssayDataset
 from utils.create_embedding_feautres import feature_embedding
 from dvrl.predictor import MLP
 from models.features import FeaturesModel
@@ -46,13 +46,15 @@ def main(args):
     print(f'readability shape: {train_data["readability"].shape}')
     print(f"number of clusters: {len(np.unique(cluster_assignments))}")
     print(f"average cluster size: {len(train_data['embedding']) / len(np.unique(cluster_assignments))}")
+    print('dev data:')
+    print(f"    {dev_data['original_score']}")
 
     ###################################################
     # Step2. Training DVRL
     ###################################################
     # Create predictor
     print('Creating predictor model...')
-    # pred_model = MLP(input_feature=train_data['ridley_feature'].shape[1]).to(device)
+    # pred_model = MLP(input_feature=train_data['simple_embedding'].shape[1]).to(device)
     pred_model = FeaturesModel().to(device)
 
     # Network parameters
@@ -119,7 +121,7 @@ def main(args):
     # Also print results to console
     print(f'QWK Proposed: {qwk_proposed:.4f}')
     print(f'QWK Conventional: {qwk_conventional:.4f}')
-    print(f'Estimated Lambda: {data_value}')
+    print(f'Estimated Lambda: {np.round(data_value, 2)}')
 
     if args.wandb:
         wandb.alert(title=args.wandb_pjname, text='Training finished!')

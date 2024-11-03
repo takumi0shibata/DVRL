@@ -9,7 +9,7 @@ class DataValueEstimator(nn.Module):
         hidden_dim: int,
         comb_dim: int,
         layer_number: int,
-        act_fn: callable
+        activation_fn: callable
     ) -> None:
         """
         Args:
@@ -22,7 +22,7 @@ class DataValueEstimator(nn.Module):
 
         super(DataValueEstimator, self).__init__()
         
-        self.act_fn = act_fn
+        self.act_fn = activation_fn
         # Initial layer
         self.initial_layer = nn.Linear(input_dim, hidden_dim)
         # Intermediate layers
