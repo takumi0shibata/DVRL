@@ -8,16 +8,22 @@ import torch
 import numpy as np
 import argparse
 import torch
-import torch.nn as nn
 import wandb
 import polars as pl
 
-from dvrl import dvrl_v3
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.general_utils import set_seed
 from dvrl.dataset import EssayDataset
 from dvrl.prompt_dataset import PromptDataset
 from dvrl.predictor import MLP
 from models.features import FeaturesModel
+
+from utils.dvrl_utils import (
+    fit_func,
+    pred_func,
+    calc_qwk,
+)
 
 
 def main(args):
@@ -35,7 +41,7 @@ def main(args):
     print('Loading essay data...')
     dataset = EssayDataset('data/training_set_rel3.xlsx', 'data/hand_crafted_v3.csv', 'data/readability_features.csv')
     dataset.preprocess_dataframe()
-    train_data, dev_data, test_data = dataset.cross_prompt_split(target_prompt_set=args.target_prompt_id, dev_size=args.dev_size)
+    train_data, dev_data, test_data = dataset.cross_prompt_split(target_prompt_set=args.target_prompt_id, dev_size=args.dev_size, cache_dir='src/.embedding_cache')
     if args.input_seq == 'pos':
         train_data['ridley_feature'] = np.concatenate([train_data['feature'], train_data['readability']], axis=1)
         dev_data['ridley_feature'] = np.concatenate([dev_data['feature'], dev_data['readability']], axis=1)
@@ -64,67 +70,82 @@ def main(args):
     print(f'    Number of training clusters: {len(np.unique(train_data["cluster"]))}')
 
     ###################################################
-    # Step2. Training DVRL
+    # Step2. Training MLP
     ###################################################
     # Create predictor
     print('Creating predictor model...')
     if args.input_seq == 'word':
-        pred_model = MLP(input_feature=train_data['embedding'].shape[1]).to(device)
+        model = MLP(input_feature=train_data['embedding'].shape[1]).to(device)
     elif args.input_seq == 'pos':
-        pred_model = FeaturesModel().to(device)
+        model = FeaturesModel().to(device)
 
-    # Network parameters
-    print('Initialize DVRL framework...')
-    dvrl_params = {
-        'hidden_dim': 100,
-        'comb_dim': 64,
-        'iterations': 1000,
-        'activation': nn.Tanh(),
-        'layer_number': 5,
-        'learning_rate': 1e-3,
-        'inner_iterations': 100,
-        'batch_size_predictor': 512,
-        'wandb': args.wandb,
-    }
+    # Select training data
+    df = pl.read_csv(f'outputs/dvrl_v3/estimated_values_{target_prompt_id}_{args.input_seq}_{args.seed}.csv')
+    dev_qwks = []
+    test_qwks = []
+    for threshold in np.arange(0.9, -0.1, -0.1):
+        filtered_clusters = df.filter(pl.col('values') >= threshold)['cluster'].to_numpy()
+        if len(filtered_clusters) == 0:
+            if args.wandb:
+                wandb.log({
+                    'Size of training data': 0,
+                    'QWK[DEV]': 0.0,
+                    'QWK[TEST]': 0.0,
+                })
+            continue
+        cluster_mask = np.isin(train_data['cluster'], filtered_clusters)
+        if args.input_seq == 'word':
+            selected_train_data = train_data['embedding'][cluster_mask]
+        elif args.input_seq == 'pos':
+            selected_train_data = train_data['ridley_feature'][cluster_mask]
+        selected_train_label = train_data['scaled_score'][cluster_mask]
 
-    if args.wandb:
-        wandb.init(
-            project=args.pjname,
-            name=args.run_name + f'_{target_prompt_id}_{args.input_seq}',
-            config=dict(args._get_kwargs())|dvrl_params
+        # Train model
+        print(f'Training model with clusters having values >= {threshold}...')
+        fit_func(
+            model,
+            selected_train_data,
+            selected_train_label,
+            batch_size=256,
+            epochs=100,
+            device=device,
         )
 
-    
-    if args.input_seq == 'word':
-        x_train = train_data['embedding']
-        x_dev = dev_data['embedding']
-    elif args.input_seq == 'pos':
-        x_train = train_data['ridley_feature']
-        x_dev = dev_data['ridley_feature']
-    
-    # Initialize DVRL
-    dvrl_class = dvrl_v3.Dvrl(
-        train_data,
-        x_train,
-        train_data['scaled_score'],
-        x_dev,
-        dev_data['scaled_score'],
-        prompt_data,
-        pred_model,
-        dvrl_params,
-        device,
-        target_prompt_id
-    )
+        # Predict
+        print('Predicting...')
+        y_dev_pred = pred_func(
+            model,
+            dev_data['ridley_feature'] if args.input_seq == 'pos' else dev_data['embedding'],
+            batch_size=256,
+            device=device,
+        )
+        y_test_pred = pred_func(
+            model,
+            test_data['ridley_feature'] if args.input_seq == 'pos' else test_data['embedding'],
+            batch_size=256,
+            device=device,
+        )
 
-    # Train DVRL
-    print('Training DVRL...')
-    outputs = dvrl_class.train_dvrl(args.metric)
+        # Calculate QWK
+        print('Calculating QWK...')
+        dev_qwk = calc_qwk(dev_data['scaled_score'], y_dev_pred, target_prompt_id, args.attribute_name)
+        test_qwk = calc_qwk(test_data['scaled_score'], y_test_pred, target_prompt_id, args.attribute_name)
 
-    # Save DVRL
-    print('Saving DVRL...')
-    output_dir = './outputs/dvrl_v3'
-    os.makedirs(output_dir, exist_ok=True)
-    pl.DataFrame(outputs).write_csv(os.path.join(output_dir, f'estimated_values_{target_prompt_id}_{args.input_seq}_{args.seed}.csv'))
+        dev_qwks.append(dev_qwk)
+        test_qwks.append(test_qwk)
+
+        print(f'    Dev QWK: {dev_qwk}')
+        print(f'    Test QWK: {test_qwk}')
+
+        # log wandb
+        data_num = len(selected_train_data)
+        if args.wandb:
+            wandb.log({
+                'Size of training data': data_num,
+                'QWK[DEV]': dev_qwk,
+                'QWK[TEST]': test_qwk,
+            })
+    
 
     if args.wandb:
         wandb.alert(title=args.wandb_pjname, text='Training finished!')
@@ -135,7 +156,7 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser(description="DVRL")
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--pjname', type=str, default='DVRL-v2-test')
+    parser.add_argument('--pjname', type=str, default='[TEST]DVRL-v3')
     parser.add_argument('--run_name', type=str, default='DVRL_DataValueEstimation')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
@@ -143,8 +164,8 @@ if __name__ == '__main__':
     parser.add_argument('--dev_size', type=int, default=30)
     parser.add_argument('--metric', type=str, default='qwk', choices=['corr', 'mse', 'qwk'])
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
-    parser.add_argument('--device', type=str, default='cpu')
-    parser.add_argument('--input_seq', type=str, default='word', choices=['word', 'pos'])
+    parser.add_argument('--device', type=str, default='cuda')
+    parser.add_argument('--input_seq', type=str, default='pos', choices=['word', 'pos'])
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 

@@ -232,11 +232,9 @@ class Dvrl:
             loss.backward()
             dvrl_optimizer.step()
 
-            logger.info(
-                f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
-                f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
-                f'{metric.upper()}: {dvrl_perf:.3f}'
-            )
+            if iteration % 20 == 0:
+                logger.info(f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, {metric.upper()}: {dvrl_perf:.3f}')
+            
             print(f'Cluster: {cluster}')
             print(f'Values: {np.round(est_dv_curr.detach().cpu().numpy(), 2)}')
 
@@ -245,8 +243,6 @@ class Dvrl:
                     {
                         'Reward': reward,
                         'DVRL Loss': loss.item(),
-                        'Prob MAX': est_dv_curr.max().item(),
-                        'Prob MIN': est_dv_curr.min().item(),
                         metric.upper(): dvrl_perf
                     }
                 )
