@@ -11,7 +11,7 @@ import wandb
 
 from dvrl.dvrl_loss import DvrlLoss
 from dvrl.data_value_estimator import DataValueEstimator
-from utils.dvrl_utils import fit_func, pred_func, calc_qwk
+from dvrl.fn_predictor import fit_func, pred_func, calc_qwk
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -35,6 +35,7 @@ class Dvrl:
         parameters: dict,
         device: str,
         target_prompt_id: int,
+        predictor_config: dict,
         temp_dir: str = None
     ) -> None:
         """
@@ -56,6 +57,7 @@ class Dvrl:
         self.prompt_data = prompt_data
         self.device = device
         self.target_prompt_id = target_prompt_id
+        self.predictor_config = predictor_config
 
         # Network parameters for data value estimator
         self.hidden_dim = parameters.get('hidden_dim', 100)
@@ -63,9 +65,7 @@ class Dvrl:
         self.outer_iterations = parameters.get('iterations', 1000)
         self.activation_fn = parameters.get('activation', 'relu')
         self.layer_number = parameters.get('layer_number', 2)
-        self.inner_iterations = parameters.get('inner_iterations', 100)
-        self.learning_rate = parameters.get('learning_rate', 1e-3)
-        self.batch_size_predictor = parameters.get('batch_size_predictor', 512)
+        self.lr = parameters.get('lr', 0.001)
 
         # Basic parameters
         self.epsilon = 1e-8  # Adds to the log to avoid overflow
@@ -88,28 +88,42 @@ class Dvrl:
 
         # Train baseline model
         self.ori_model = copy.deepcopy(self.pred_model)
-        self.ori_model.load_state_dict(torch.load(self.init_model_path))
+        self.ori_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
         logger.info('Training the original model...')
-        fit_func(
+        self.ori_model = fit_func(
             self.ori_model,
             self.x_source,
             self.y_source,
-            self.batch_size_predictor,
-            self.inner_iterations,
-            self.device
+            self.predictor_config.optimizer,
+            self.predictor_config.lr,
+            self.predictor_config.batch_size,
+            self.predictor_config.epochs,
+            self.device,
+            self.target_prompt_id,
+            'qwk',
+            self.x_dev,
+            self.y_dev,
+            self.predictor_config.use_final_epoch_model
         )
 
         # Train validation model
         self.val_model = copy.deepcopy(self.pred_model)
-        self.val_model.load_state_dict(torch.load(self.init_model_path))
+        self.val_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
         logger.info('Training the validation model...')
-        fit_func(
+        self.val_model = fit_func(
             self.val_model,
+            self.x_source,
+            self.y_source,
+            self.predictor_config.optimizer,
+            self.predictor_config.lr,
+            self.predictor_config.batch_size,
+            self.predictor_config.epochs,
+            self.device,
+            self.target_prompt_id,
+            'qwk',
             self.x_dev,
             self.y_dev,
-            self.batch_size_predictor,
-            self.inner_iterations,
-            self.device
+            self.predictor_config.use_final_epoch_model
         )
 
     def train_dvrl(self, metric: str = 'qwk') -> None:
@@ -129,13 +143,13 @@ class Dvrl:
         ).to(self.device)
 
         dvrl_criterion = DvrlLoss(self.epsilon, self.threshold).to(self.device)
-        dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.learning_rate)
+        dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.lr)
 
         # Compute baseline performance
         y_valid_hat = pred_func(
             self.ori_model,
             self.x_dev,
-            self.batch_size_predictor,
+            self.predictor_config.batch_size,
             self.device
         )
         if metric == 'mse':
@@ -152,7 +166,7 @@ class Dvrl:
         y_source_valid_pred = pred_func(
             self.val_model,
             self.x_source,
-            self.batch_size_predictor,
+            self.predictor_config.batch_size,
             self.device
         )
         y_pred_diff = np.abs(self.y_source - y_source_valid_pred)
@@ -194,23 +208,30 @@ class Dvrl:
 
             # Train a new model with the selected data
             new_model = copy.deepcopy(self.pred_model)
-            new_model.load_state_dict(torch.load(self.init_model_path))
+            new_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
             for_using_cluster = cluster[sel_prob_curr == 1]
             cluster_mask = np.isin(self.train_data['cluster'], for_using_cluster)
-            fit_func(
+            new_model = fit_func(
                 new_model,
-                self.x_source[cluster_mask],
+                [x[cluster_mask] for x in self.x_source] if isinstance(self.x_source, list) else self.x_source[cluster_mask],
                 self.y_source[cluster_mask],
-                self.batch_size_predictor,
-                self.inner_iterations,
+                self.predictor_config.optimizer,
+                self.predictor_config.lr,
+                self.predictor_config.batch_size,
+                self.predictor_config.epochs,
                 self.device,
+                self.target_prompt_id,
+                metric,
+                self.x_dev,
+                self.y_dev,
+                self.predictor_config.use_final_epoch_model
             )
 
             # Validate the new model
             y_valid_hat = pred_func(
                 new_model,
                 self.x_dev,
-                self.batch_size_predictor,
+                self.predictor_config.batch_size,
                 self.device
             )
 

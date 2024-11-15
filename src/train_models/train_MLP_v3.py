@@ -34,6 +34,13 @@ def main(args):
     device = torch.device(args.device)
     set_seed(args.seed)
 
+    if args.wandb:
+        wandb.init(
+            project=args.pjname,
+            name=args.run_name + f'_{target_prompt_id}_{args.input_seq}',
+            config=dict(args._get_kwargs())
+        )
+
     ###################################################
     # Step1. Load Data
     ###################################################
@@ -72,18 +79,19 @@ def main(args):
     ###################################################
     # Step2. Training MLP
     ###################################################
-    # Create predictor
-    print('Creating predictor model...')
-    if args.input_seq == 'word':
-        model = MLP(input_feature=train_data['embedding'].shape[1]).to(device)
-    elif args.input_seq == 'pos':
-        model = FeaturesModel().to(device)
-
     # Select training data
     df = pl.read_csv(f'outputs/dvrl_v3/estimated_values_{target_prompt_id}_{args.input_seq}_{args.seed}.csv')
     dev_qwks = []
     test_qwks = []
     for threshold in np.arange(0.9, -0.1, -0.1):
+        # Create predictor
+        print('Creating predictor model...')
+        if args.input_seq == 'word':
+            model = MLP(input_feature=train_data['embedding'].shape[1]).to(device)
+        elif args.input_seq == 'pos':
+            model = FeaturesModel().to(device)
+
+        # Filter data
         filtered_clusters = df.filter(pl.col('values') >= threshold)['cluster'].to_numpy()
         if len(filtered_clusters) == 0:
             if args.wandb:
@@ -148,7 +156,7 @@ def main(args):
     
 
     if args.wandb:
-        wandb.alert(title=args.wandb_pjname, text='Training finished!')
+        wandb.alert(title=args.pjname, text='Training finished!')
         wandb.finish()
 
 

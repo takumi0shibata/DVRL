@@ -182,7 +182,7 @@ def evaluate_model(
         'y_pred': y_pred_list
     }
 
-# 訓練関数の定義
+# 訓練関数の定義(BERT用)
 def train_epoch(model, data_loader, loss_fn, optimizer, device, scheduler, use_weight=True):
     model.train()
 
@@ -215,7 +215,7 @@ def train_epoch(model, data_loader, loss_fn, optimizer, device, scheduler, use_w
 
     return np.mean(losses)
 
-# 評価関数の定義
+# 評価関数の定義(BERT用)
 def evaluate_epoch(
         model: nn.Module,
         data_loader: DataLoader,
