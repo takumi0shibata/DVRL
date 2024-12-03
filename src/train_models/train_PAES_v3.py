@@ -8,18 +8,17 @@ import torch
 import numpy as np
 import argparse
 import torch
-import torch.nn as nn
 import wandb
 import polars as pl
 
-from dvrl import dvrl_v3
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from utils.general_utils import set_seed
 from dvrl.dataset import EssayDataset
 from dvrl.prompt_dataset import PromptDataset
-from dvrl.predictor import MLP
-from models.features import FeaturesModel
 from models.paes import PAES
 from dvrl.predictor_config import MLPConfig, FeaturesModelConfig, PAESModelConfig
+from dvrl.fn_predictor import fit_func, pred_func, calc_qwk
 
 
 def main(args):
@@ -75,64 +74,84 @@ def main(args):
     print(f'    Number of training clusters: {len(np.unique(train_data["cluster"]))}')
 
     ###################################################
-    # Step2. Training DVRL
+    # Step2. Training MLP
     ###################################################
-    # Create predictor
-    print('Creating predictor model...')
-    if args.pred_model == 'mlp':
-        config = MLPConfig()
-        pred_model = MLP(input_feature=train_data['embedding'].shape[1]).to(device)
-        x_train = train_data['embedding']
-        x_dev = dev_data['embedding']
-    elif args.pred_model == 'features_model':
-        config = FeaturesModelConfig()
-        pred_model = FeaturesModel().to(device)
-        train_data['ridley_feature'] = np.concatenate([train_data['feature'], train_data['readability']], axis=1)
-        dev_data['ridley_feature'] = np.concatenate([dev_data['feature'], dev_data['readability']], axis=1)
-        x_train = train_data['ridley_feature']
-        x_dev = dev_data['ridley_feature']
-    elif args.pred_model == 'paes':
+    # Select training data
+    df = pl.read_csv(f'outputs/dvrl_v3/estimated_values_{target_prompt_id}_{args.pred_model}_{args.seed}.csv')
+    dev_qwks = []
+    test_qwks = []
+    for threshold in np.arange(0.9, -0.1, -0.1):
         config = PAESModelConfig()
-        pred_model = PAES(train_data['max_sentnum'], train_data['max_sentlen'], train_data['pos_vocab']).to(device)
+        model = PAES(train_data['max_sentnum'], train_data['max_sentlen'], train_data['pos_vocab']).to(device)
         x_train = [train_data['pos_x'], train_data['feature'], train_data['readability']]
         x_dev = [dev_data['pos_x'], dev_data['feature'], dev_data['readability']]
+        x_test = [test_data['pos_x'], test_data['feature'], test_data['readability']]
 
-    # Network parameters
-    print('Initialize DVRL framework...')
-    dvrl_params = {
-        'hidden_dim': 100,
-        'comb_dim': 64,
-        'iterations': 500,
-        'activation': nn.Tanh(),
-        'layer_number': 5,
-        'lr': 0.001,
-        'wandb': args.wandb,
-    }
+        # Filter data
+        filtered_clusters = df.filter(pl.col('values') >= threshold)['cluster'].to_numpy()
+        if len(filtered_clusters) == 0:
+            if args.wandb:
+                wandb.log({
+                    'Size of training data': 0,
+                    'QWK[DEV]': 0.0,
+                    'QWK[TEST]': 0.0,
+                })
+            continue
+        
+        # Train model
+        print(f'Training model with clusters having values >= {threshold}...')
+        cluster_mask = np.isin(train_data['cluster'], filtered_clusters)
+        model = fit_func(
+            model,
+            [x[cluster_mask] for x in x_train],
+            train_data['scaled_score'][cluster_mask].reshape(-1, 1),
+            config.optimizer,
+            config.lr,
+            10,
+            config.epochs,
+            device,
+            target_prompt_id,
+            args.metric,
+            x_dev,
+            dev_data['scaled_score'].reshape(-1, 1),
+            False
+        )
+
+        # Predict
+        print('Predicting...')
+        y_dev_pred = pred_func(
+            model,
+            x_dev,
+            config.batch_size,
+            device
+        )
+        y_test_pred = pred_func(
+            model,
+            x_test,
+            config.batch_size,
+            device
+        )
+
+        # Calculate QWK
+        print('Calculating QWK...')
+        dev_qwk = calc_qwk(dev_data['scaled_score'], y_dev_pred, target_prompt_id, args.attribute_name)
+        test_qwk = calc_qwk(test_data['scaled_score'], y_test_pred, target_prompt_id, args.attribute_name)
+
+        dev_qwks.append(dev_qwk)
+        test_qwks.append(test_qwk)
+
+        print(f'    Dev QWK: {dev_qwk}')
+        print(f'    Test QWK: {test_qwk}')
+
+        # log wandb
+        data_num = len(train_data['scaled_score'][cluster_mask])
+        if args.wandb:
+            wandb.log({
+                'Size of training data': data_num,
+                'QWK[DEV]': dev_qwk,
+                'QWK[TEST]': test_qwk,
+            })
     
-    # Initialize DVRL
-    dvrl_class = dvrl_v3.Dvrl(
-        train_data,
-        x_train,
-        train_data['scaled_score'],
-        x_dev,
-        dev_data['scaled_score'],
-        prompt_data,
-        pred_model,
-        dvrl_params,
-        device,
-        target_prompt_id,
-        config,
-    )
-
-    # Train DVRL
-    print('Training DVRL...')
-    outputs = dvrl_class.train_dvrl(args.metric)
-
-    # Save DVRL
-    print('Saving DVRL...')
-    output_dir = './outputs/dvrl_v3'
-    os.makedirs(output_dir, exist_ok=True)
-    pl.DataFrame(outputs).write_csv(os.path.join(output_dir, f'estimated_values_{target_prompt_id}_{args.pred_model}_{args.seed}.csv'))
 
     if args.wandb:
         wandb.alert(title=args.pjname, text='Training finished!')
@@ -143,8 +162,8 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser(description="DVRL")
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--pjname', type=str, default='DVRL-v3-test')
-    parser.add_argument('--run_name', type=str, default='Valuation')
+    parser.add_argument('--pjname', type=str, default='DVRL-V3')
+    parser.add_argument('--run_name', type=str, default='Train')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
     parser.add_argument('--attribute_name', type=str, default='score')
@@ -152,18 +171,7 @@ if __name__ == '__main__':
     parser.add_argument('--metric', type=str, default='qwk', choices=['corr', 'mse', 'qwk'])
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
     parser.add_argument('--device', type=str, default='cuda')
-    parser.add_argument(
-        '--pred_model',
-        type=str,
-        default='mlp',
-        choices=[
-            'mlp',
-            'features_model',
-            'paes',
-            'bert',
-            'deberta_v3_large'
-        ]
-    )
+    parser.add_argument('--pred_model', type=str, default='paes')
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 
