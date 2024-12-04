@@ -39,7 +39,7 @@ def main(args):
     if args.wandb:
         wandb.init(
             project=args.pjname,
-            name=args.run_name + f'_{target_prompt_id}_{args.input_seq}',
+            name=args.run_name + f'_{target_prompt_id}_{args.pred_model}_seed{args.seed}_cluster{args.n_clusters}',
             config=dict(args._get_kwargs())
         )
 
@@ -85,10 +85,10 @@ def main(args):
     ###################################################
     # Select training data
     df = pl.read_csv(f'outputs/dvrl_v4/estimated_values_{target_prompt_id}_{args.pred_model}_seed{args.seed}_cluster{args.n_clusters}.csv')
-    dev_qwks = []
-    test_qwks = []
-    remove_high_values = True
     for threshold in np.arange(0.0, 1.1, 0.1):
+        ############################################
+        # Remove high values
+        ############################################
         # Create predictor
         print('Creating predictor model...')
         if args.pred_model == 'mlp':
@@ -97,12 +97,8 @@ def main(args):
             model = FeaturesModel().to(device)
 
         # Filter data
-        if remove_high_values:
-            threshold_percentile = df.quantile(1 - threshold, 'nearest')['values'].item() # 昇順にソートされている
-            filtered_clusters = df.filter(pl.col('values') <= threshold_percentile)['cluster'].to_numpy()
-        else:
-            threshold_percentile = df.quantile(threshold, 'nearest')['values'].item()
-            filtered_clusters = df.filter(pl.col('values') >= threshold_percentile)['cluster'].to_numpy()
+        threshold_percentile = df.quantile(1 - threshold, 'nearest')['values'].item() # 昇順にソートされている
+        filtered_clusters = df.filter(pl.col('values') <= threshold_percentile)['cluster'].to_numpy()
         cluster_mask = np.isin(train_data['cluster'], filtered_clusters)
         if args.pred_model == 'mlp':
             selected_train_data = train_data['embedding'][cluster_mask]
@@ -141,8 +137,66 @@ def main(args):
         dev_qwk = calc_qwk(dev_data['scaled_score'], y_dev_pred, target_prompt_id, args.attribute_name)
         test_qwk = calc_qwk(test_data['scaled_score'], y_test_pred, target_prompt_id, args.attribute_name)
 
-        dev_qwks.append(dev_qwk)
-        test_qwks.append(test_qwk)
+        print(f'    Dev QWK: {dev_qwk}')
+        print(f'    Test QWK: {test_qwk}')
+
+        # log wandb
+        if args.wandb:
+            wandb.log({
+                'LOW QWK[DEV]': dev_qwk,
+                'LOW QWK[TEST]': test_qwk,
+            })
+        
+        ############################################
+        # Remove low values
+        ############################################
+        # Create predictor
+        print('Creating predictor model...')
+        if args.pred_model == 'mlp':
+            model = MLP(input_feature=train_data['embedding'].shape[1]).to(device)
+        elif args.pred_model == 'features_model':
+            model = FeaturesModel().to(device)
+        
+        # Filter data
+        threshold_percentile = df.quantile(threshold, 'nearest')['values'].item()
+        filtered_clusters = df.filter(pl.col('values') >= threshold_percentile)['cluster'].to_numpy()
+        cluster_mask = np.isin(train_data['cluster'], filtered_clusters)
+        if args.pred_model == 'mlp':
+            selected_train_data = train_data['embedding'][cluster_mask]
+        elif args.pred_model == 'features_model':
+            selected_train_data = train_data['ridley_feature'][cluster_mask]
+        selected_train_label = train_data['scaled_score'][cluster_mask]
+
+        # Train model
+        print(f'Training model with threshold={threshold_percentile}...')
+        fit_func(
+            model,
+            selected_train_data,
+            selected_train_label,
+            batch_size=256,
+            epochs=100,
+            device=device,
+        )
+
+        # Predict
+        print('Predicting...')
+        y_dev_pred = pred_func(
+            model,
+            dev_data['ridley_feature'] if args.pred_model == 'features_model' else dev_data['embedding'],
+            batch_size=256,
+            device=device,
+        )
+        y_test_pred = pred_func(
+            model,
+            test_data['ridley_feature'] if args.pred_model == 'features_model' else test_data['embedding'],
+            batch_size=256,
+            device=device,
+        )
+
+        # Calculate QWK
+        print('Calculating QWK...')
+        dev_qwk = calc_qwk(dev_data['scaled_score'], y_dev_pred, target_prompt_id, args.attribute_name)
+        test_qwk = calc_qwk(test_data['scaled_score'], y_test_pred, target_prompt_id, args.attribute_name)
 
         print(f'    Dev QWK: {dev_qwk}')
         print(f'    Test QWK: {test_qwk}')
@@ -150,10 +204,9 @@ def main(args):
         # log wandb
         if args.wandb:
             wandb.log({
-                'QWK[DEV]': dev_qwk,
-                'QWK[TEST]': test_qwk,
+                'HIGH QWK[DEV]': dev_qwk,
+                'HIGH QWK[TEST]': test_qwk,
             })
-    
 
     if args.wandb:
         wandb.alert(title=args.pjname, text='Training finished!')
@@ -164,8 +217,8 @@ if __name__ == '__main__':
     # Set up the argument parser
     parser = argparse.ArgumentParser(description="DVRL")
     parser.add_argument('--wandb', action='store_true')
-    parser.add_argument('--pjname', type=str, default='[TEST]DVRL-v3')
-    parser.add_argument('--run_name', type=str, default='DVRL_DataValueEstimation')
+    parser.add_argument('--pjname', type=str, default='DVRL-V4')
+    parser.add_argument('--run_name', type=str, default='Training')
     parser.add_argument('--target_prompt_id', type=int, default=1)
     parser.add_argument('--seed', type=int, default=12)
     parser.add_argument('--attribute_name', type=str, default='score')
