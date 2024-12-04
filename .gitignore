@@ -1,3 +1,4 @@
 src/.embedding_cache/
 .venv/
 wandb/
+outputs/

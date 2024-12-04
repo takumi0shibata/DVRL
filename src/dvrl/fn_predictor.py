@@ -95,7 +95,7 @@ def fit_func(
             x_dev_tensors = [torch.tensor(x_dev, dtype=torch.float32).to(device)]
         y_dev_tensor = torch.tensor(y_dev, dtype=torch.float32).to(device)
 
-    for epoch in tqdm(range(iterations)):
+    for epoch in range(iterations):
         model.train()
 
         # Iterate over batches
