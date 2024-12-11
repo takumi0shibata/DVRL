@@ -84,7 +84,7 @@ class Dvrl:
 
         # Train baseline model
         self.ori_model = copy.deepcopy(self.pred_model)
-        self.ori_model.load_state_dict(torch.load(self.init_model_path))
+        self.ori_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
         logger.info('Training the original model...')
         fit_func(
             self.ori_model,
@@ -97,7 +97,7 @@ class Dvrl:
 
         # Train validation model
         self.val_model = copy.deepcopy(self.pred_model)
-        self.val_model.load_state_dict(torch.load(self.init_model_path))
+        self.val_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
         logger.info('Training the validation model...')
         fit_func(
             self.val_model,
@@ -154,7 +154,7 @@ class Dvrl:
         y_pred_diff = np.abs(self.y_source - y_source_valid_pred)
 
         # Initialize baseline for reward computation
-        baseline = 0 if self.moving_average else valid_perf
+        baseline = valid_perf
 
         for iteration in tqdm(range(self.outer_iterations), desc='Training DVRL'):
             self.value_estimator.train()
@@ -178,7 +178,7 @@ class Dvrl:
 
             # Train a new model with the selected data
             new_model = copy.deepcopy(self.pred_model)
-            new_model.load_state_dict(torch.load(self.init_model_path))
+            new_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
             fit_func(
                 new_model,
                 x_batch,
@@ -243,7 +243,7 @@ class Dvrl:
         y_source_tensor = torch.tensor(self.y_source, dtype=torch.float32).to(self.device)
         y_pred_diff_tensor = torch.tensor(y_pred_diff, dtype=torch.float32).to(self.device)
         final_data_value = self.value_estimator(x_source_tensor, y_source_tensor, y_pred_diff_tensor).squeeze()
-        self.final_model.load_state_dict(torch.load(self.init_model_path))
+        self.final_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
         fit_func(
             self.final_model,
             self.x_source,
