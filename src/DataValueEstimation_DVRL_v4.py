@@ -148,15 +148,7 @@ if __name__ == '__main__':
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
     parser.add_argument('--device', type=str, default='cuda')
     parser.add_argument('--n_clusters', type=int, default=1000)
-    parser.add_argument(
-        '--pred_model',
-        type=str,
-        default='mlp',
-        choices=[
-            'mlp',
-            'features_model',
-        ]
-    )
+    parser.add_argument('--pred_model',type=str, default='mlp', choices=['mlp', 'features_model'])
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 
