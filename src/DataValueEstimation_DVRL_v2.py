@@ -124,7 +124,7 @@ def main(args):
     print(f'Estimated Lambda: {np.round(data_value, 2)}')
 
     if args.wandb:
-        wandb.alert(title=args.wandb_pjname, text='Training finished!')
+        wandb.alert(title=args.pjname, text='Training finished!')
         wandb.finish()
 
 

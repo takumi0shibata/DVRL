@@ -73,7 +73,7 @@ def main(args):
     dvrl_params = {
         'hidden_dim': 100,
         'comb_dim': 10,
-        'iterations': 5,
+        'iterations': 1000,
         'activation': nn.Tanh(),
         'layer_number': 5,
         'learning_rate': 0.001,
@@ -106,7 +106,7 @@ def main(args):
     np.save(output_dir + f'/values_{target_prompt_id}_{args.pred_model}_seed{args.seed}_dev{args.dev_size}.npy', data_value)
 
     if args.wandb:
-        wandb.alert(title=args.wandb_pjname, text='Training finished!')
+        wandb.alert(title=args.pjname, text='Training finished!')
         wandb.finish()
 
 
@@ -124,8 +124,6 @@ if __name__ == '__main__':
     parser.add_argument('--embedding_model', type=str, default='microsoft/deberta-v3-large')
     parser.add_argument('--device', type=str, default='cuda')
     parser.add_argument('--pred_model',type=str, default='mlp', choices=['mlp', 'features_model'])
-    args = parser.parse_args()
-    print(dict(args._get_kwargs()))
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 
