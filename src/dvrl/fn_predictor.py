@@ -95,6 +95,8 @@ def fit_func(
         else:
             x_dev_tensors = [torch.tensor(x_dev, dtype=torch.float32).to(device)]
         y_dev_tensor = torch.tensor(y_dev, dtype=torch.float32).to(device)
+        dev_dataset = TensorDataset(*x_dev_tensors, y_dev_tensor)
+        dev_loader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False)
 
     for epoch in range(iterations):
         if verbose:
@@ -118,16 +120,27 @@ def fit_func(
         # Evaluate on dev set if using best dev model selection
         if not use_final_epoch_model and x_dev is not None and y_dev is not None:
             model.eval()
+            dev_preds = []
+            dev_targets = []
             with torch.no_grad():
-                dev_outputs = model(*x_dev_tensors)
+                for batch in dev_loader:
+                    batch_x = [b.to(device) for b in batch[:-1]]
+                    batch_y = batch[-1].to(device)
+                    dev_outputs = model(*batch_x)
+                    dev_preds.extend(dev_outputs.cpu().numpy())
+                    dev_targets.extend(batch_y.cpu().numpy())
+
+                dev_preds = np.array(dev_preds)
+                dev_targets = np.array(dev_targets)
+
                 if metric == 'mse':
-                    dev_score = mean_squared_error(y_dev_tensor.cpu().numpy(), dev_outputs.cpu().numpy())
+                    dev_score = mean_squared_error(dev_targets, dev_preds)
                     is_better = dev_score < best_dev_score  # Lower MSE is better
                 elif metric == 'qwk':
-                    dev_score = calc_qwk(y_dev_tensor.cpu().numpy(), dev_outputs.cpu().numpy(), prompt_id, 'score')
+                    dev_score = calc_qwk(dev_targets, dev_preds, prompt_id, 'score')
                     is_better = dev_score > best_dev_score  # Higher QWK is better
                 elif metric == 'corr':
-                    dev_score = np.corrcoef(y_dev_tensor.cpu().numpy().flatten(), dev_outputs.cpu().numpy().flatten())[0, 1]
+                    dev_score = np.corrcoef(dev_targets.flatten(), dev_preds.flatten())[0, 1]
                     is_better = dev_score > best_dev_score  # Higher correlation is better
                 
                 if verbose:
