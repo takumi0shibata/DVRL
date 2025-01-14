@@ -44,7 +44,8 @@ def fit_func(
     metric: str = 'qwk',
     x_dev: list | np.ndarray = None,
     y_dev: np.ndarray = None,
-    use_final_epoch_model: bool = False
+    use_final_epoch_model: bool = False,
+    verbose: bool = False
 ) -> nn.Module:
     """
     Fits the model to the training data while validating on the dev set.
@@ -96,6 +97,8 @@ def fit_func(
         y_dev_tensor = torch.tensor(y_dev, dtype=torch.float32).to(device)
 
     for epoch in range(iterations):
+        if verbose:
+            print(f"Epoch {epoch+1}/{iterations}")
         model.train()
 
         # Iterate over batches
@@ -126,6 +129,9 @@ def fit_func(
                 elif metric == 'corr':
                     dev_score = np.corrcoef(y_dev_tensor.cpu().numpy().flatten(), dev_outputs.cpu().numpy().flatten())[0, 1]
                     is_better = dev_score > best_dev_score  # Higher correlation is better
+                
+                if verbose:
+                    print(f"dev {metric}: {dev_score}")
 
                 # Update best model state if current dev performance is better
                 if is_better:

@@ -19,6 +19,6 @@ class FeaturesModelConfig:
 class PAESModelConfig:
     optimizer: torch.optim.Optimizer = torch.optim.RMSprop
     lr: float = 1e-3
-    batch_size: int = 64
+    batch_size: int = 10
     epochs: int = 50
     use_final_epoch_model: bool = True
