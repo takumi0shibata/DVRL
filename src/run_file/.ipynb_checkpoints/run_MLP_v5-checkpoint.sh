@@ -13,8 +13,8 @@ device="cuda:$((prompt))"
 pred_models=("mlp" "features_model")
 # pred_models=("features_model")
 
-# loss_lambda のリスト
-lambda_list=("1.0" "0.5" "0.0")
+# lambda のリスト
+lambda_list=("0.0" "0.5" "1.0")
 
 # ループで各組み合わせを実行
 for pred_model in "${pred_models[@]}"
@@ -23,7 +23,7 @@ do
   do
     echo "Running with pred_model: ${pred_model}, lambda: ${lambda}"
 
-    python src/DataValueEstimation_DVRL_v5.py \
+    python src/train_models/train_MLP_v5.py \
         --wandb \
         --pjname "DVRL-V5" \
         --target_prompt_id "${prompt}" \
