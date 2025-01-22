@@ -8,6 +8,7 @@ class DataValueEstimator(nn.Module):
         input_dim: int,
         hidden_dim: int,
         comb_dim: int,
+        y_pred_diff_dim: int,
         layer_number: int,
         activation_fn: callable
     ) -> None:
@@ -32,7 +33,7 @@ class DataValueEstimator(nn.Module):
         # Layer before combining with y_hat
         self.pre_comb_layer = nn.Linear(hidden_dim, comb_dim)
         # Layer after combining with y_hat
-        self.comb_layer = nn.Linear(comb_dim + 1, comb_dim)
+        self.comb_layer = nn.Linear(comb_dim + y_pred_diff_dim, comb_dim)
         # Output layer
         self.output_layer = nn.Linear(comb_dim, 1)
         

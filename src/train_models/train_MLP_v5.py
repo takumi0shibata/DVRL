@@ -118,7 +118,7 @@ def main(args):
         embedding_model=args.embedding_model,
         add_pos=False,
     )
-    estimated_data_value = np.load(f'outputs/dvrl_v5/values_{target_prompt_id}_{args.pred_model}_seed{args.seed}_dev{args.dev_size}_lambda{args.loss_lambda}.npy')
+    estimated_data_value = np.load(f'outputs/dvrl_v5/values_{target_prompt_id}_{args.pred_model}_seed{args.seed}_dev{args.dev_size}_lambda{args.loss_lambda}_ot{args.ot}.npy')
     print(f'    Number of training samples: {len(train_data["essay_id"])}')
     print(f'    Number of dev samples: {len(dev_data["essay_id"])}')
     print(f'    Number of test samples: {len(test_data["essay_id"])}')
@@ -199,6 +199,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=100)
     parser.add_argument('--pred_model', type=str, default='mlp', choices=['mlp', 'features_model'])
     parser.add_argument('--loss_lambda', type=float, default=1.0)
+    parser.add_argument('--ot', action='store_true')
     
     args = parser.parse_args()
     print(dict(args._get_kwargs()))

@@ -91,6 +91,7 @@ def main(args):
         'batch_size_predictor': 512,
         'loss_lambda': args.loss_lambda,
         'wandb': args.wandb,
+        'ot': args.ot,
     }
 
     # Initialize DVRL
@@ -113,7 +114,7 @@ def main(args):
     print('Saving DVRL...')
     output_dir = './outputs/dvrl_v5'
     os.makedirs(output_dir, exist_ok=True)
-    np.save(output_dir + f'/values_{target_prompt_id}_{args.pred_model}_seed{args.seed}_dev{args.dev_size}_lambda{args.loss_lambda}.npy', data_value)
+    np.save(output_dir + f'/values_{target_prompt_id}_{args.pred_model}_seed{args.seed}_dev{args.dev_size}_lambda{args.loss_lambda}_ot{args.ot}.npy', data_value)
 
     if args.wandb:
         wandb.alert(title=args.pjname, text='Training finished!')
@@ -135,6 +136,7 @@ if __name__ == '__main__':
     parser.add_argument('--device', type=str, default='cpu')
     parser.add_argument('--pred_model',type=str, default='mlp', choices=['mlp', 'features_model'])
     parser.add_argument('--loss_lambda', type=float, default=1.0)
+    parser.add_argument('--ot', action='store_true')
     args = parser.parse_args()
     print(dict(args._get_kwargs()))
 

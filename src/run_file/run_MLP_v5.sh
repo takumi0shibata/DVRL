@@ -30,6 +30,7 @@ do
         --seed 22 \
         --device "${device}" \
         --pred_model "${pred_model}" \
-        --loss_lambda "${lambda}"
+        --loss_lambda "${lambda}" \
+        --ot
   done
 done

@@ -11,6 +11,7 @@ import wandb
 
 from dvrl.dvrl_loss import DvrlLoss
 from dvrl.data_value_estimator import DataValueEstimator
+from dvrl.optimal_transport import compute_ot_dual
 from utils.dvrl_utils import fit_func, pred_func, calc_qwk
 
 # Configure logging
@@ -76,6 +77,7 @@ class Dvrl:
         self.final_model = copy.deepcopy(pred_model)
 
         self.use_wandb = parameters.get('wandb', False)
+        self.ot = parameters.get('ot', False)
 
         # Use temporary directory for saving models
         self.temp_dir = temp_dir or tempfile.mkdtemp()
@@ -118,18 +120,6 @@ class Dvrl:
         Args:
             metric (str): Metric to use for the DVRL ('mse', 'qwk', or 'corr').
         """
-        # Initialize the data value estimator network
-        self.value_estimator = DataValueEstimator(
-            input_dim=self.data_dim + self.label_dim,
-            hidden_dim=self.hidden_dim,
-            comb_dim=self.comb_dim,
-            layer_number=self.layer_number,
-            activation_fn=self.activation_fn
-        ).to(self.device)
-
-        dvrl_criterion = DvrlLoss(self.epsilon, self.threshold).to(self.device)
-        dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.learning_rate)
-
         # Compute baseline performance
         y_valid_hat = pred_func(
             self.ori_model,
@@ -156,8 +146,27 @@ class Dvrl:
         )
         y_pred_diff = np.abs(self.y_source - y_source_valid_pred)
 
+        # compute dual variables
+        if self.ot:
+            logger.info('Computing Optimal Transport...')
+            f, g, trans_plan = compute_ot_dual(self.x_source, np.concatenate([self.x_dev, self.x_pseudo], axis=0))
+            y_pred_diff = np.concatenate([y_pred_diff, f.reshape(-1, 1)], axis=1)
+
         # Initialize baseline for reward computation
         baseline = valid_perf
+
+        # Initialize the data value estimator network
+        self.value_estimator = DataValueEstimator(
+            input_dim=self.data_dim + self.label_dim,
+            hidden_dim=self.hidden_dim,
+            comb_dim=self.comb_dim,
+            y_pred_diff_dim=y_pred_diff.shape[1],
+            layer_number=self.layer_number,
+            activation_fn=self.activation_fn
+        ).to(self.device)
+
+        dvrl_criterion = DvrlLoss(self.epsilon, self.threshold).to(self.device)
+        dvrl_optimizer = optim.Adam(self.value_estimator.parameters(), lr=self.learning_rate)
 
         for iteration in tqdm(range(self.outer_iterations), desc='Training DVRL'):
             self.value_estimator.train()
