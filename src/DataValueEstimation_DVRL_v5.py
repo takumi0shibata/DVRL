@@ -105,11 +105,11 @@ def main(args):
 
     # Train DVRL
     print('Training DVRL...')
-    dvrl_class.train_dvrl(args.metric)
+    data_value = dvrl_class.train_dvrl(args.metric)
 
-    # Estimate data value
-    print('Estimating data value...')
-    data_value = dvrl_class.dvrl_valuator(dvrl_data['x_source'], dvrl_data['y_source'])
+    # # Estimate data value
+    # print('Estimating data value...')
+    # data_value = dvrl_class.dvrl_valuator(dvrl_data['x_source'], dvrl_data['y_source'])
 
     print('Saving DVRL...')
     output_dir = './outputs/dvrl_v5'
