@@ -8,8 +8,8 @@ from sklearn.metrics.pairwise import cosine_distances
 import numpy as np
 from tqdm import tqdm
 import pickle
-from sklearn.cluster import DBSCAN
 import nltk
+from sklearn.cluster import KMeans
 
 class EssayDataset:
     url_replacer = '<url>'
@@ -294,7 +294,7 @@ class EssayDataset:
 
         return train_data, dev_data, test_data
     
-    def cross_prompt_split(self, target_prompt_set, dev_size=30, cache_dir='.embedding_cache', add_pos=False, embedding_model='bert-base-uncased'):
+    def cross_prompt_split(self, target_prompt_set, dev_size=30, cache_dir='.embedding_cache', add_pos=False, embedding_model='bert-base-uncased', selection_method='euclidean'):
         # Create cache directory if it doesn't exist
         os.makedirs(cache_dir, exist_ok=True)
         
@@ -354,26 +354,64 @@ class EssayDataset:
         target_embeddings_array = np.vstack([target_embeddings_dict[essay_id] for essay_id in target_ids])
         
         # Function to select diverse samples for the dev set
-        def select_diverse_samples(embeddings, n_samples):
-            selected_indices = []
-            remaining_indices = list(range(len(embeddings)))
+        def select_diverse_samples(embeddings, n_samples, method='kmeans'):
+            if method == 'cosine':
+                selected_indices = []
+                remaining_indices = list(range(len(embeddings)))
 
-            # Select the first sample randomly
-            first_index = np.random.choice(remaining_indices)
-            selected_indices.append(first_index)
-            remaining_indices.remove(first_index)
+                # Select the first sample randomly
+                first_index = np.random.choice(remaining_indices)
+                selected_indices.append(first_index)
+                remaining_indices.remove(first_index)
 
-            for _ in range(1, n_samples):
-                distances = cosine_distances(embeddings[selected_indices], embeddings[remaining_indices])
-                sum_distances = distances.sum(axis=0)
-                next_index = remaining_indices[np.argmax(sum_distances)]
-                selected_indices.append(next_index)
-                remaining_indices.remove(next_index)
+                for _ in range(1, n_samples):
+                    distances = cosine_distances(embeddings[selected_indices], embeddings[remaining_indices])
+                    sum_distances = distances.sum(axis=0)
+                    next_index = remaining_indices[np.argmax(sum_distances)]
+                    selected_indices.append(next_index)
+                    remaining_indices.remove(next_index)
 
-            return selected_indices
+                return selected_indices
+            elif method == 'kmeans':
+                # Use k-means clustering to select diverse samples
+                n_clusters = min(n_samples, len(embeddings))
+                kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+                kmeans.fit(embeddings)
+                cluster_labels = kmeans.labels_
+                centroids = kmeans.cluster_centers_
+
+                selected_indices = []
+                for i in range(n_clusters):
+                    # Find the sample closest to the centroid in each cluster
+                    cluster_indices = np.where(cluster_labels == i)[0]
+                    distances = cosine_distances([centroids[i]], embeddings[cluster_indices])
+                    closest_index = cluster_indices[np.argmin(distances)]
+                    selected_indices.append(closest_index)
+
+                return selected_indices
+            elif method == 'euclidean':
+                # Use Euclidean distance to select diverse samples
+                selected_indices = []
+                remaining_indices = list(range(len(embeddings)))
+
+                # Select the first sample randomly
+                first_index = np.random.choice(remaining_indices)
+                selected_indices.append(first_index)
+                remaining_indices.remove(first_index)
+
+                for _ in range(1, n_samples):
+                    distances = np.linalg.norm(embeddings[selected_indices, np.newaxis] - embeddings[remaining_indices], axis=2)
+                    sum_distances = distances.sum(axis=0)
+                    next_index = remaining_indices[np.argmax(sum_distances)]
+                    selected_indices.append(next_index)
+                    remaining_indices.remove(next_index)
+
+                return selected_indices
+            else:
+                raise ValueError("Invalid selection_method. Choose 'cosine' or 'kmeans'.")
 
         # Select indices for the dev set
-        dev_indices = select_diverse_samples(target_embeddings_array, dev_size)
+        dev_indices = select_diverse_samples(target_embeddings_array, dev_size, selection_method)
         dev_indices = [int(i) for i in dev_indices]
         # Get IDs and embeddings for dev and test sets
         test_indices = [i for i in range(len(target_ids)) if i not in dev_indices]
@@ -437,51 +475,3 @@ class EssayDataset:
             test_data['pos_x'] = X_test_pos.reshape((X_test_pos.shape[0], X_test_pos.shape[1] * X_test_pos.shape[2]))
 
         return train_data, dev_data, test_data
-    
-    def clustering(self, embedding_data, prompt_data, label_data):
-        # クラスタリングの割り当てを計算
-        cluster_assignments = np.full(len(embedding_data), -1, dtype=int)  # -1で初期化
-        cluster_centroids = np.zeros_like(embedding_data)  # x_sourceと同じ形状
-
-        unique_prompts = np.unique(prompt_data)
-        unique_labels = np.unique(label_data)
-
-        cluster_id_counter = 0  # クラスタIDをユニークにするためのカウンター
-
-        for prompt in unique_prompts:
-            for label in unique_labels:
-                # 同じプロンプトとラベルを持つデータのインデックスを取得
-                indices = np.where((prompt_data == prompt) & (label_data == label))[0]
-                if len(indices) == 0:
-                    continue
-                embeddings = embedding_data[indices]
-                if len(embeddings) < 2:
-                    # データポイントが少なすぎる場合はクラスタ0を割り当て
-                    cluster_labels = np.zeros(len(embeddings), dtype=int)
-                    centroid = embeddings[0]
-                    cluster_assignments[indices] = cluster_id_counter
-                    cluster_centroids[indices] = centroid
-                    cluster_id_counter += 1
-                else:
-                    # 埋め込みベクトルを正規化
-                    norm_embeddings = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
-                    # コサイン距離を使用してクラスタリング
-                    clustering = DBSCAN(eps=0.5, min_samples=2, metric='cosine').fit(norm_embeddings)
-                    cluster_labels = clustering.labels_
-                    unique_cluster_labels = np.unique(cluster_labels)
-                    for cl in unique_cluster_labels:
-                        cl_indices = indices[cluster_labels == cl]
-                        if cl == -1:
-                            # ノイズポイントは個別に扱う（必要に応じて変更可能）
-                            for idx in cl_indices:
-                                cluster_assignments[idx] = cluster_id_counter
-                                cluster_centroids[idx] = embeddings[cluster_labels == cl][0]  # データポイント自身を重心とする
-                                cluster_id_counter += 1
-                        else:
-                            cl_embeddings = embeddings[cluster_labels == cl]
-                            centroid = np.mean(cl_embeddings, axis=0)
-                            cluster_assignments[cl_indices] = cluster_id_counter
-                            cluster_centroids[cl_indices] = centroid
-                            cluster_id_counter += 1
-
-        return cluster_assignments, cluster_centroids

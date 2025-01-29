@@ -54,16 +54,16 @@ class Dvrl:
         self.target_prompt_id = target_prompt_id
 
         # Network parameters for data value estimator
-        self.hidden_dim = parameters.get('hidden_dim', 128)
-        self.comb_dim = parameters.get('comb_dim', 64)
-        self.outer_iterations = parameters.get('iterations', 1000)
-        self.activation_fn = parameters.get('activation', 'relu')
-        self.layer_number = parameters.get('layer_number', 2)
-        self.inner_iterations = parameters.get('inner_iterations', 100)
-        self.batch_size = int(min(parameters.get('batch_size', 32), self.x_source.shape[0]))
-        self.learning_rate = parameters.get('learning_rate', 1e-3)
-        self.batch_size_predictor = parameters.get('batch_size_predictor', 32)
-        self.loss_lambda = parameters.get('loss_lambda', 1.0)
+        self.hidden_dim = parameters['hidden_dim']
+        self.comb_dim = parameters['comb_dim']
+        self.outer_iterations = parameters['iterations']
+        self.activation_fn = parameters['activation']
+        self.layer_number = parameters['layer_number']
+        self.inner_iterations = parameters['inner_iterations']
+        self.batch_size = int(min(parameters['batch_size'], self.x_source.shape[0]))
+        self.learning_rate = parameters['learning_rate']
+        self.batch_size_predictor = parameters['batch_size_predictor']
+        self.loss_lambda = parameters['loss_lambda']
         # self.moving_average = 'moving_average_window' in parameters
         # self.moving_average_window = parameters.get('moving_average_window', 100)
 
@@ -229,7 +229,7 @@ class Dvrl:
                 pseudo_reward = np.corrcoef(self.y_pseudo.flatten(), y_pseudo_hat.flatten())[0, 1]
 
             # Compute reward
-            reward = dvrl_perf + self.loss_lambda * pseudo_reward - baseline
+            reward = (1 - self.loss_lambda) * dvrl_perf + self.loss_lambda * pseudo_reward - baseline
 
             # Update the selection network
             reward_tensor = torch.tensor([reward], dtype=torch.float32).to(self.device)
@@ -245,20 +245,20 @@ class Dvrl:
             #     )
 
             logger.info(
-                f'Iteration: {iteration + 1}, Reward: {reward:.3f}, PSEUDO_Reward: {pseudo_reward:.3f}, DVRL Loss: {loss.item():.3f}, '
+                f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
                 f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
-                f'{metric.upper()}: {dvrl_perf:.3f}'
+                f'{metric.upper()} for Dev: {dvrl_perf:.3f}, QWK for pseudo data: {pseudo_reward:.3f}'
             )
 
             if self.use_wandb:
                 wandb.log(
                     {
                         'Reward': reward,
-                        'PSEUDO_Reward': pseudo_reward,
                         'DVRL Loss': loss.item(),
                         'Prob MAX': est_dv_curr.max().item(),
                         'Prob MIN': est_dv_curr.min().item(),
-                        metric.upper(): dvrl_perf
+                        metric.upper(): dvrl_perf,
+                        'Pseudo QWK': pseudo_reward,
                     }
                 )
 

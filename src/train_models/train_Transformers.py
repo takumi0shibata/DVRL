@@ -10,6 +10,7 @@ from transformers import AutoTokenizer, AutoModel, AutoConfig, get_linear_schedu
 import torch.nn as nn
 from torch.optim import AdamW
 import wandb
+from dvrl.dataset import EssayDataset
 
 # my packages
 from utils.dvrl_utils import remove_top_p_sample 
@@ -100,16 +101,37 @@ def train_and_evaluate(
 
 
 def main(args):
+    ###################################################
+    # Step0. Set UP
+    ###################################################
     target_prompt_id = args.target_prompt_id
+    device = torch.device(args.device)
     set_seed(args.seed)
-    estimated_data_value = np.load(f'outputs/Estimated_Data_Values/{args.valuation_method}/estimated_data_value{target_prompt_id}.npy')
 
     if args.wandb:
         wandb.init(
             project=args.pjname,
-            name=args.run_name+str(target_prompt_id),
-            config=args
+            name=args.run_name + f'_{args.pred_model}_{target_prompt_id}_seed{args.seed}_lambda{args.loss_lambda}_ot{args.ot}',
+            config=dict(args._get_kwargs())
         )
+
+    ###################################################
+    # Step1. Load Data
+    ###################################################
+    print('Loading essay data...')
+    dataset = EssayDataset('data/training_set_rel3.xlsx', 'data/hand_crafted_v3.csv', 'data/readability_features.csv')
+    dataset.preprocess_dataframe()
+    train_data, dev_data, test_data = dataset.cross_prompt_split(
+        target_prompt_set=args.target_prompt_id,
+        dev_size=args.dev_size,
+        cache_dir='src/.embedding_cache',
+        embedding_model=args.embedding_model,
+        add_pos=False,
+    )
+    estimated_data_value = np.load(f'outputs/dvrl_v5/values_{target_prompt_id}_{args.pred_model}_seed{args.seed}_dev{args.dev_size}_lambda{args.loss_lambda}_ot{args.ot}.npy')
+    print(f'    Number of training samples: {len(train_data["essay_id"])}')
+    print(f'    Number of dev samples: {len(dev_data["essay_id"])}')
+    print(f'    Number of test samples: {len(test_data["essay_id"])}')
 
     
     for p in np.arange(0.0, 1.0, 0.1):
@@ -155,13 +177,13 @@ def main(args):
         if args.wandb:
             wandb.log({
                 'p': p,
-                'best_dev_qwk_high': best_val_metrics_high[0],
-                'best_test_qwk_high': best_test_metrics_high[0],
-                'best_dev_loss_high': best_dev_loss_high,
-                'best_dev_qwk_low': best_val_metrics_low[0],
-                'best_test_qwk_low': best_test_metrics_low[0],
-                'best_dev_loss_low': best_dev_loss_low
-                })
+                'Dev QWK [high]': best_val_metrics_high[0],
+                'Test QWK [high]': best_test_metrics_high[0],
+                'Dev Loss [high]': best_dev_loss_high,
+                'Dev QWK [low]': best_val_metrics_low[0],
+                'Test QWK [low]': best_test_metrics_low[0],
+                'Dev Loss [low]': best_dev_loss_low
+            })
     
     if args.wandb:
         wandb.finish()
@@ -183,6 +205,8 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=16, choices=[16, 8]) # BERT-base: 16, DeBERTa-v3-large: 8
     parser.add_argument('--epochs', type=int, default=10, choices=[10, 5]) # BERT-base: 10, DeBERTa-v3-large: 5
     parser.add_argument('--lr', type=float, default=2e-5)
+    parser.add_argument('--loss_lambda', type=float, default=1.0)
+    parser.add_argument('--ot', action='store_true')
     parser.add_argument(
         '--model_name',
         type=str,
