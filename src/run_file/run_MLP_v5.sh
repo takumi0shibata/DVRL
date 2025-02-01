@@ -25,12 +25,11 @@ do
 
     python src/train_models/train_MLP_v5.py \
         --wandb \
-        --pjname "DVRL-V5" \
+        --pjname "DVRL-V5-journal" \
         --target_prompt_id "${prompt}" \
-        --seed 22 \
+        --seed 12 \
         --device "${device}" \
         --pred_model "${pred_model}" \
-        --loss_lambda "${lambda}" \
-        --ot
+        --loss_lambda "${lambda}" 
   done
 done

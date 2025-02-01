@@ -10,8 +10,8 @@ read -p "Enter the target prompt ID: " prompt
 device="cuda:$((prompt))"
 
 # pred_model のリスト
-# pred_models=("mlp" "features_model")
-pred_models=("features_model")
+pred_models=("mlp" "features_model")
+# pred_models=("features_model")
 
 # loss_lambda のリスト
 lambda_list=("1.0" "0.5" "0.0")
@@ -25,12 +25,11 @@ do
 
     python src/DataValueEstimation_DVRL_v5.py \
         --wandb \
-        --pjname "DVRL-V5" \
+        --pjname "DVRL-V5-journal" \
         --target_prompt_id "${prompt}" \
-        --seed 22 \
+        --seed 12 \
         --device "${device}" \
         --pred_model "${pred_model}" \
-        --loss_lambda "${lambda}" \
-        --ot
+        --loss_lambda "${lambda}"
   done
 done

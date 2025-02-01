@@ -84,7 +84,7 @@ def main(args):
     dvrl_params = {
         'hidden_dim': 100,
         'comb_dim': 10,
-        'iterations': 1,
+        'iterations': 1000,
         'activation': nn.Tanh(),
         'layer_number': 5,
         'learning_rate': 0.001,

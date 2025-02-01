@@ -29,7 +29,7 @@ def main(args):
     if args.wandb:
         wandb.init(
             project=args.pjname,
-            name=args.run_name + f'_{args.pred_model}_{target_prompt_id}_seed{args.seed}_dev{args.dev_size}',
+            name=args.run_name + f'_{args.pred_model}_{target_prompt_id}_seed{args.seed}_dev{args.dev_size}_lambda{args.loss_lambda}_ot{args.ot}',
             config=dict(args._get_kwargs())
         )
 
@@ -50,6 +50,8 @@ def main(args):
     print(f'    Number of training samples: {len(train_data["essay_id"])}')
     print(f'    Number of dev samples: {len(dev_data["essay_id"])}')
     print(f'    Number of test samples: {len(test_data["essay_id"])}')
+    print(f'    Selected Dev data: {dev_data["essay_id"]}')
+    print(f'    The score of selected Dev data: {dev_data["original_score"]}')
 
     # load pseudo label
     df = pl.read_csv('data/pseudo_label.csv').to_dict()
