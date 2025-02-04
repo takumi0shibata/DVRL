@@ -11,7 +11,7 @@ import wandb
 
 from dvrl.dvrl_loss import DvrlLoss
 from dvrl.data_value_estimator import DataValueEstimator
-from dvrl.optimal_transport import compute_ot_dual
+from dvrl.optimal_transport import compute_optimal_transport
 from utils.dvrl_utils import fit_func, pred_func, calc_qwk
 
 # Configure logging
@@ -104,14 +104,24 @@ class Dvrl:
         self.val_model = copy.deepcopy(self.pred_model)
         self.val_model.load_state_dict(torch.load(self.init_model_path, weights_only=True))
         logger.info('Training the validation model...')
-        fit_func(
-            self.val_model,
-            self.x_dev,
-            self.y_dev,
-            self.batch_size_predictor,
-            self.inner_iterations,
-            self.device
-        )
+        if self.loss_lambda == 1:
+            fit_func(
+                self.val_model,
+                self.x_pseudo,
+                self.y_pseudo,
+                self.batch_size_predictor,
+                self.inner_iterations,
+                self.device
+            )
+        else:
+            fit_func(
+                self.val_model,
+                self.x_dev,
+                self.y_dev,
+                self.batch_size_predictor,
+                self.inner_iterations,
+                self.device
+            )
 
     def train_dvrl(self, metric: str = 'qwk') -> None:
         """
@@ -121,21 +131,38 @@ class Dvrl:
             metric (str): Metric to use for the DVRL ('mse', 'qwk', or 'corr').
         """
         # Compute baseline performance
-        y_valid_hat = pred_func(
-            self.ori_model,
-            self.x_dev,
-            self.batch_size_predictor,
-            self.device
-        )
-        if metric == 'mse':
-            valid_perf = metrics.mean_squared_error(self.y_dev, y_valid_hat)
-        elif metric == 'qwk':
-            valid_perf = calc_qwk(self.y_dev, y_valid_hat, self.target_prompt_id, 'score')
-        elif metric == 'corr':
-            valid_perf = np.corrcoef(self.y_dev.flatten(), y_valid_hat.flatten())[0, 1]
+        if self.loss_lambda == 1:
+            y_valid_hat = pred_func(
+                self.ori_model,
+                self.x_pseudo,
+                self.batch_size_predictor,
+                self.device
+            )
+            if metric == 'mse':
+                valid_perf = metrics.mean_squared_error(self.y_pseudo, y_valid_hat)
+            elif metric == 'qwk':
+                valid_perf = calc_qwk(self.y_pseudo, y_valid_hat, self.target_prompt_id, 'score')
+            elif metric == 'corr':
+                valid_perf = np.corrcoef(self.y_pseudo.flatten(), y_valid_hat.flatten())[0, 1]
+            else:
+                raise ValueError('Unsupported metric. Choose from "mse", "qwk", or "corr".')
+            logger.info(f'Baseline Performance ({metric}): {valid_perf:.3f}')
         else:
-            raise ValueError('Unsupported metric. Choose from "mse", "qwk", or "corr".')
-        logger.info(f'Baseline Performance ({metric}): {valid_perf:.3f}')
+            y_valid_hat = pred_func(
+                self.ori_model,
+                self.x_dev,
+                self.batch_size_predictor,
+                self.device
+            )
+            if metric == 'mse':
+                valid_perf = metrics.mean_squared_error(self.y_dev, y_valid_hat)
+            elif metric == 'qwk':
+                valid_perf = calc_qwk(self.y_dev, y_valid_hat, self.target_prompt_id, 'score')
+            elif metric == 'corr':
+                valid_perf = np.corrcoef(self.y_dev.flatten(), y_valid_hat.flatten())[0, 1]
+            else:
+                raise ValueError('Unsupported metric. Choose from "mse", "qwk", or "corr".')
+            logger.info(f'Baseline Performance ({metric}): {valid_perf:.3f}')
 
         # Prediction differences
         y_source_valid_pred = pred_func(
@@ -149,8 +176,12 @@ class Dvrl:
         # compute dual variables
         if self.ot:
             logger.info('Computing Optimal Transport...')
-            f, g, trans_plan = compute_ot_dual(self.x_source, np.concatenate([self.x_dev, self.x_pseudo], axis=0))
-            y_pred_diff = np.concatenate([y_pred_diff, f.reshape(-1, 1)], axis=1)
+            if self.loss_lambda == 1:
+                P, log = compute_optimal_transport(self.x_source, self.x_pseudo)
+            else:
+                P, log = compute_optimal_transport(self.x_source, np.concatenate([self.x_dev, self.x_pseudo], axis=0))
+            ot_feature = np.exp(-log['u'].detach().cpu().numpy())
+            y_pred_diff = np.concatenate([y_pred_diff, ot_feature.reshape(-1, 1)], axis=1)
 
         # Initialize baseline for reward computation
         baseline = valid_perf
@@ -201,13 +232,14 @@ class Dvrl:
                 sel_prob_curr
             )
 
-            # Validate the new model
-            y_valid_hat = pred_func(
-                new_model,
-                self.x_dev,
-                self.batch_size_predictor,
-                self.device
-            )
+            if self.loss_lambda != 1:
+                # Validate the new model
+                y_valid_hat = pred_func(
+                    new_model,
+                    self.x_dev,
+                    self.batch_size_predictor,
+                    self.device
+                )
 
             # predict for pseudo
             y_pseudo_hat = pred_func(
@@ -219,17 +251,23 @@ class Dvrl:
 
             # Compute performance metric
             if metric == 'mse':
-                dvrl_perf = metrics.mean_squared_error(self.y_dev, y_valid_hat)
+                if self.loss_lambda != 1:
+                    dvrl_perf = metrics.mean_squared_error(self.y_dev, y_valid_hat)
                 pseudo_reward = metrics.mean_squared_error(self.y_pseudo, y_pseudo_hat)
             elif metric == 'qwk':
-                dvrl_perf = calc_qwk(self.y_dev, y_valid_hat, self.target_prompt_id, 'score')
+                if self.loss_lambda != 1:
+                    dvrl_perf = calc_qwk(self.y_dev, y_valid_hat, self.target_prompt_id, 'score')
                 pseudo_reward = calc_qwk(self.y_pseudo, y_pseudo_hat, self.target_prompt_id, 'score')
             elif metric == 'corr':
-                dvrl_perf = np.corrcoef(self.y_dev.flatten(), y_valid_hat.flatten())[0, 1]
+                if self.loss_lambda != 1:
+                    dvrl_perf = np.corrcoef(self.y_dev.flatten(), y_valid_hat.flatten())[0, 1]
                 pseudo_reward = np.corrcoef(self.y_pseudo.flatten(), y_pseudo_hat.flatten())[0, 1]
 
             # Compute reward
-            reward = (1 - self.loss_lambda) * dvrl_perf + self.loss_lambda * pseudo_reward - baseline
+            if self.loss_lambda != 1:
+                reward = (1 - self.loss_lambda) * dvrl_perf + self.loss_lambda * pseudo_reward - baseline
+            else:
+                reward = pseudo_reward - baseline
 
             # Update the selection network
             reward_tensor = torch.tensor([reward], dtype=torch.float32).to(self.device)
@@ -244,11 +282,18 @@ class Dvrl:
             #         ((self.moving_average_window - 1) * baseline + dvrl_perf) / self.moving_average_window
             #     )
 
-            logger.info(
-                f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
-                f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
-                f'{metric.upper()} for Dev: {dvrl_perf:.3f}, QWK for pseudo data: {pseudo_reward:.3f}'
-            )
+            if self.loss_lambda != 1:
+                logger.info(
+                    f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
+                    f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
+                    f'{metric.upper()} for Dev: {dvrl_perf:.3f}, QWK for pseudo data: {pseudo_reward:.3f}'
+                )
+            else:
+                logger.info(
+                    f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
+                    f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
+                    f'Pseudo QWK: {pseudo_reward:.3f}'
+                )
 
             if self.use_wandb:
                 wandb.log(

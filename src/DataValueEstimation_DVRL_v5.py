@@ -46,6 +46,7 @@ def main(args):
         cache_dir='src/.embedding_cache',
         embedding_model=args.embedding_model,
         add_pos=False,
+        device=device
     )
     print(f'    Number of training samples: {len(train_data["essay_id"])}')
     print(f'    Number of dev samples: {len(dev_data["essay_id"])}')

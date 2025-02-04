@@ -294,7 +294,16 @@ class EssayDataset:
 
         return train_data, dev_data, test_data
     
-    def cross_prompt_split(self, target_prompt_set, dev_size=30, cache_dir='.embedding_cache', add_pos=False, embedding_model='bert-base-uncased', selection_method='euclidean'):
+    def cross_prompt_split(
+        self,
+        target_prompt_set,
+        dev_size=30,
+        cache_dir='.embedding_cache',
+        add_pos=False,
+        embedding_model='bert-base-uncased',
+        selection_method='euclidean',
+        device='cpu'
+    ):
         # Create cache directory if it doesn't exist
         os.makedirs(cache_dir, exist_ok=True)
         
@@ -304,11 +313,7 @@ class EssayDataset:
         
         # Load BERT tokenizer and model
         tokenizer = AutoTokenizer.from_pretrained(embedding_model)
-        model = AutoModel.from_pretrained(embedding_model)
-    
-        # Move model to GPU if available
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        model.to(device)
+        model = AutoModel.from_pretrained(embedding_model).to(device)
     
         # Function to compute embeddings and cache them
         def compute_embeddings(df, cache_dir, tokenizer, model):
@@ -355,6 +360,9 @@ class EssayDataset:
         
         # Function to select diverse samples for the dev set
         def select_diverse_samples(embeddings, n_samples, method='kmeans'):
+            if n_samples == 0:
+                return []
+                
             if method == 'cosine':
                 selected_indices = []
                 remaining_indices = list(range(len(embeddings)))
@@ -418,16 +426,23 @@ class EssayDataset:
         
         # Function to extract data and include embeddings
         def extract_data(df, embeddings_dict):
+            if len(df) == 0:  # Handle empty DataFrame case
+                return {
+                    'essay_id': np.array([]),
+                    'essay_set': np.array([]),
+                    'essay': np.array([]),
+                    'original_score': np.array([]),
+                    'scaled_score': np.array([]),
+                    'feature': np.array([]).reshape(0, self.feature_data.shape[1]-2),  # -2 for essay_id and essay_set columns
+                    'readability': np.array([]).reshape(0, self.readability_data.shape[1]-1),  # -1 for essay_id column
+                    'embedding': np.array([]).reshape(0, next(iter(embeddings_dict.values())).shape[0])  # Use first embedding's shape
+                }
+            
             # Sort feature and readability DataFrames by essay_id
             df = df.sort('essay_id')
             feature = self.feature_data.filter(pl.col('essay_id').is_in(df['essay_id']))
             readability = self.readability_data.filter(pl.col('essay_id').is_in(df['essay_id']))
             embeddings = np.vstack([embeddings_dict[essay_id] for essay_id in df['essay_id']])
-
-            # # Print for verification
-            # print(df['essay_id'].to_list())
-            # print(feature['essay_id'].to_list())
-            # print(readability['essay_id'].to_list())
 
             # Assertions to ensure data integrity
             assert len(df) == len(feature) == len(readability) == embeddings.shape[0], "Data lengths must match."
@@ -459,19 +474,35 @@ class EssayDataset:
             # create pos_x by Ridley style
             pos_tags = self.read_pos_vocab(train_data['essay'])
             train_pos_data = self.read_essay_sets(train_data['essay'], pos_tags)
-            dev_pos_data = self.read_essay_sets(dev_data['essay'], pos_tags)
+            
+            # Handle empty dev data case
+            if len(dev_data['essay']) > 0:
+                dev_pos_data = self.read_essay_sets(dev_data['essay'], pos_tags)
+                max_sentnum = max(train_pos_data['max_sentnum'], dev_pos_data['max_sentnum'])
+                max_sentlen = max(train_pos_data['max_sentlen'], dev_pos_data['max_sentlen'])
+            else:
+                dev_pos_data = {'pos_x': [], 'max_sentnum': 0, 'max_sentlen': 0}
+                max_sentnum = train_pos_data['max_sentnum']
+                max_sentlen = train_pos_data['max_sentlen']
+            
             test_pos_data = self.read_essay_sets(test_data['essay'], pos_tags)
-            max_sentnum = max(train_pos_data['max_sentnum'], dev_pos_data['max_sentnum'], test_pos_data['max_sentnum'])
-            max_sentlen = max(train_pos_data['max_sentlen'], dev_pos_data['max_sentlen'], test_pos_data['max_sentlen'])
+            max_sentnum = max(max_sentnum, test_pos_data['max_sentnum'])
+            max_sentlen = max(max_sentlen, test_pos_data['max_sentlen'])
+            
             # Pad the sequences with shape [batch, max_sentence_num, max_sentence_length]
             X_train_pos = self.pad_hierarchical_text_sequences(train_pos_data['pos_x'], max_sentnum, max_sentlen)
-            X_dev_pos = self.pad_hierarchical_text_sequences(dev_pos_data['pos_x'], max_sentnum, max_sentlen)
-            X_test_pos = self.pad_hierarchical_text_sequences(test_pos_data['pos_x'], max_sentnum, max_sentlen)
             train_data['pos_x'] = X_train_pos.reshape((X_train_pos.shape[0], X_train_pos.shape[1] * X_train_pos.shape[2]))
             train_data['pos_vocab'] = pos_tags
             train_data['max_sentnum'] = max_sentnum
             train_data['max_sentlen'] = max_sentlen
-            dev_data['pos_x'] = X_dev_pos.reshape((X_dev_pos.shape[0], X_dev_pos.shape[1] * X_dev_pos.shape[2]))
+            
+            if len(dev_data['essay']) > 0:
+                X_dev_pos = self.pad_hierarchical_text_sequences(dev_pos_data['pos_x'], max_sentnum, max_sentlen)
+                dev_data['pos_x'] = X_dev_pos.reshape((X_dev_pos.shape[0], X_dev_pos.shape[1] * X_dev_pos.shape[2]))
+            else:
+                dev_data['pos_x'] = np.array([]).reshape(0, max_sentnum * max_sentlen)
+            
+            X_test_pos = self.pad_hierarchical_text_sequences(test_pos_data['pos_x'], max_sentnum, max_sentlen)
             test_data['pos_x'] = X_test_pos.reshape((X_test_pos.shape[0], X_test_pos.shape[1] * X_test_pos.shape[2]))
 
         return train_data, dev_data, test_data

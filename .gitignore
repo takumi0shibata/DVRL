@@ -2,3 +2,49 @@ src/.embedding_cache/
 .venv/
 wandb/
 outputs/
+
+# Python関連
+__pycache__/
+*.py[cod]
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 環境関連
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# エディタ/IDE関連
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# テスト関連
+.coverage
+htmlcov/
+.pytest_cache/
+
+# その他
+.DS_Store
+Thumbs.db
