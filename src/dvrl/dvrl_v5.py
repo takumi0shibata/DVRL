@@ -282,18 +282,19 @@ class Dvrl:
             #         ((self.moving_average_window - 1) * baseline + dvrl_perf) / self.moving_average_window
             #     )
 
-            if self.loss_lambda != 1:
-                logger.info(
-                    f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
-                    f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
-                    f'{metric.upper()} for Dev: {dvrl_perf:.3f}, QWK for pseudo data: {pseudo_reward:.3f}'
-                )
-            else:
-                logger.info(
-                    f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
-                    f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
-                    f'Pseudo QWK: {pseudo_reward:.3f}'
-                )
+            if (iteration + 1) % 20 == 0:
+                if self.loss_lambda != 1:
+                    logger.info(
+                        f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
+                        f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
+                        f'{metric.upper()} for Dev: {dvrl_perf:.3f}, QWK for pseudo data: {pseudo_reward:.3f}'
+                    )
+                else:
+                    logger.info(
+                        f'Iteration: {iteration + 1}, Reward: {reward:.3f}, DVRL Loss: {loss.item():.3f}, '
+                        f'Prob MAX: {est_dv_curr.max().item():.3f}, Prob MIN: {est_dv_curr.min().item():.3f}, '
+                        f'Pseudo QWK: {pseudo_reward:.3f}'
+                    )
 
             if self.use_wandb:
                 wandb.log(
