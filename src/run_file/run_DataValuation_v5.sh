@@ -25,7 +25,7 @@ do
 
     python src/DataValueEstimation_DVRL_v5.py \
         --wandb \
-        --pjname "DVRL-V5-journal" \
+        --pjname "DVRL-V5-20250206" \
         --target_prompt_id "${prompt}" \
         --seed 12 \
         --device "${device}" \
